@@ -2,6 +2,7 @@ import type { RewriteAnalysis } from '@/lib/types';
 import {
   escalationNotReduced,
   findCorporatePhrases,
+  framingFromAnalysisCopied,
 } from '@/lib/rewriteEscalationPatterns';
 
 export type ValidationIssue = {
@@ -118,7 +119,14 @@ export function validateRewrite(
   for (const hit of escalationNotReduced(input, output)) {
     issues.push({
       code: 'escalation_preserved',
-      detail: `Escalating framing still present: "${hit.label}"`,
+      detail: `Escalating structure still present: ${hit.label}`,
+    });
+  }
+
+  for (const { phrase, reason } of framingFromAnalysisCopied(analysis, output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail: `Listed escalating framing copied (${reason}): "${phrase.slice(0, 70)}${phrase.length > 70 ? '…' : ''}"`,
     });
   }
 
@@ -160,7 +168,8 @@ Your rewrite failed quality checks. Fix these issues and return the FULL JSON ag
 ${list}
 
 Rules:
-- REFRAME escalating framing into neutral observations (impact on me / pattern / facts) — do not copy blame or motive-attribution phrases.
+- Remove or reframe EVERY item in escalatingFraming — none may appear verbatim or as a close paraphrase in output.
+- Replace with neutral observations (impact on me, pattern, facts) — no motive attribution, no "only when I speak up", no "as if normal".
 - KEEP every substantive point and boundary from your analysis arrays.
 - Same language as input. Not submissive or corporate.
 `.trim();

@@ -6,7 +6,9 @@
     "mustNotContain": [
       "alsof dat normaal is",
       "pas wanneer ik er zelf iets van zeg",
-      "het voelt vaak alsof er pas"
+      "zodra ik er zelf iets van zeg",
+      "het voelt vaak alsof er pas",
+      "pas rekening wordt gehouden"
     ],
     "shouldContain": ["planning", "patroon", "frustratie"]
   },

@@ -6,7 +6,7 @@ DE-ESCALATION FRAMEWORK — separate four buckets before writing output:
 1. SUBSTANTIVE CONCERN (preserve in output): concrete issue, facts, practical impact, pattern/recurrence if stated.
 2. BOUNDARY / REQUEST / CONDITION (preserve explicitly): limits, preferences, asks, "if/in case/unless" conditions.
 3. EMOTIONAL INTENSITY (may soften, not erase): frustration, tiredness — use measured I-statements ("dat zorgt bij mij voor …"), not attacks.
-4. ESCALATING FRAMING (reframe or drop — do NOT copy verbatim): blame-heavy lines, sarcasm, motive attribution, "alsof dat normaal is", "pas wanneer ik er iets van zeg", "het lijkt alsof jij…", always/never you-framing, implied bad intent.
+4. ESCALATING FRAMING (reframe or drop — NEVER in output): blame, sarcasm, motive attribution, as-if-normal, only-when-I-speak-up, consideration-only-after-I-raise-it — any language. List in escalatingFraming[], then omit from output (no verbatim, no close paraphrase).
 
 GOAL: Clearer, calmer, harder to escalate against — NOT submissive, fake-positive, or corporate.
 - Do NOT synonym-swap while keeping the same accusatory structure.
@@ -20,8 +20,8 @@ EXAMPLE (Dutch — structural de-escalation):
 Input:
 "Ik ben er eerlijk gezegd best klaar mee dat afspraken steeds op het laatste moment veranderen en ik vervolgens maar moet meebewegen alsof dat normaal is. Het voelt vaak alsof er pas rekening wordt gehouden met mijn planning of situatie zodra ik er zelf iets van zeg, terwijl ik juist probeer vooraf duidelijkheid te houden. Ik snap dat dingen soms anders lopen, maar dit begint inmiddels wel een patroon te worden waar ik last van heb."
 
-BAD (tone polish only — keeps escalating structure):
-"Ik ben eerlijk gezegd behoorlijk gefrustreerd dat afspraken steeds op het laatste moment veranderen, en dat ik me dan moet aanpassen alsof dat normaal is. Het lijkt vaak pas alsof er rekening wordt gehouden met mijn planning of situatie wanneer ik er zelf iets van zeg … dit begint een patroon te worden dat voor mij lastig is."
+BAD (tone polish — keeps escalating structure):
+"Ik ben … gefrustreerd … alsof dat normaal is. … het gevoel dat er pas rekening wordt gehouden … zodra ik er zelf iets van zeg …" (motive-attribution sentence must NOT survive)
 
 GOOD (reframed):
 "Ik merk dat afspraken de laatste tijd regelmatig op het laatste moment veranderen, waardoor ik mijn planning steeds moet aanpassen. Dat zorgt bij mij voor frustratie, vooral omdat ik juist probeer vooraf duidelijkheid te houden. Ik begrijp dat dingen soms anders lopen, maar voor mij begint dit inmiddels als een terugkerend patroon te voelen waar ik graag betere afspraken over zou maken."
@@ -61,7 +61,8 @@ Return valid JSON only with ALL fields:
   "output": "string — final message in the SAME language as input"
 }
 
-List escalatingFraming from the input before writing output. The output must NOT repeat those phrases verbatim.
+List escalatingFraming from the input before writing output.
+CRITICAL: output must NOT contain those lines verbatim OR as close paraphrases (e.g. do not keep "only when I say something" / "zodra ik er iets van zeg" / "as if that is normal" — reframe to impact + pattern).
 
 ${EXAMPLE_SCHEDULING}
 `.trim();

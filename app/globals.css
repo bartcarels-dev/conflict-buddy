@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ── Light theme (default) ── */
+:root {
+  color-scheme: light;
+  --background: #e8eef5;
+  --background-accent: #dce6f2;
+  --foreground: #152232;
+  --muted: #4a5d73;
+  --muted-light: #6b7f96;
+  --primary: #1a6b8a;
+  --primary-hover: #145a73;
+  --primary-muted: #b8dce8;
+  --primary-subtle: #e8f4f8;
+  --surface: #ffffff;
+  --surface-muted: #f3f6fa;
+  --border: #b8c8d8;
+  --border-strong: #94a8bc;
+  --input-bg: #ffffff;
+  --shadow: 0 4px 20px -4px rgb(21 34 50 / 0.1);
+  --font-sans: var(--font-geist-sans), "Segoe UI", system-ui, sans-serif;
+}
+
+/* ── Dark theme (browser / OS preference) ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0c1018;
+    --background-accent: #121a26;
+    --foreground: #e8eef5;
+    --muted: #9aadc0;
+    --muted-light: #7a8fa3;
+    --primary: #4db8d9;
+    --primary-hover: #6ecae6;
+    --primary-muted: #1e3d4d;
+    --primary-subtle: #152530;
+    --surface: #1a2433;
+    --surface-muted: #141c28;
+    --border: #2e4058;
+    --border-strong: #3d5470;
+    --input-bg: #121a26;
+    --shadow: 0 4px 24px -4px rgb(0 0 0 / 0.45);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-accent: var(--background-accent);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-light: var(--muted-light);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input-bg: var(--input-bg);
+  --font-sans: var(--font-sans);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(
+    165deg,
+    var(--background) 0%,
+    var(--background-accent) 50%,
+    var(--background) 100%
+  );
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent browser dark-mode from restyling controls differently than our theme */
+input,
+textarea,
+button,
+select {
+  color-scheme: inherit;
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}

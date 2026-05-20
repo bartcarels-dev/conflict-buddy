@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Conflict Buddy — Clearer messages & factual notes",
   description:
-    "Turn tense communication into clearer messages and factual log entries. Paste, generate, edit, and copy — nothing saved to an account.",
+    "Turn tense communication into clearer messages and factual log entries. No account, no saved history — your text is only used to generate your result.",
 };
 
 export default function RootLayout({

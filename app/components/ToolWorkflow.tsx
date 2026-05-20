@@ -175,8 +175,9 @@ export function ToolWorkflow({
       </div>
 
       <p className="text-xs text-muted-light border-t border-border pt-4">
-        Your text is not saved to an account or our servers. Copy anything you
-        want to keep before leaving this page.
+        Privacy: no account and no saved history. What you enter is used only to
+        generate your result on this visit—it is not stored, reviewed by us, or
+        used to train AI. Copy anything you want to keep before you leave.
       </p>
     </div>
   );

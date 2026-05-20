@@ -128,8 +128,8 @@ export default function Home() {
           {view === 'home' && (
             <p className="mt-3 text-sm text-muted max-w-2xl leading-relaxed">
               Turn tense communication into clearer messages and factual
-              notes. Paste your text, generate a draft, edit it, and copy —
-              nothing is saved to an account.
+              notes. Paste your text, generate a draft, edit it, and copy — no
+              account and no saved history.
             </p>
           )}
           <p className="mt-2 text-xs text-muted-light italic">
@@ -194,8 +194,10 @@ export default function Home() {
             </div>
 
             <p className="text-xs text-muted-light">
-              We do not store your text on our servers. Copy anything you want
-              to keep before leaving.
+              Privacy: no account and no saved history. What you enter is used
+              only to generate your result on this visit—it is not stored,
+              reviewed by us, or used to train AI. Copy anything you want to keep
+              before you leave.
             </p>
           </div>
         )}

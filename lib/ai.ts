@@ -149,6 +149,32 @@ SEPARATION ↔ CLOTHING (required in de-escalated + boundary when in input):
 `.trim();
 }
 
+/** Voice rules for Message Rewriter — keep natural Dutch/English, not reporting calques. */
+export function messageRewriterVoiceRules(lang: Lang): string {
+  if (lang === 'nl') {
+    return `
+MESSAGE REWRITER — STEM & WERKWOORDEN (verzendbaar bericht aan de andere partij):
+- Als de invoer "je/jij" gebruikt (bericht aan de andere partij): houd die aanspreekvorm. Niet omschrijven naar rapportage ("ik heb … teruggekregen") tenzij de invoer zelf al "ik" gebruikt.
+- FOUT: invoer "je gaf de kleren die ik meegaf vies terug" → "ik heb de kleren die ik meegaf vies teruggekregen" (klinkt als Engelse vertaling, stijf en onnatuurlijk).
+- GOED: "Je gaf de kleren die ik meegaf vies terug." of "De kleren die ik meegaf gaf je vies terug."
+- Gebruik hetzelfde werkwoordpatroon als de invoer: "teruggeven / gaf terug" → niet automatisch "terugkrijgen / heb teruggekregen".
+- Wie doet wat: als de invoer zegt dat de ander iets deed (gaf terug, zei, gebruikte): laat de ander het onderwerp — niet alles naar "ik heb …" herschrijven.
+- Slotalinea: alleen over onderwerpen uit de invoer (alleen kleding → bijv. "Wil je de kleren voortaan schoon en gewassen teruggeven?"; FOUT: "bij de volgende overdracht" als overdracht niet in de invoer staat).
+- Spreektaal: zinnen die iemand echt zou typen in een app-bericht, geen beleidstaal of dossierformulering.
+`.trim();
+  }
+  return `
+MESSAGE REWRITER — VOICE & VERBS (sendable message to the other person):
+- If the input uses "you" (message to the other party): keep direct address. Do not rewrite into reporting style ("I received … back") unless the input already uses "I".
+- WRONG: input "you gave back the clothes I sent dirty" → "I received the clothes I sent back dirty" (English calque, stiff).
+- RIGHT: "You returned the clothes I sent dirty." / "The clothes I sent came back dirty from you."
+- Match the input's verb pattern: "gave back / return" — do not default to "received / got back".
+- Who did what: when the input says the other person did something, keep them as the subject — do not rewrite everything as "I have …".
+- Closing line: only about topics in the input (clothing only → ask about clean return; do not mention handover if not in the input).
+- Sound like a real text message, not a policy memo or case report.
+`.trim();
+}
+
 export function deEscalatedRules(lang: Lang): string {
   if (lang === 'nl') {
     return `

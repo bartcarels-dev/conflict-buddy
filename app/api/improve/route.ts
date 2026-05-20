@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { ToolMode } from '@/lib/types';
 import {
   deEscalatedRules,
+  messageRewriterVoiceRules,
   detectLanguage,
   formatDate,
   getErrorResponse,
@@ -32,6 +33,8 @@ Schrijf één rustiger, duidelijker bericht dat de gebruiker kan versturen of al
 
 ${globalRules(lang)}
 
+${messageRewriterVoiceRules(lang)}
+
 ${deEscalatedRules(lang)}
 
 Return valid JSON only: { "output": "string" }
@@ -41,6 +44,8 @@ You are Conflict Buddy — Message Rewriter for tense communication.
 Write one calmer, clearer message the user can send or use as a draft.
 
 ${globalRules(lang)}
+
+${messageRewriterVoiceRules(lang)}
 
 ${deEscalatedRules(lang)}
 

@@ -4,6 +4,10 @@ import {
   findCorporatePhrases,
   framingFromAnalysisCopied,
 } from '@/lib/rewriteEscalationPatterns';
+import {
+  hasRedundantAgreementAsk,
+  isMostlyReorderedBlame,
+} from '@/lib/rewriteStructuralCheck';
 
 export type ValidationIssue = {
   code:
@@ -13,7 +17,8 @@ export type ValidationIssue = {
     | 'unchanged'
     | 'escalation_preserved'
     | 'substantive_dropped'
-    | 'too_corporate';
+    | 'too_corporate'
+    | 'reordered_blame';
   detail: string;
 };
 
@@ -137,6 +142,22 @@ export function validateRewrite(
     });
   }
 
+  if (isMostlyReorderedBlame(input, output)) {
+    issues.push({
+      code: 'reordered_blame',
+      detail:
+        'Still multiple direct you+problem sentences — reframe to situation/impact (e.g. handover cannot happen on time), not reorder the same accusations',
+    });
+  }
+
+  if (hasRedundantAgreementAsk(input, output)) {
+    issues.push({
+      code: 'reordered_blame',
+      detail:
+        'Input already states agreements do not work — reframe blame chains, do not only add a generic "better agreements" closing',
+    });
+  }
+
   const toPreserve = [
     ...(analysis?.substantive ?? []),
     ...(analysis?.boundariesAndConditions ?? []),
@@ -170,6 +191,8 @@ ${list}
 Rules:
 - Remove or reframe EVERY item in escalatingFraming — none may appear verbatim or as a close paraphrase in output.
 - Replace with neutral observations (impact on me, pattern, facts) — no motive attribution, no "only when I speak up", no "as if normal".
+- Reduce repeated "you are late / you are not home" chains — state facts + impact on handover/planning instead.
+- Do NOT only reorder the same accusations; do NOT add a generic "better agreements" line if the input already said arrangements fail.
 - KEEP every substantive point and boundary from your analysis arrays.
 - Same language as input. Not submissive or corporate.
 `.trim();

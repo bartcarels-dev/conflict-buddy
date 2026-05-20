@@ -10,6 +10,8 @@ DE-ESCALATION FRAMEWORK — separate four buckets before writing output:
 
 GOAL: Clearer, calmer, harder to escalate against — NOT submissive, fake-positive, or corporate.
 - Do NOT synonym-swap while keeping the same accusatory structure.
+- Do NOT reorder the same "you + problem" sentences — merge into situation + impact (what cannot happen and why).
+- If the input already says arrangements/agreements do not work, do not only append "I want better agreements" — reframe and end with one concrete forward ask.
 - REFRAME: observation + impact + pattern + constructive forward look.
 - Avoid: "ik vind het belangrijk dat we samen", "this raises questions", hollow "I hope we can work together".
 `.trim();
@@ -25,6 +27,14 @@ BAD (tone polish — keeps escalating structure):
 
 GOOD (reframed):
 "Ik merk dat afspraken de laatste tijd regelmatig op het laatste moment veranderen, waardoor ik mijn planning steeds moet aanpassen. Dat zorgt bij mij voor frustratie, vooral omdat ik juist probeer vooraf duidelijkheid te houden. Ik begrijp dat dingen soms anders lopen, maar voor mij begint dit inmiddels als een terugkerend patroon te voelen waar ik graag betere afspraken over zou maken."
+
+EXAMPLE (handover / late — do NOT just reorder "je bent te laat"):
+
+Input: "Je bent niet thuis / te laat voor overdracht … Joa aan de deur … rond 10 uur … structureel … afspraken werken niet … mijn planning"
+
+BAD: Same three "je bent / je arriveert" accusations in new order + "ik wil betere afspraken" (already said agreements fail).
+
+GOOD: "Ik merk dat overdracht aan de deur volgens afspraak structureel lastig is: ik ben op tijd, maar het lukt vaak niet omdat er pas rond 10 uur of later iemand thuis is. Af en toe vertraging kan, maar dit is inmiddels structureel en verstoort mijn planning. Kunnen we afspreken hoe we dit betrouwbaar regelen?"
 `.trim();
 
 function levelBlock(level: TransformLevel): string {

@@ -3,7 +3,6 @@ import type { RewriteAnalysis, ToolMode, TransformLevel } from '@/lib/types';
 import {
   detectLanguage,
   formatDate,
-  genericLogEntryRules,
   getErrorResponse,
   parseAiJson,
   runCompletion,
@@ -18,14 +17,20 @@ import {
   messageRewriterStructuredUserPrompt,
 } from '@/lib/prompts/messageRewriterStructured';
 import {
+  logEntryBuilderRules,
+  logEntryBuilderUserPrompt,
+} from '@/lib/prompts/logEntryBuilder';
+import {
   detectRewriteLocale,
   findAgencyGave,
+  isAlreadyCalmMessage,
   languageMismatch,
   rewriteLangLabel,
 } from '@/lib/rewriteLocale';
 import {
   buildUnchangedRetryPrompt,
   buildValidationRetryPrompt,
+  hasKnewPerfectlyEscalation,
   isRewriteUnchanged,
   validateRewrite,
 } from '@/lib/rewriteValidation';
@@ -47,10 +52,11 @@ function parseTransformLevel(value: unknown): TransformLevel {
   return 'moderate';
 }
 
-function buildLogPrompts(dateLabel: string, formattedDate: string) {
+function buildLogPrompts(input: string, dateLabel: string, formattedDate: string) {
   const dateLine = `${dateLabel}: ${formattedDate}`;
   return {
-    systemPrompt: genericLogEntryRules().replace('{dateLine}', dateLine),
+    systemPrompt: logEntryBuilderRules(dateLine, detectRewriteLocale(input)),
+    userPrompt: logEntryBuilderUserPrompt(input),
   };
 }
 
@@ -168,7 +174,9 @@ async function rewriteWithValidation(
 
     const issues = validateRewrite(input, output, analysis, level);
     const needsUnchangedRetry =
-      usesStructuredPipeline(level) && isRewriteUnchanged(input, output);
+      usesStructuredPipeline(level) &&
+      isRewriteUnchanged(input, output) &&
+      !isAlreadyCalmMessage(input);
 
     if (issues.length === 0 && !needsUnchangedRetry) break;
 
@@ -188,6 +196,17 @@ async function rewriteWithValidation(
   for (let fix = 0; fix < 2 && languageMismatch(input, output); fix++) {
     const label = rewriteLangLabel(detectRewriteLocale(input));
     const note = `REJECTED — wrong language in previous attempt. Rewrite entirely in ${label} ONLY. Do not use any other language.`;
+    if (usesStructuredPipeline(level)) {
+      output = (await generateStructuredRewrite(input, level, note)).output;
+      output = ensureAgencyPreserved(input, output, level);
+    } else {
+      output = await generateMinimalRewrite(input, note);
+    }
+  }
+
+  for (let fix = 0; fix < 2 && hasKnewPerfectlyEscalation(input, output); fix++) {
+    const note =
+      'REJECTED — still contains "you knew perfectly well" / "sabías perfectamente que" / "muito bem que" / "très bien que". Remove that motive-attribution line; keep deadline impact and deliver-tomorrow ask.';
     if (usesStructuredPipeline(level)) {
       output = (await generateStructuredRewrite(input, level, note)).output;
       output = ensureAgencyPreserved(input, output, level);
@@ -260,13 +279,11 @@ export async function POST(req: Request) {
     if (mode === 'rewrite') {
       output = await rewriteWithValidation(input, transformLevel);
     } else {
-      const { systemPrompt } = buildLogPrompts(dateLabel, formattedDate);
-      const userPrompt = `
-Turn these rough notes into a neutral log entry. Same language as the input. Only facts from the notes.
-
-Notes:
-${input}
-`.trim();
+      const { systemPrompt, userPrompt } = buildLogPrompts(
+        input,
+        dateLabel,
+        formattedDate
+      );
 
       const parsed = await runModel(systemPrompt, userPrompt);
       output = extractOutput(parsed, 'log');

@@ -35,8 +35,14 @@ export function detectRewriteLocale(text: string): RewriteLang {
     return 'en';
   if (/\b(ich bin|du bist|absprachen|müde|übergeben)\b/.test(lower)) return 'de';
   if (/\b(je suis|tu es|les arrangements|remise|déposer)\b/.test(lower)) return 'fr';
-  if (/\b(estoy|devolviste|acuerdos|horario|entrega|tú mismo)\b/.test(lower)) return 'es';
-  if (/\b(estou|devolveste|acordos|entrega|planeamento)\b/.test(lower)) return 'pt';
+  if (
+    /\b(amanhã|devolveste|podes|chego|planeamento|acordos|combinado|tua\s+porta|tu\s+próprio|olá)\b/i.test(
+      lower
+    )
+  )
+    return 'pt';
+  if (/\b(estoy|devolviste|acuerdos|horario|planificación|tú\s+mismo|mañana)\b/i.test(lower))
+    return 'es';
 
   if (/[ãõ]|ção|não|estou|embora/.test(lower)) return 'pt';
   if (/ñ|estoy|último|horario|siento|patrón|patron/.test(lower)) return 'es';
@@ -44,8 +50,8 @@ export function detectRewriteLocale(text: string): RewriteLang {
   if (/è|é|ê|honnêt|fatigué|schéma|arrangements|fatigué/.test(lower)) return 'fr';
   if (/\b(i am|you are|this is|if you|will call|my schedule|handover|you gave|i'd rather)\b/.test(lower))
     return 'en';
-  if (/\bdevolveste|ligo ao teu|nódoas|planeamento\b/.test(lower)) return 'pt';
-  if (/\bdevolviste|llamaré|tú mismo|planificación\b/.test(lower)) return 'es';
+  if (/\b(amanhã|devolveste|podes|chego|planeamento|olá)\b/i.test(lower)) return 'pt';
+  if (/\b(estoy|devolviste|llamaré|tú mismo|planificación|mañana|hola)\b/i.test(lower)) return 'es';
 
   let best: RewriteLang = 'unknown';
   let bestScore = 0;
@@ -73,11 +79,20 @@ export function rewriteLangBanner(lang: RewriteLang): string {
   return `OUTPUT LANGUAGE: ${LANG_LABELS[lang]} ONLY. Do NOT use Dutch, French, or any other language if the input is ${LANG_LABELS[lang]}. NEVER translate.`;
 }
 
+const PT_OUTPUT_MARKERS =
+  /\b(amanhã|podes|chego|dez|combinado|planeamento|acordos|tua|entrega\s+do|estou|percebo|ignorar-me)\b/i;
+const ES_OUTPUT_MARKERS =
+  /\b(mañana|podrías|llegaré|diez|quería|planificación|acuerdos|tu\s+puerta|estoy|ignorarme)\b/i;
+
 export function languageMismatch(input: string, output: string): boolean {
   const inLang = detectRewriteLocale(input);
   const outLang = detectRewriteLocale(output);
-  if (inLang === 'unknown' || outLang === 'unknown') return false;
-  return inLang !== outLang;
+  if (inLang !== 'unknown' && outLang !== 'unknown' && inLang !== outLang) return true;
+  if (inLang === 'pt' && ES_OUTPUT_MARKERS.test(output) && !PT_OUTPUT_MARKERS.test(output))
+    return true;
+  if (inLang === 'es' && PT_OUTPUT_MARKERS.test(output) && !ES_OUTPUT_MARKERS.test(output))
+    return true;
+  return false;
 }
 
 /** Custody / child handover context */
@@ -90,7 +105,7 @@ export const HANDOVER_TIMING =
 
 /** Direct "you + regularly + not home/late" blame (NL + EN; others via escalation categories) */
 export const REGULAR_ABSENCE_BLAME =
-  /\b(je|you|du|tu|usted|você|voce)\s+.{0,25}(regelmatig|regularly|regelmäßig|régulièrement|regularmente|estás\s+regularmente)\s+.{0,25}(niet\s+thuis|not\s+home|nicht\s+(da|zu\s+hause)|absent|en\s+retard|fora\s+de\s+casa|tarde|late)\b/i;
+  /\b(je|you|du|tu|estás|usted|você|voce)\s+.{0,25}(regelmatig|regularly|regelmäßig|régulièrement|regularmente)\s+.{0,25}(niet\s+thuis|not\s+home|nicht\s+(da|zu\s+hause)|absent|en\s+retard|fora\s+de\s+casa|tarde|late)\b/i;
 
 /** "You yourself around [time]" accusation */
 export const YOU_SELF_TIME =
@@ -186,4 +201,20 @@ export function findAgencyGave(input: string) {
 
 export function isHandoverContext(input: string): boolean {
   return HANDOVER_CONTEXT.test(input) && HANDOVER_TIMING.test(input);
+}
+
+/** Short, informational handover delay — should not be heavily de-escalated. */
+export function isAlreadyCalmMessage(input: string): boolean {
+  if (input.length > 220) return false;
+  return (
+    /\b(\d{1,2}|ten|zehn|dix|diez|dez)\s+min/i.test(input) &&
+    HANDOVER_CONTEXT.test(input) &&
+    !/\b(advocaat|lawyer|belachelijk|ridiculous|ignor|negeer)\b/i.test(input)
+  );
+}
+
+export function isSchedulingPattern(input: string): boolean {
+  return /\b(last minute|letzter minute|dernier moment|último momento|última hora|laatste moment)\b/i.test(
+    input
+  );
 }

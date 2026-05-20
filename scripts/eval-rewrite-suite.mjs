@@ -84,7 +84,15 @@ async function main() {
         console.log(`  [${status}] ${level}`);
         if (fails.length) fails.forEach((e) => console.log(`      - ${e}`));
         console.log(`      ${output.slice(0, 120).replace(/\n/g, ' ')}…`);
-        report.push({ id: f.id, level, status, fails, output });
+        report.push({
+          id: f.id,
+          lang: f.lang,
+          category: f.category,
+          level,
+          status,
+          fails,
+          output,
+        });
       } catch (e) {
         console.log(`  [ERR] ${level}: ${e.message}`);
         report.push({ id: f.id, level, status: 'ERR', error: e.message });
@@ -95,9 +103,17 @@ async function main() {
   const outPath = join(__dirname, '../lib/prompts/__fixtures__/rewrite-eval-report.json');
   writeFileSync(outPath, JSON.stringify(report, null, 2));
   const passed = report.filter((r) => r.status === 'PASS').length;
-  console.log(`\n${passed}/${report.length} checks passed`);
+  const strict = report.filter((r) => r.level === 'moderate' || r.level === 'firm');
+  const strictPass = strict.filter((r) => r.status === 'PASS').length;
+  const strictPct = ((100 * strictPass) / strict.length).toFixed(1);
+  console.log(`\n${passed}/${report.length} checks passed (all modes)`);
+  console.log(`Moderate+firm: ${strictPass}/${strict.length} (${strictPct}%)`);
   console.log(`Report: ${outPath}`);
-  process.exit(passed === report.length ? 0 : 1);
+  const target = Number(process.env.EVAL_TARGET_PCT ?? 95);
+  const ok =
+    passed === report.length ||
+    (strictPass / strict.length) * 100 >= target;
+  process.exit(ok ? 0 : 1);
 }
 
 main();

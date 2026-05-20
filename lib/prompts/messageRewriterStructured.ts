@@ -3,7 +3,9 @@ import type { RewriteLang } from '@/lib/rewriteLocale';
 import {
   detectRewriteLocale,
   findAgencyGave,
+  isAlreadyCalmMessage,
   isHandoverContext,
+  isSchedulingPattern,
   rewriteLangBanner,
   rewriteLangLabel,
 } from '@/lib/rewriteLocale';
@@ -113,6 +115,16 @@ ${EXAMPLE_SCHEDULING}
 
 function contextualHints(input: string): string {
   const hints: string[] = [];
+  if (isAlreadyCalmMessage(input)) {
+    hints.push(
+      'ALREADY CALM: keep the same facts and time words (e.g. ten/zehn/dix/diez/dez minutes, tomorrow/demain). Light polish only — do not add conflict or blame framing.'
+    );
+  }
+  if (isSchedulingPattern(input)) {
+    hints.push(
+      'SCHEDULING PATTERN: remove "as if normal", "only when I say", "when I speak up", "erst wenn ich etwas sage", "erst auf meine Planung" — reframe to impact + recurring pattern.'
+    );
+  }
   if (isHandoverContext(input)) {
     hints.push(
       'HANDOVER: Do NOT open with direct "you are not home / you are late" accusations. Start with situation + impact on handover/planning. Keep names, times, and that agreements fail — without "you yourself around [time]" or repeated you+late chains.'
@@ -122,6 +134,16 @@ function contextualHints(input: string): string {
   if (agency) {
     hints.push(
       `CRITICAL: Keep the input agency phrase (${agency.label}) in output — do not replace with passive "I received" only.`
+    );
+  }
+  if (
+    /\b(deadline|plazo|prazo|frist|échéance)\b/i.test(input) &&
+    /\b(perfectamente|muito\s+bem|damn\s+well|très\s+bien|donders\s+goed|wusstest|knew)\b/i.test(
+      input
+    )
+  ) {
+    hints.push(
+      'WORK DEADLINE: Remove "you knew perfectly / sabías perfectamente / muito bem que / très bien que" and HR/legal escalation lines. Keep deadline/plazo + deliver-by-tomorrow ask + impact on you — no motive attack.'
     );
   }
   return hints.length ? `\n${hints.join('\n')}` : '';

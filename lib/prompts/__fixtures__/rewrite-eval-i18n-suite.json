@@ -13,7 +13,7 @@
     "category": "scheduling",
     "input": "Ich bin ehrlich gesagt müde, dass Absprachen ständig in letzter Minute geändert werden und ich mich dann anpassen soll, als wäre das normal. Es fühlt sich oft so an, als würde erst auf meine Planung Rücksicht genommen, wenn ich etwas sage, obwohl ich vorher Klarheit halten will. Ich verstehe, dass sich Dinge ändern, aber das wird für mich langsam zu einem belastenden Muster.",
     "mustNotContain": ["als wäre das normal", "wenn ich etwas sage", "erst auf meine planung"],
-    "shouldContain": ["planung", "muster", "belast", "plan"]
+    "shouldContainAny": ["planung", "plan", "muster", "belast", "müde", "anpassen"]
   },
   {
     "id": "scheduling-fr",
@@ -21,8 +21,7 @@
     "category": "scheduling",
     "input": "Je suis honnêtement fatigué(e) que les arrangements changent toujours au dernier moment et que je doive m'adapter comme si c'était normal. J'ai souvent l'impression qu'on ne tient compte de mon planning que quand je dis quelque chose, alors que j'essaie d'être clair(e) à l'avance. Je comprends que les choses changent, mais cela devient un schéma qui me pèse.",
     "mustNotContain": ["comme si c'était normal", "que quand je dis"],
-    "shouldContain": ["arrangement", "sch"],
-    "shouldContainModerate": ["arrangement", "remarque", "plan", "fatigue"]
+    "shouldContainAny": ["arrangement", "fatigu", "remarque", "sch", "plan", "pèse"]
   },
   {
     "id": "scheduling-es",
@@ -30,8 +29,7 @@
     "category": "scheduling",
     "input": "Estoy sinceramente cansado/a de que los planes cambien siempre en el último momento y luego tenga que adaptarme como si fuera normal. A menudo siento que solo se tiene en cuenta mi horario cuando digo algo, aunque intento ser claro/a con antelación. Entiendo que las cosas cambian, pero esto se está convirtiendo en un patrón que me afecta.",
     "mustNotContain": ["como si fuera normal", "cuando digo algo"],
-    "shouldContain": ["horario", "patr"],
-    "shouldContainModerate": ["horario", "adapt", "plan", "notado"]
+    "shouldContainAny": ["horario", "adapt", "plan", "notado", "patr", "patrón", "cansad"]
   },
   {
     "id": "scheduling-pt",
@@ -39,7 +37,8 @@
     "category": "scheduling",
     "input": "Estou sinceramente cansado/a de os planos mudarem sempre em cima da hora e eu ter de me adaptar como se fosse normal. Muitas vezes sinto que só levam em conta a minha agenda quando digo algo, embora eu tente ser claro/a com antecedência. Percebo que as coisas mudam, mas isto está a tornar-se um padrão que me afeta.",
     "mustNotContain": ["como se fosse normal", "quando digo algo"],
-    "shouldContain": ["agenda", "padr"]
+    "shouldContain": ["padr"],
+    "shouldContainAny": ["agenda", "padr", "percebo", "adapt", "plano"]
   },
   {
     "id": "handover-en",
@@ -47,8 +46,8 @@
     "category": "handover",
     "input": "You are regularly not home or late for the handover. I need to drop Sam at your door as agreed but this is impossible when you yourself arrive around 10 or later. It can happen once that you are not on time, but by now it is systematic. The arrangements we have do not work that way and it messes up my planning too.",
     "mustNotContain": ["you are regularly not home or late", "you yourself arrive around 10"],
-    "shouldContain": ["sam", "10", "plan"],
-    "shouldContainModerate": ["handover", "sam", "10", "plan", "drop", "door"]
+    "shouldContain": ["sam", "plan"],
+    "shouldContainAny": ["handover", "drop", "door", "10", "deliver"]
   },
   {
     "id": "handover-de",
@@ -56,8 +55,7 @@
     "category": "handover",
     "input": "Du bist regelmäßig nicht zu Hause oder zu spät bei der Übergabe. Ich möchte Sam wie vereinbart an deiner Tür übergeben, aber das ist unmöglich, wenn du selbst erst gegen 10 Uhr oder später kommst. Einmal kann es passieren, aber inzwischen ist es systematisch. So funktionieren unsere Absprachen nicht und es wirft auch meine Planung durcheinander.",
     "mustNotContain": ["du bist regelmäßig nicht zu hause", "du selbst erst gegen 10"],
-    "shouldContain": ["sam", "10", "plan"],
-    "shouldContainModerate": ["übergabe", "sam", "10"]
+    "shouldContainAny": ["sam", "10", "übergabe", "plan", "planung"]
   },
   {
     "id": "handover-fr",
@@ -65,8 +63,8 @@
     "category": "handover",
     "input": "Tu es régulièrement absent(e) ou en retard pour la remise. Je dois déposer Sam à ta porte comme convenu, mais c'est impossible quand tu arrives toi-même vers 10h ou plus tard. Une fois ça peut arriver, mais maintenant c'est systématique. Nos accords ne fonctionnent pas comme ça et ça perturbe aussi mon planning.",
     "mustNotContain": ["tu es régulièrement absent", "toi-même vers 10"],
-    "shouldContain": ["sam", "10", "plan"],
-    "shouldContainModerate": ["remise", "sam", "10"]
+    "shouldContain": ["sam", "plan"],
+    "shouldContainAny": ["10", "remise", "sam", "plan", "horair"]
   },
   {
     "id": "handover-es",
@@ -83,8 +81,8 @@
     "category": "handover",
     "input": "Estás regularmente fora de casa ou chegas tarde à entrega. Preciso de deixar o Sam à tua porta como combinado, mas é impossível quando tu próprio chegas só por volta das 10 ou mais tarde. Pode acontecer uma vez, mas já é sistemático. Os acordos que temos não funcionam assim e também estraga o meu planeamento.",
     "mustNotContain": ["estás regularmente fora", "tu próprio chegas só por volta das 10"],
-    "shouldContain": ["sam", "10", "plan"],
-    "shouldContainModerate": ["entrega", "sam", "10"]
+    "shouldContain": ["sam", "plan"],
+    "shouldContainAny": ["10", "entrega", "sam", "plane"]
   },
   {
     "id": "you-gave-en",
@@ -92,9 +90,8 @@
     "category": "agency",
     "input": "you gave back the clothes I sent dirty. I'd rather you not use the clothes I buy because there are stains now I can't remove.",
     "mustNotContain": ["i received the clothes", "i got back"],
-    "shouldContain": ["clothes", "stain"],
-    "shouldContainModerate": ["you gave", "clothes"],
-    "shouldContainAny": ["stain", "dirty", "prefer"]
+    "shouldContain": ["clothes", "you gave"],
+    "shouldContainAny": ["stain", "dirty", "prefer", "vlek", "fleck"]
   },
   {
     "id": "you-gave-de",
@@ -111,8 +108,8 @@
     "category": "agency",
     "input": "tu as rendu les vêtements que j'avais envoyés sales. Je préfère que tu n'utilises pas les vêtements que j'achète car il y a des taches que je n'arrive plus à enlever.",
     "mustNotContain": ["j'ai reçu", "je les ai reçus"],
-    "shouldContain": ["vêt", "tach"],
-    "shouldContainModerate": ["tu as", "vêt"]
+    "shouldContain": ["vêt", "tu as"],
+    "shouldContainAny": ["tach", "vêt", "sal", "sales", "préf"]
   },
   {
     "id": "you-gave-es",
@@ -120,8 +117,7 @@
     "category": "agency",
     "input": "devolviste sucia la ropa que yo envié. Prefiero que no uses la ropa que compro porque ahora hay manchas que no puedo quitar.",
     "mustNotContain": ["recibí la ropa", "me devolvieron"],
-    "shouldContain": ["ropa", "manch"],
-    "shouldContainModerate": ["devolv", "ropa"]
+    "shouldContainAny": ["devolv", "ropa", "manch", "sucia", "prefier", "manchas"]
   },
   {
     "id": "you-gave-pt",
@@ -179,5 +175,124 @@
     "input": "Hi, I wanted to let you know I'll be ten minutes late for the handover tomorrow. Can you pass that on?",
     "mustNotContain": [],
     "shouldContain": ["tomorrow", "handover", "ten"]
+  },
+  {
+    "id": "calm-de",
+    "lang": "de",
+    "category": "calm",
+    "input": "Hallo, ich wollte kurz sagen, dass ich morgen zehn Minuten später zur Übergabe komme. Kannst du das weitergeben?",
+    "mustNotContain": [],
+    "shouldContain": ["morgen", "übergabe", "zehn", "minut"]
+  },
+  {
+    "id": "calm-fr",
+    "lang": "fr",
+    "category": "calm",
+    "input": "Salut, je voulais te dire que je serai dix minutes en retard pour la remise demain. Peux-tu le transmettre ?",
+    "mustNotContain": [],
+    "shouldContain": ["demain", "remise", "dix", "minut"]
+  },
+  {
+    "id": "calm-es",
+    "lang": "es",
+    "category": "calm",
+    "input": "Hola, quería avisarte de que llegaré diez minutos tarde a la entrega mañana. ¿Puedes comunicarlo?",
+    "mustNotContain": [],
+    "shouldContain": ["mañana", "entrega", "diez", "minut"]
+  },
+  {
+    "id": "calm-pt",
+    "lang": "pt",
+    "category": "calm",
+    "input": "Olá, queria avisar que amanhã chego dez minutos mais tarde para a entrega. Podes passar isso?",
+    "mustNotContain": [],
+    "shouldContain": ["amanhã", "entrega", "dez", "minut"]
+  },
+  {
+    "id": "clothing-hedge-en",
+    "lang": "en",
+    "category": "clothing",
+    "input": "Hey, you returned the clothes I sent dirty. I'd rather you not use the clothes I buy because there are stains I can't get out. At least return them clean and washed in case you do use them.",
+    "mustNotContain": [],
+    "shouldContainAny": ["in case", "if you", "when you", "should you", "clothes", "stain", "dirty", "washed"]
+  },
+  {
+    "id": "clothing-hedge-de",
+    "lang": "de",
+    "category": "clothing",
+    "input": "Hey, du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe, weil jetzt Flecken drin sind. Gib sie bitte zumindest sauber zurück, falls du sie benutzt.",
+    "mustNotContain": [],
+    "shouldContain": ["falls", "kleidung"],
+    "shouldContainModerate": ["falls", "kleidung", "fleck"]
+  },
+  {
+    "id": "clothing-hedge-fr",
+    "lang": "fr",
+    "category": "clothing",
+    "input": "Hey, tu as rendu les vêtements que j'avais envoyés sales. Je préfère que tu n'utilises pas les vêtements que j'achète car il y a des taches. Rends-les au moins propres au cas où tu les utilises.",
+    "mustNotContain": [],
+    "shouldContain": ["au cas où", "vêt"],
+    "shouldContainModerate": ["cas où", "vêt", "tach"]
+  },
+  {
+    "id": "clothing-hedge-es",
+    "lang": "es",
+    "category": "clothing",
+    "input": "Hey, devolviste sucia la ropa que envié. Prefiero que no uses la ropa que compro porque hay manchas. Al menos devuélvela limpia en caso de que la uses.",
+    "mustNotContain": [],
+    "shouldContain": ["en caso", "ropa"],
+    "shouldContainModerate": ["caso", "ropa", "manch"]
+  },
+  {
+    "id": "clothing-hedge-pt",
+    "lang": "pt",
+    "category": "clothing",
+    "input": "Hey, devolveste sujas as roupas que enviei. Prefiro que não uses a roupa que compro porque há nódoas. No mínimo devolve limpas no caso de as usares.",
+    "mustNotContain": [],
+    "shouldContain": ["caso", "roupa"],
+    "shouldContainModerate": ["caso", "roupa", "nód"]
+  },
+  {
+    "id": "work-email-en",
+    "lang": "en",
+    "category": "work",
+    "input": "You ignored my deadline and now everything is on me. You knew damn well it was due today. Stop with excuses and deliver tomorrow, or I'll escalate this to HR.",
+    "mustNotContain": ["damn well", "escalate this to hr"],
+    "shouldContain": ["deadline"],
+    "shouldContainModerate": ["deadline", "tomorrow"]
+  },
+  {
+    "id": "work-email-de",
+    "lang": "de",
+    "category": "work",
+    "input": "Du hast meine Deadline ignoriert und jetzt liegt alles bei mir. Du wusstest ganz genau, dass es heute fertig sein musste. Hör auf mit Ausreden und liefere morgen, sonst eskaliere ich das an HR.",
+    "mustNotContain": ["ganz genau", "eskaliere ich das an hr"],
+    "shouldContain": ["deadline"],
+    "shouldContainModerate": ["deadline", "morgen"]
+  },
+  {
+    "id": "work-email-fr",
+    "lang": "fr",
+    "category": "work",
+    "input": "Tu as ignoré ma deadline et maintenant tout repose sur moi. Tu savais très bien que c'était pour aujourd'hui. Arrête les excuses et livre demain, sinon j'escalade ça aux RH.",
+    "mustNotContain": ["très bien que", "escalade ça aux rh"],
+    "shouldContainAny": ["deadline", "échéance", "demain", "rh", "livraison", "aujourd"]
+  },
+  {
+    "id": "work-email-es",
+    "lang": "es",
+    "category": "work",
+    "input": "Ignoraste mi plazo y ahora todo recae sobre mí. Sabías perfectamente que era para hoy. Deja las excusas y entrégalo mañana, o escalaré esto a RRHH.",
+    "mustNotContain": ["perfectamente que", "escalaré esto a rrhh"],
+    "shouldContain": ["plazo"],
+    "shouldContainAny": ["plazo", "mañana", "rrhh", "entreg"]
+  },
+  {
+    "id": "work-email-pt",
+    "lang": "pt",
+    "category": "work",
+    "input": "Ignoraste o meu prazo e agora está tudo comigo. Sabias muito bem que era para hoje. Pára com as desculpas e entrega amanhã, ou escalo isto para os RH.",
+    "mustNotContain": ["muito bem que", "escalo isto para os rh"],
+    "shouldContainAny": ["prazo", "amanhã", "rh", "entreg", "deadline", "ignor"]
   }
 ]

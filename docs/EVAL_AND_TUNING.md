@@ -30,3 +30,19 @@ npm run eval:analyze
 ```
 
 Target: **≥95% pass** on `moderate` + `firm` across all fixture languages before calling quality “excellent”.
+
+```bash
+# Gate on moderate+firm only (default target 95%)
+$env:EVAL_TARGET_PCT=95; npm run eval:rewrite:suite
+```
+
+## Automatic tuning — be careful
+
+| Approach | Verdict |
+|----------|---------|
+| Re-run eval → read report → **you or the agent edits prompts/validation in git** | Recommended |
+| `npm run eval:analyze` summarizing failures | Safe (read-only) |
+| Script that **auto-edits** prompts from production requests | Avoid (privacy, drift, no audit trail) |
+| Fine-tuning OpenAI on user messages | Avoid unless explicit consent + legal review |
+
+The app does **not** store user input for learning. Improvement happens only through **versioned fixture suites** and code changes you ship deliberately.

@@ -59,8 +59,38 @@ if (byCase.size) {
 
 const strict = report.filter((r) => r.level === 'moderate' || r.level === 'firm');
 const strictPass = strict.filter((r) => r.status === 'PASS').length;
-console.log(
-  `\nModerate+firm only: ${strictPass}/${strict.length} (${((100 * strictPass) / strict.length).toFixed(1)}%)`
-);
+  console.log(
+    `\nModerate+firm only: ${strictPass}/${strict.length} (${((100 * strictPass) / strict.length).toFixed(1)}%)`
+  );
 
-console.log('\nTuning: edit prompts/validation in repo, then re-run eval. No auto-apply from this script.\n');
+  const byLang = new Map();
+  const byCat = new Map();
+  for (const r of report) {
+    const lang = r.lang ?? 'nl';
+    if (!byLang.has(lang)) byLang.set(lang, { pass: 0, total: 0 });
+    const L = byLang.get(lang);
+    L.total++;
+    if (r.status === 'PASS') L.pass++;
+
+    const cat = r.category ?? r.id?.split('-')[0] ?? '?';
+    if (!byCat.has(cat)) byCat.set(cat, { pass: 0, total: 0 });
+    const C = byCat.get(cat);
+    C.total++;
+    if (r.status === 'PASS') C.pass++;
+  }
+
+  if (byLang.size > 1) {
+    console.log('\nBy language:');
+    for (const [lang, { pass, total }] of [...byLang.entries()].sort()) {
+      console.log(`  ${lang}: ${pass}/${total} (${((100 * pass) / total).toFixed(1)}%)`);
+    }
+  }
+
+  if (byCat.size > 1) {
+    console.log('\nBy category:');
+    for (const [cat, { pass, total }] of [...byCat.entries()].sort()) {
+      console.log(`  ${cat}: ${pass}/${total} (${((100 * pass) / total).toFixed(1)}%)`);
+    }
+  }
+
+  console.log('\nTuning: edit prompts/validation in repo, then re-run eval. No auto-apply from this script.\n');

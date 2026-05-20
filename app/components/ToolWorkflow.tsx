@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/components/I18nProvider';
 import type { ToolMode, TransformLevel } from '@/lib/types';
 
 const fieldClass =
@@ -9,102 +10,139 @@ const panelClass =
   'rounded-2xl border-2 border-border bg-surface p-6 shadow-[var(--shadow)]';
 
 type Props = {
-  mode: ToolMode;
-  title: string;
-  description: string;
-  inputLabel: string;
-  inputPlaceholder: string;
-  outputLabel: string;
-  outputPlaceholder: string;
+  activeMode: ToolMode;
+  onModeChange: (mode: ToolMode) => void;
   input: string;
-  output: string;
+  rewriteOutput: string;
+  logOutput: string;
   eventDate: string;
   loading: boolean;
   error: string;
-  copied: boolean;
+  rewriteCopied: boolean;
+  logCopied: boolean;
   onInputChange: (value: string) => void;
-  onOutputChange: (value: string) => void;
+  onRewriteOutputChange: (value: string) => void;
+  onLogOutputChange: (value: string) => void;
   onEventDateChange: (value: string) => void;
   onGenerate: () => void;
   onReset: () => void;
   onCopy: () => void;
-  onBack: () => void;
-  transformLevel?: TransformLevel;
-  onTransformLevelChange?: (level: TransformLevel) => void;
+  transformLevel: TransformLevel;
+  onTransformLevelChange: (level: TransformLevel) => void;
 };
 
 export function ToolWorkflow({
-  mode,
-  title,
-  description,
-  inputLabel,
-  inputPlaceholder,
-  outputLabel,
-  outputPlaceholder,
+  activeMode,
+  onModeChange,
   input,
-  output,
+  rewriteOutput,
+  logOutput,
   eventDate,
   loading,
   error,
-  copied,
+  rewriteCopied,
+  logCopied,
   onInputChange,
-  onOutputChange,
+  onRewriteOutputChange,
+  onLogOutputChange,
   onEventDateChange,
   onGenerate,
   onReset,
   onCopy,
-  onBack,
-  transformLevel = 'moderate',
+  transformLevel,
   onTransformLevelChange,
 }: Props) {
+  const { messages: m } = useI18n();
   const canGenerate = !!input.trim();
+  const output = activeMode === 'rewrite' ? rewriteOutput : logOutput;
   const hasOutput = !!output.trim();
+  const copied = activeMode === 'rewrite' ? rewriteCopied : logCopied;
+
+  const tabs: { id: ToolMode; label: string; hint: string }[] = [
+    { id: 'rewrite', label: m.tabs.rewrite.label, hint: m.tabs.rewrite.hint },
+    { id: 'log', label: m.tabs.log.label, hint: m.tabs.log.hint },
+  ];
+
+  const rewriteLevels: { level: TransformLevel; label: string }[] = [
+    { level: 'minimal', label: m.rewrite.minimal },
+    { level: 'moderate', label: m.rewrite.moderate },
+    { level: 'firm', label: m.rewrite.firm },
+  ];
 
   return (
     <div className="space-y-6">
-      <button
-        type="button"
-        onClick={onBack}
-        className="text-sm font-medium text-muted hover:text-primary"
+      <nav
+        className="flex flex-col sm:flex-row gap-2 p-1 rounded-xl border-2 border-border bg-surface-muted"
+        aria-label={m.tabs.aria}
       >
-        ← Back
-      </button>
+        {tabs.map((tab) => {
+          const active = activeMode === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => onModeChange(tab.id)}
+              className={[
+                'flex-1 rounded-lg px-4 py-3 text-left transition-colors',
+                active
+                  ? 'bg-surface border-2 border-primary shadow-sm'
+                  : 'border-2 border-transparent hover:bg-surface',
+              ].join(' ')}
+              aria-pressed={active}
+            >
+              <span
+                className={[
+                  'block text-sm font-semibold',
+                  active ? 'text-primary' : 'text-foreground',
+                ].join(' ')}
+              >
+                {tab.label}
+              </span>
+              <span className="block mt-0.5 text-xs text-muted">{tab.hint}</span>
+            </button>
+          );
+        })}
+      </nav>
 
-      <div>
-        <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-        <p className="mt-2 text-sm text-muted max-w-2xl leading-relaxed">
-          {description}
-        </p>
-      </div>
+      <p className="text-sm text-muted leading-relaxed">
+        {activeMode === 'rewrite' ? m.intro.rewrite : m.intro.log}
+      </p>
 
       <div className={panelClass + ' space-y-4'}>
         <div>
           <label
-            htmlFor={`${mode}-input`}
+            htmlFor="shared-input"
             className="block text-sm font-medium text-foreground mb-2"
           >
-            {inputLabel}
+            {activeMode === 'rewrite'
+              ? m.input.rewriteLabel
+              : m.input.logLabel}
           </label>
           <textarea
-            id={`${mode}-input`}
+            id="shared-input"
             className={`${fieldClass} min-h-[180px] resize-y`}
             rows={7}
-            placeholder={inputPlaceholder}
+            placeholder={
+              activeMode === 'rewrite'
+                ? m.input.rewritePlaceholder
+                : m.input.logPlaceholder
+            }
             value={input}
             onChange={(e) => onInputChange(e.target.value)}
           />
+          <p className="mt-2 text-xs text-muted-light">{m.input.sharedHint}</p>
         </div>
 
-        {mode === 'log' && (
+        {activeMode === 'log' && (
           <div>
             <label
-              htmlFor={`${mode}-date`}
+              htmlFor="log-date"
               className="block text-sm font-medium text-foreground mb-2"
             >
-              Entry date
+              {m.log.entryDate}
             </label>
             <input
-              id={`${mode}-date`}
+              id="log-date"
               type="date"
               className={`${fieldClass} max-w-xs`}
               value={eventDate}
@@ -113,54 +151,29 @@ export function ToolWorkflow({
           </div>
         )}
 
-        {mode === 'rewrite' && onTransformLevelChange && (
+        {activeMode === 'rewrite' && (
           <div>
             <span className="block text-sm font-medium text-foreground mb-2">
-              Rewrite mode
+              {m.rewrite.modeLabel}
             </span>
             <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => onTransformLevelChange('minimal')}
-                className={[
-                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
-                  transformLevel === 'minimal'
-                    ? 'border-primary bg-primary-subtle text-primary'
-                    : 'border-border bg-surface text-muted hover:border-primary',
-                ].join(' ')}
-              >
-                Light polish
-              </button>
-              <button
-                type="button"
-                onClick={() => onTransformLevelChange('moderate')}
-                className={[
-                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
-                  transformLevel === 'moderate'
-                    ? 'border-primary bg-primary-subtle text-primary'
-                    : 'border-border bg-surface text-muted hover:border-primary',
-                ].join(' ')}
-              >
-                Clear &amp; calm
-              </button>
-              <button
-                type="button"
-                onClick={() => onTransformLevelChange('firm')}
-                className={[
-                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
-                  transformLevel === 'firm'
-                    ? 'border-primary bg-primary-subtle text-primary'
-                    : 'border-border bg-surface text-muted hover:border-primary',
-                ].join(' ')}
-              >
-                Firm boundary
-              </button>
+              {rewriteLevels.map(({ level, label }) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => onTransformLevelChange(level)}
+                  className={[
+                    'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
+                    transformLevel === level
+                      ? 'border-primary bg-primary-subtle text-primary'
+                      : 'border-border bg-surface text-muted hover:border-primary',
+                  ].join(' ')}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <p className="mt-2 text-xs text-muted-light">
-              Light polish: grammar and typos only. Clear &amp; calm:
-              structural de-escalation — reframes blame, keeps your point.
-              Firm boundary: same, with limits and requests stated clearly.
-            </p>
+            <p className="mt-2 text-xs text-muted-light">{m.rewrite.modeHelp}</p>
           </div>
         )}
 
@@ -177,17 +190,19 @@ export function ToolWorkflow({
             ].join(' ')}
           >
             {loading
-              ? 'Generating…'
+              ? m.actions.generating
               : hasOutput
-                ? 'Regenerate'
-                : 'Generate'}
+                ? m.actions.regenerate
+                : activeMode === 'rewrite'
+                  ? m.actions.rewriteMessage
+                  : m.actions.buildLogEntry}
           </button>
           <button
             type="button"
             onClick={onReset}
             className="rounded-xl border-2 border-border bg-surface px-4 py-2.5 text-sm font-medium text-muted hover:border-primary hover:text-primary"
           >
-            Reset
+            {m.actions.resetAll}
           </button>
         </div>
       </div>
@@ -201,10 +216,12 @@ export function ToolWorkflow({
       <div className={panelClass + ' space-y-4'}>
         <div className="flex items-start justify-between gap-3">
           <label
-            htmlFor={`${mode}-output`}
+            htmlFor="tool-output"
             className="block text-sm font-medium text-foreground"
           >
-            {outputLabel}
+            {activeMode === 'rewrite'
+              ? m.output.rewriteLabel
+              : m.output.logLabel}
           </label>
           {hasOutput && (
             <button
@@ -212,27 +229,39 @@ export function ToolWorkflow({
               onClick={onCopy}
               className="shrink-0 rounded-md border-2 border-border bg-surface px-3 py-1.5 text-xs font-medium text-muted hover:border-primary hover:text-primary"
             >
-              {copied ? 'Copied' : 'Copy'}
+              {copied ? m.actions.copied : m.actions.copy}
             </button>
           )}
         </div>
-        <textarea
-          id={`${mode}-output`}
-          className={`${fieldClass} min-h-[200px] resize-y bg-surface`}
-          rows={8}
-          placeholder={outputPlaceholder}
-          value={output}
-          onChange={(e) => onOutputChange(e.target.value)}
-        />
+        {activeMode === 'rewrite' ? (
+          <textarea
+            id="tool-output"
+            className={`${fieldClass} min-h-[200px] resize-y bg-surface`}
+            rows={8}
+            placeholder={m.output.rewritePlaceholder}
+            value={rewriteOutput}
+            onChange={(e) => onRewriteOutputChange(e.target.value)}
+          />
+        ) : (
+          <textarea
+            id="tool-output"
+            className={`${fieldClass} min-h-[200px] resize-y bg-surface`}
+            rows={8}
+            placeholder={m.output.logPlaceholder}
+            value={logOutput}
+            onChange={(e) => onLogOutputChange(e.target.value)}
+          />
+        )}
         <p className="text-xs text-muted-light">
-          Edit the text above before copying. You can regenerate anytime.
+          {activeMode === 'log' && !hasOutput && (
+            <>{m.output.logEmptyHint} </>
+          )}
+          {m.output.editHint}
         </p>
       </div>
 
       <p className="text-xs text-muted-light border-t border-border pt-4">
-        Privacy: no account and no saved history. What you enter is used only to
-        generate your result on this visit—it is not stored, reviewed by us, or
-        used to train AI. Copy anything you want to keep before you leave.
+        {m.privacy}
       </p>
     </div>
   );

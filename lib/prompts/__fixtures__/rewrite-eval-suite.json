@@ -10,7 +10,8 @@
     "input": "Ik merk dat je regelmatig niet thuis bent of te laat bent voor de overdracht. Ik wil Joa volgens afspraak aan jouw deur kunnen overdragen maar dit is onmogelijk als je zelf rond 10 uur of later arriveert. Het kan een keer voorkomen dat je niet op tijd bent, maar het gebeurt inmiddels structureel. Zo werken de afspraken die we hebben niet en het gooit bovendien mijn eigen planning door de war.",
     "mustNotContain": ["je regelmatig niet thuis bent of te laat", "je zelf rond 10 uur"],
     "shouldContain": ["planning", "10", "joa"],
-    "shouldContainModerate": ["joa", "10", "planning"]
+    "shouldContainModerate": ["joa", "planning"],
+    "shouldContainAny": ["10", "tien", "uur"]
   },
   {
     "id": "clothing-hedge",

@@ -35,6 +35,13 @@ export type ValidationIssue = {
   detail: string;
 };
 
+const KNEW_PERFECTLY_ESCALATION =
+  /\b(perfectamente\s+que|muito\s+bem\s+que|perfectly\s+well|you\s+knew\s+(very\s+)?well|wusstest\s+du\s+genau|sabías\s+perfectamente|sabias\s+muito\s+bem|très\s+bien\s+que|donders\s+goed)\b/i;
+
+export function hasKnewPerfectlyEscalation(input: string, output: string): boolean {
+  return KNEW_PERFECTLY_ESCALATION.test(input) && KNEW_PERFECTLY_ESCALATION.test(output);
+}
+
 function normalize(text: string) {
   return text
     .toLowerCase()
@@ -151,6 +158,53 @@ export function validateRewrite(
     issues.push({
       code: 'closing_replaced',
       detail: 'Conditional closing replaced by generic ask',
+    });
+  }
+
+  const schedulingBanned = [
+    /\bwenn\s+ich\s+etwas\s+sage\b/i,
+    /\berst\s+auf\s+meine\s+planung\b/i,
+    /\bonly\s+counts\s+once\s+i\s+say\b/i,
+    /\bque\s+quand\s+je\s+dis\b/i,
+    /\bcuando\s+digo\s+algo\b/i,
+    /\bquando\s+digo\s+algo\b/i,
+  ];
+  for (const p of schedulingBanned) {
+    if (p.test(input) && p.test(output)) {
+      issues.push({
+        code: 'escalation_preserved',
+        detail: `Scheduling: remove phrase still in output (${p.source})`,
+      });
+    }
+  }
+
+  if (hasKnewPerfectlyEscalation(input, output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail:
+        'Drop "you knew perfectly well / sabías perfectamente / muito bem que" — state deadline impact without motive attack',
+    });
+  }
+
+  const threatInput =
+    /\b(ridiculous|ridicule|ridículo|lächerlich|belachelijk)\b/i.test(input) ||
+    /\b(ignor|negeer|ignore)\w*/i.test(input);
+  const threatTopicKept =
+    /\b(ignor|frustr|acordo|acuerdo|agreement|contact|percebo|entendo|compreendo)\w*/i.test(
+      output
+    );
+  if (threatInput && !threatTopicKept && output.length > 80) {
+    issues.push({
+      code: 'substantive_dropped',
+      detail:
+        'Threat/de-escalation: keep the core issue (being ignored, agreements) — do not replace with vague "communication" only',
+    });
+  }
+
+  if (/\b(ridiculous|ridicule|lächerlich|belachelijk|ridículo)\b/i.test(output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail: 'Remove insult/sarcasm words (ridiculous, ridicule, etc.) from output',
     });
   }
 

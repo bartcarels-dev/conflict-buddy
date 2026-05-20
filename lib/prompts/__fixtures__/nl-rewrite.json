@@ -1,0 +1,20 @@
+[
+  {
+    "id": "scheduling-pattern",
+    "level": "moderate",
+    "input": "Ik ben er eerlijk gezegd best klaar mee dat afspraken steeds op het laatste moment veranderen en ik vervolgens maar moet meebewegen alsof dat normaal is. Het voelt vaak alsof er pas rekening wordt gehouden met mijn planning of situatie zodra ik er zelf iets van zeg, terwijl ik juist probeer vooraf duidelijkheid te houden. Ik snap dat dingen soms anders lopen, maar dit begint inmiddels wel een patroon te worden waar ik last van heb.",
+    "mustNotContain": [
+      "alsof dat normaal is",
+      "pas wanneer ik er zelf iets van zeg",
+      "het voelt vaak alsof er pas"
+    ],
+    "shouldContain": ["planning", "patroon", "frustratie"]
+  },
+  {
+    "id": "clothing-hedge",
+    "level": "moderate",
+    "input": "Hey, je hebt de kleren die ik meegaf vies teruggegeven. Ik wil liever niet dat je de kleding die ik koop gebruikt, omdat er nu vlekken in zitten die ik er niet meer uit krijg. Het is ook gewoon netjes om het op zijn minst schoon en gewassen terug te geven in het geval je het wel gebruikt.",
+    "mustNotContain": [],
+    "shouldContain": ["in het geval", "kleren", "vlekken"]
+  }
+]

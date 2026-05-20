@@ -116,7 +116,7 @@ export function ToolWorkflow({
         {mode === 'rewrite' && onTransformLevelChange && (
           <div>
             <span className="block text-sm font-medium text-foreground mb-2">
-              Rewrite strength
+              Rewrite mode
             </span>
             <div className="flex flex-wrap gap-2">
               <button
@@ -143,11 +143,23 @@ export function ToolWorkflow({
               >
                 Clear &amp; calm
               </button>
+              <button
+                type="button"
+                onClick={() => onTransformLevelChange('firm')}
+                className={[
+                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
+                  transformLevel === 'firm'
+                    ? 'border-primary bg-primary-subtle text-primary'
+                    : 'border-border bg-surface text-muted hover:border-primary',
+                ].join(' ')}
+              >
+                Firm boundary
+              </button>
             </div>
             <p className="mt-2 text-xs text-muted-light">
-              Light polish: small fixes, often looks similar if your draft is
-              already calm. Clear &amp; calm: rephrases for smoother tone and
-              keeps your limits and conditions.
+              Light polish: grammar and typos only. Clear &amp; calm:
+              structural de-escalation — reframes blame, keeps your point.
+              Firm boundary: same, with limits and requests stated clearly.
             </p>
           </div>
         )}

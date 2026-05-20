@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { ToolMode, TransformLevel } from '@/lib/types';
+import type { RewriteAnalysis, ToolMode, TransformLevel } from '@/lib/types';
 import {
   detectLanguage,
   formatDate,
@@ -8,13 +8,21 @@ import {
   parseAiJson,
   runCompletion,
 } from '@/lib/ai';
-import { messageRewriterRules } from '@/lib/prompts/messageRewriter';
 import {
-  buildPreservationRetryPrompt,
+  messageRewriterMinimalRules,
+  messageRewriterMinimalUserPrompt,
+  usesStructuredPipeline,
+} from '@/lib/prompts/messageRewriterMinimal';
+import {
+  messageRewriterStructuredRules,
+  messageRewriterStructuredUserPrompt,
+} from '@/lib/prompts/messageRewriterStructured';
+import {
   buildUnchangedRetryPrompt,
-  checkRewritePreservation,
+  buildValidationRetryPrompt,
   isRewriteUnchanged,
-} from '@/lib/rewritePreservation';
+  validateRewrite,
+} from '@/lib/rewriteValidation';
 
 function ensureLogEntry(
   logEntry: string,
@@ -29,41 +37,41 @@ function ensureLogEntry(
 }
 
 function parseTransformLevel(value: unknown): TransformLevel {
-  return value === 'minimal' ? 'minimal' : 'moderate';
-}
-
-function buildRewritePrompts(level: TransformLevel) {
-  return {
-    systemPrompt: messageRewriterRules(level),
-  };
-}
-
-function buildRewriteUserPrompt(input: string, level: TransformLevel) {
-  const levelNote =
-    level === 'minimal'
-      ? 'Apply MINIMAL polish — preserve structure and closing; near-identical OK if already calm.'
-      : 'Apply MODERATE clear & calm — rephrase for smoother tone; output must NOT be identical to the input.';
-
-  return `
-Rewrite the message below.
-
-${levelNote}
-
-Requirements:
-- Same language as the input (do not translate).
-- Only topics and facts from this text; add nothing.
-- Remove insults/threats only; keep firm limits and preferences.
-- Preserve hedges, conditions ("if", "in case", "when", "unless"), and closing intent.
-
-Message:
-${input}
-`.trim();
+  if (value === 'minimal' || value === 'firm') return value;
+  return 'moderate';
 }
 
 function buildLogPrompts(dateLabel: string, formattedDate: string) {
   const dateLine = `${dateLabel}: ${formattedDate}`;
   return {
     systemPrompt: genericLogEntryRules().replace('{dateLine}', dateLine),
+  };
+}
+
+function parseAnalysis(parsed: Record<string, unknown>): RewriteAnalysis | null {
+  const toArr = (v: unknown) =>
+    Array.isArray(v) ? v.map(String).filter(Boolean) : [];
+
+  const substantive = toArr(parsed.substantive);
+  const boundariesAndConditions = toArr(parsed.boundariesAndConditions);
+  const emotionalIntensity = toArr(parsed.emotionalIntensity);
+  const escalatingFraming = toArr(parsed.escalatingFraming);
+
+  if (
+    substantive.length +
+      boundariesAndConditions.length +
+      emotionalIntensity.length +
+      escalatingFraming.length ===
+    0
+  ) {
+    return null;
+  }
+
+  return {
+    substantive,
+    boundariesAndConditions,
+    emotionalIntensity,
+    escalatingFraming,
   };
 }
 
@@ -84,25 +92,85 @@ function logDateLabel(input: string): string {
   return detectLanguage(input) === 'nl' ? 'Datum' : 'Date';
 }
 
-async function generateRewrite(
+async function runModel(
+  systemPrompt: string,
+  userPrompt: string
+): Promise<Record<string, unknown>> {
+  const raw = await runCompletion(systemPrompt, userPrompt);
+  try {
+    return parseAiJson(raw);
+  } catch {
+    console.error('Failed to parse JSON:', raw);
+    return { output: raw.trim() };
+  }
+}
+
+async function generateMinimalRewrite(
+  input: string,
+  retryNote?: string
+): Promise<string> {
+  let userPrompt = messageRewriterMinimalUserPrompt(input);
+  if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
+  const parsed = await runModel(messageRewriterMinimalRules(), userPrompt);
+  return extractOutput(parsed, 'rewrite');
+}
+
+async function generateStructuredRewrite(
   input: string,
   level: TransformLevel,
   retryNote?: string
+): Promise<{ output: string; analysis: RewriteAnalysis | null }> {
+  let userPrompt = messageRewriterStructuredUserPrompt(input, level);
+  if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
+  const parsed = await runModel(
+    messageRewriterStructuredRules(level),
+    userPrompt
+  );
+  return {
+    output: extractOutput(parsed, 'rewrite'),
+    analysis: parseAnalysis(parsed),
+  };
+}
+
+const MAX_REWRITE_ATTEMPTS = 2;
+
+async function rewriteWithValidation(
+  input: string,
+  level: TransformLevel
 ): Promise<string> {
-  const { systemPrompt } = buildRewritePrompts(level);
-  let userPrompt = buildRewriteUserPrompt(input, level);
-  if (retryNote) {
-    userPrompt = `${userPrompt}\n\n${retryNote}`;
+  let output = '';
+  let analysis: RewriteAnalysis | null = null;
+  let retryNote: string | undefined;
+
+  for (let attempt = 0; attempt < MAX_REWRITE_ATTEMPTS; attempt++) {
+    if (usesStructuredPipeline(level)) {
+      const result = await generateStructuredRewrite(input, level, retryNote);
+      output = result.output;
+      analysis = result.analysis;
+    } else {
+      output = await generateMinimalRewrite(input, retryNote);
+    }
+
+    if (!output) break;
+
+    const issues = validateRewrite(input, output, analysis);
+    const needsUnchangedRetry =
+      usesStructuredPipeline(level) && isRewriteUnchanged(input, output);
+
+    if (issues.length === 0 && !needsUnchangedRetry) break;
+
+    if (attempt === MAX_REWRITE_ATTEMPTS - 1) break;
+
+    if (needsUnchangedRetry) {
+      retryNote = buildUnchangedRetryPrompt();
+    } else if (issues.length > 0) {
+      retryNote = buildValidationRetryPrompt(issues);
+    } else {
+      break;
+    }
   }
 
-  const raw = await runCompletion(systemPrompt, userPrompt);
-  try {
-    const parsed = parseAiJson(raw);
-    return extractOutput(parsed, 'rewrite');
-  } catch {
-    console.error('Failed to parse rewrite JSON:', raw);
-    return raw.trim();
-  }
+  return output;
 }
 
 export async function POST(req: Request) {
@@ -133,32 +201,7 @@ export async function POST(req: Request) {
     let output = '';
 
     if (mode === 'rewrite') {
-      output = await generateRewrite(input, transformLevel);
-
-      if (transformLevel === 'moderate' && isRewriteUnchanged(input, output)) {
-        output = await generateRewrite(
-          input,
-          transformLevel,
-          buildUnchangedRetryPrompt()
-        );
-      }
-
-      const issues = checkRewritePreservation(input, output);
-      if (issues.length > 0) {
-        output = await generateRewrite(
-          input,
-          transformLevel,
-          buildPreservationRetryPrompt(issues)
-        );
-      }
-
-      if (transformLevel === 'moderate' && isRewriteUnchanged(input, output)) {
-        output = await generateRewrite(
-          input,
-          transformLevel,
-          buildUnchangedRetryPrompt()
-        );
-      }
+      output = await rewriteWithValidation(input, transformLevel);
     } else {
       const { systemPrompt } = buildLogPrompts(dateLabel, formattedDate);
       const userPrompt = `
@@ -168,14 +211,8 @@ Notes:
 ${input}
 `.trim();
 
-      const raw = await runCompletion(systemPrompt, userPrompt);
-      try {
-        const parsed = parseAiJson(raw);
-        output = extractOutput(parsed, 'log');
-      } catch {
-        console.error('Failed to parse JSON:', raw);
-        output = raw.trim();
-      }
+      const parsed = await runModel(systemPrompt, userPrompt);
+      output = extractOutput(parsed, 'log');
       output = ensureLogEntry(output, dateLabel, formattedDate);
     }
 

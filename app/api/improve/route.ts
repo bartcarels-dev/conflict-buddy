@@ -3,9 +3,8 @@ import type { ToolMode } from '@/lib/types';
 import {
   detectLanguage,
   formatDate,
+  genericLogEntryRules,
   getErrorResponse,
-  globalRules,
-  logEntryRules,
   messageRewriterRules,
   parseAiJson,
   runCompletion,
@@ -23,76 +22,34 @@ function ensureLogEntry(
   return logEntry;
 }
 
-function buildRewritePrompts(lang: ReturnType<typeof detectLanguage>) {
-  const systemPrompt =
-    lang === 'nl'
-      ? `
-Je bent Conflict Buddy — Message Rewriter voor gespannen communicatie.
-Schrijf één rustiger, duidelijker bericht dat de gebruiker kan versturen of als basis kan gebruiken.
-
-${messageRewriterRules(lang)}
-
-Return valid JSON only: { "output": "string" }
-`.trim()
-      : `
-You are Conflict Buddy — Message Rewriter for tense communication.
-Write one calmer, clearer message the user can send or use as a draft.
-
-${messageRewriterRules(lang)}
-
-Return valid JSON only: { "output": "string" }
-`.trim();
-
-  return { systemPrompt };
+function buildRewritePrompts() {
+  return {
+    systemPrompt: `
+${messageRewriterRules()}
+`.trim(),
+  };
 }
 
-function buildRewriteUserPrompt(
-  lang: ReturnType<typeof detectLanguage>,
-  input: string
-) {
-  const guard =
-    lang === 'nl'
-      ? 'Gebruik ALLEEN onderwerpen uit deze invoer. Voeg geen overdracht, kind of andere context toe die hier niet staat.'
-      : 'Use ONLY topics from this input. Do not add handover, children, or other context not stated here.';
+function buildRewriteUserPrompt(input: string) {
+  return `
+Rewrite the message below.
 
-  return `${guard}\n\nInvoer:\n${input}`;
+Requirements:
+- Same language as the input (do not translate).
+- Only topics and facts from this text; add nothing.
+- Preserve hedges, conditions ("if", "in case", "when"), and the user's intent.
+- If already calm, edit lightly — do not replace with a template closing.
+
+Message:
+${input}
+`.trim();
 }
 
-function buildLogPrompts(
-  lang: ReturnType<typeof detectLanguage>,
-  formattedDate: string,
-  dateLabel: string
-) {
-  const systemPrompt =
-    lang === 'nl'
-      ? `
-Je bent Conflict Buddy — Log Entry Builder.
-Maak één neutrale, feitelijke logregistratie op basis van ruwe notities.
-
-${globalRules(lang)}
-
-LOG ENTRY:
-${logEntryRules(lang)}
-- Start met "${dateLabel}: ${formattedDate}".
-- Bullets met • waar passend.
-
-Return valid JSON only: { "output": "string" }
-`.trim()
-      : `
-You are Conflict Buddy — Log Entry Builder.
-Create one neutral, factual log-style entry from rough notes.
-
-${globalRules(lang)}
-
-LOG ENTRY:
-${logEntryRules(lang)}
-- Start with "${dateLabel}: ${formattedDate}".
-- Use • bullets where appropriate.
-
-Return valid JSON only: { "output": "string" }
-`.trim();
-
-  return { systemPrompt };
+function buildLogPrompts(dateLabel: string, formattedDate: string) {
+  const dateLine = `${dateLabel}: ${formattedDate}`;
+  return {
+    systemPrompt: genericLogEntryRules().replace('{dateLine}', dateLine),
+  };
 }
 
 function extractOutput(parsed: Record<string, unknown>, mode: ToolMode): string {
@@ -106,6 +63,11 @@ function extractOutput(parsed: Record<string, unknown>, mode: ToolMode): string 
   }
 
   return String(parsed.logEntry ?? '').trim();
+}
+
+/** Date label for log header — follows input language when detectable. */
+function logDateLabel(input: string): string {
+  return detectLanguage(input) === 'nl' ? 'Datum' : 'Date';
 }
 
 export async function POST(req: Request) {
@@ -130,20 +92,22 @@ export async function POST(req: Request) {
     }
 
     const formattedDate = formatDate(eventDate);
-    const lang = detectLanguage(input);
-    const dateLabel = lang === 'nl' ? 'Datum' : 'Date';
+    const dateLabel = logDateLabel(input);
 
     const { systemPrompt } =
       mode === 'rewrite'
-        ? buildRewritePrompts(lang)
-        : buildLogPrompts(lang, formattedDate, dateLabel);
+        ? buildRewritePrompts()
+        : buildLogPrompts(dateLabel, formattedDate);
 
     const userPrompt =
       mode === 'rewrite'
-        ? buildRewriteUserPrompt(lang, input)
-        : lang === 'nl'
-          ? `Invoer:\n${input}`
-          : `Input:\n${input}`;
+        ? buildRewriteUserPrompt(input)
+        : `
+Turn these rough notes into a neutral log entry. Same language as the input. Only facts from the notes.
+
+Notes:
+${input}
+`.trim();
 
     const raw = await runCompletion(systemPrompt, userPrompt);
     let output = '';

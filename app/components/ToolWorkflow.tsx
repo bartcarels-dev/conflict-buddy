@@ -1,6 +1,6 @@
 'use client';
 
-import type { ToolMode } from '@/lib/types';
+import type { ToolMode, TransformLevel } from '@/lib/types';
 
 const fieldClass =
   'w-full rounded-lg border-2 border-border bg-input-bg px-4 py-3 text-sm text-foreground shadow-sm placeholder:text-muted-light focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/20';
@@ -29,6 +29,8 @@ type Props = {
   onReset: () => void;
   onCopy: () => void;
   onBack: () => void;
+  transformLevel?: TransformLevel;
+  onTransformLevelChange?: (level: TransformLevel) => void;
 };
 
 export function ToolWorkflow({
@@ -52,6 +54,8 @@ export function ToolWorkflow({
   onReset,
   onCopy,
   onBack,
+  transformLevel = 'moderate',
+  onTransformLevelChange,
 }: Props) {
   const canGenerate = !!input.trim();
   const hasOutput = !!output.trim();
@@ -106,6 +110,44 @@ export function ToolWorkflow({
               value={eventDate}
               onChange={(e) => onEventDateChange(e.target.value)}
             />
+          </div>
+        )}
+
+        {mode === 'rewrite' && onTransformLevelChange && (
+          <div>
+            <span className="block text-sm font-medium text-foreground mb-2">
+              Rewrite strength
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => onTransformLevelChange('minimal')}
+                className={[
+                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
+                  transformLevel === 'minimal'
+                    ? 'border-primary bg-primary-subtle text-primary'
+                    : 'border-border bg-surface text-muted hover:border-primary',
+                ].join(' ')}
+              >
+                Light polish
+              </button>
+              <button
+                type="button"
+                onClick={() => onTransformLevelChange('moderate')}
+                className={[
+                  'rounded-lg border-2 px-3 py-2 text-xs font-medium transition-colors',
+                  transformLevel === 'moderate'
+                    ? 'border-primary bg-primary-subtle text-primary'
+                    : 'border-border bg-surface text-muted hover:border-primary',
+                ].join(' ')}
+              >
+                Clear &amp; calm
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-muted-light">
+              Light polish keeps your wording and closing; Clear &amp; calm
+              smooths tone while keeping your limits.
+            </p>
           </div>
         )}
 

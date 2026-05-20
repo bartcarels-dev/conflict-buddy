@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server';
-import type { ToolMode } from '@/lib/types';
+import type { ToolMode, TransformLevel } from '@/lib/types';
 import {
   detectLanguage,
   formatDate,
   genericLogEntryRules,
   getErrorResponse,
-  messageRewriterRules,
   parseAiJson,
   runCompletion,
 } from '@/lib/ai';
+import { messageRewriterRules } from '@/lib/prompts/messageRewriter';
+import {
+  buildPreservationRetryPrompt,
+  checkRewritePreservation,
+} from '@/lib/rewritePreservation';
 
 function ensureLogEntry(
   logEntry: string,
@@ -22,23 +26,32 @@ function ensureLogEntry(
   return logEntry;
 }
 
-function buildRewritePrompts() {
+function parseTransformLevel(value: unknown): TransformLevel {
+  return value === 'minimal' ? 'minimal' : 'moderate';
+}
+
+function buildRewritePrompts(level: TransformLevel) {
   return {
-    systemPrompt: `
-${messageRewriterRules()}
-`.trim(),
+    systemPrompt: messageRewriterRules(level),
   };
 }
 
-function buildRewriteUserPrompt(input: string) {
+function buildRewriteUserPrompt(input: string, level: TransformLevel) {
+  const levelNote =
+    level === 'minimal'
+      ? 'Apply MINIMAL polish — preserve structure and closing.'
+      : 'Apply MODERATE calm clarity — keep every boundary and hedge.';
+
   return `
 Rewrite the message below.
+
+${levelNote}
 
 Requirements:
 - Same language as the input (do not translate).
 - Only topics and facts from this text; add nothing.
-- Preserve hedges, conditions ("if", "in case", "when"), and the user's intent.
-- If already calm, edit lightly — do not replace with a template closing.
+- Remove insults/threats only; keep firm limits and preferences.
+- Preserve hedges, conditions ("if", "in case", "when", "unless"), and closing intent.
 
 Message:
 ${input}
@@ -65,9 +78,29 @@ function extractOutput(parsed: Record<string, unknown>, mode: ToolMode): string 
   return String(parsed.logEntry ?? '').trim();
 }
 
-/** Date label for log header — follows input language when detectable. */
 function logDateLabel(input: string): string {
   return detectLanguage(input) === 'nl' ? 'Datum' : 'Date';
+}
+
+async function generateRewrite(
+  input: string,
+  level: TransformLevel,
+  retryNote?: string
+): Promise<string> {
+  const { systemPrompt } = buildRewritePrompts(level);
+  let userPrompt = buildRewriteUserPrompt(input, level);
+  if (retryNote) {
+    userPrompt = `${userPrompt}\n\n${retryNote}`;
+  }
+
+  const raw = await runCompletion(systemPrompt, userPrompt);
+  try {
+    const parsed = parseAiJson(raw);
+    return extractOutput(parsed, 'rewrite');
+  } catch {
+    console.error('Failed to parse rewrite JSON:', raw);
+    return raw.trim();
+  }
 }
 
 export async function POST(req: Request) {
@@ -76,6 +109,7 @@ export async function POST(req: Request) {
     const mode = body.mode as ToolMode;
     const input = String(body.input ?? '').trim();
     const eventDate = body.eventDate as string | undefined;
+    const transformLevel = parseTransformLevel(body.transformLevel);
 
     if (mode !== 'rewrite' && mode !== 'log') {
       return NextResponse.json(
@@ -94,33 +128,32 @@ export async function POST(req: Request) {
     const formattedDate = formatDate(eventDate);
     const dateLabel = logDateLabel(input);
 
-    const { systemPrompt } =
-      mode === 'rewrite'
-        ? buildRewritePrompts()
-        : buildLogPrompts(dateLabel, formattedDate);
+    let output = '';
 
-    const userPrompt =
-      mode === 'rewrite'
-        ? buildRewriteUserPrompt(input)
-        : `
+    if (mode === 'rewrite') {
+      output = await generateRewrite(input, transformLevel);
+      const issues = checkRewritePreservation(input, output);
+      if (issues.length > 0) {
+        const retryNote = buildPreservationRetryPrompt(issues);
+        output = await generateRewrite(input, transformLevel, retryNote);
+      }
+    } else {
+      const { systemPrompt } = buildLogPrompts(dateLabel, formattedDate);
+      const userPrompt = `
 Turn these rough notes into a neutral log entry. Same language as the input. Only facts from the notes.
 
 Notes:
 ${input}
 `.trim();
 
-    const raw = await runCompletion(systemPrompt, userPrompt);
-    let output = '';
-
-    try {
-      const parsed = parseAiJson(raw);
-      output = extractOutput(parsed, mode);
-    } catch {
-      console.error('Failed to parse JSON:', raw);
-      output = raw.trim();
-    }
-
-    if (mode === 'log') {
+      const raw = await runCompletion(systemPrompt, userPrompt);
+      try {
+        const parsed = parseAiJson(raw);
+        output = extractOutput(parsed, 'log');
+      } catch {
+        console.error('Failed to parse JSON:', raw);
+        output = raw.trim();
+      }
       output = ensureLogEntry(output, dateLabel, formattedDate);
     }
 
@@ -131,7 +164,7 @@ ${input}
       );
     }
 
-    return NextResponse.json({ mode, output });
+    return NextResponse.json({ mode, output, transformLevel });
   } catch (err) {
     console.error('Error in /api/improve:', err);
     const { status, error } = getErrorResponse(err);

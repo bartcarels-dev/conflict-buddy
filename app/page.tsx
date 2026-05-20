@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ToolWorkflow } from '@/app/components/ToolWorkflow';
-import type { ToolMode } from '@/lib/types';
+import type { ToolMode, TransformLevel } from '@/lib/types';
 
 type View = 'home' | ToolMode;
 
@@ -46,6 +46,7 @@ export default function Home() {
   );
   const [logCopied, setLogCopied] = useState(false);
 
+  const [rewriteLevel, setRewriteLevel] = useState<TransformLevel>('moderate');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -65,6 +66,7 @@ export default function Home() {
         body: JSON.stringify({
           mode,
           input,
+          ...(mode === 'rewrite' ? { transformLevel: rewriteLevel } : {}),
           ...(mode === 'log' ? { eventDate: logEventDate } : {}),
         }),
       });
@@ -219,6 +221,8 @@ export default function Home() {
             onReset={resetRewrite}
             onCopy={() => handleCopy(rewriteOutput, 'rewrite')}
             onBack={goHome}
+            transformLevel={rewriteLevel}
+            onTransformLevelChange={setRewriteLevel}
           />
         )}
 

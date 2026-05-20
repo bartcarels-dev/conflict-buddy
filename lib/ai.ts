@@ -359,12 +359,22 @@ export async function runCompletion(systemPrompt: string, userPrompt: string) {
   return completion.choices[0].message.content || '{}';
 }
 
+function missingApiKeyMessage(): string {
+  if (process.env.NODE_ENV === 'development') {
+    return (
+      'OpenAI API key missing. Add OPENAI_API_KEY=sk-… to .env.local in the project root, then restart the dev server (npm run dev).'
+    );
+  }
+  return (
+    'OpenAI API key is not configured on the server. In Vercel: Project → Settings → Environment Variables → add OPENAI_API_KEY, then redeploy.'
+  );
+}
+
 export function getErrorResponse(err: unknown) {
   if (err instanceof Error && err.message === 'MISSING_API_KEY') {
     return {
       status: 503,
-      error:
-        'OpenAI API key missing. Set OPENAI_API_KEY in .env.local and restart the server.',
+      error: missingApiKeyMessage(),
     };
   }
   const cause =

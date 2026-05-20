@@ -1,23 +1,34 @@
 import type { TransformLevel } from '@/lib/types';
+import type { RewriteLang } from '@/lib/rewriteLocale';
+import {
+  detectRewriteLocale,
+  findAgencyGave,
+  isHandoverContext,
+  rewriteLangBanner,
+  rewriteLangLabel,
+} from '@/lib/rewriteLocale';
 
 const FRAMEWORK = `
 DE-ESCALATION FRAMEWORK — separate four buckets before writing output:
 
-1. SUBSTANTIVE CONCERN (preserve in output): concrete issue, facts, practical impact, pattern/recurrence if stated.
-2. BOUNDARY / REQUEST / CONDITION (preserve explicitly): limits, preferences, asks, "if/in case/unless" conditions.
+1. SUBSTANTIVE CONCERN (preserve in output): concrete issue, facts, practical impact, pattern/recurrence, times (e.g. "10 uur"), names — do not drop.
+2. BOUNDARY / REQUEST / CONDITION (preserve explicitly): limits, preferences, asks, "if/in case/unless" conditions — keep hedges like "in het geval je het wel gebruikt".
 3. EMOTIONAL INTENSITY (may soften, not erase): frustration, tiredness — use measured I-statements ("dat zorgt bij mij voor …"), not attacks.
-4. ESCALATING FRAMING (reframe or drop — NEVER in output): blame, sarcasm, motive attribution, as-if-normal, only-when-I-speak-up, consideration-only-after-I-raise-it — any language. List in escalatingFraming[], then omit from output (no verbatim, no close paraphrase).
+4. ESCALATING FRAMING (reframe or drop — NEVER in output): blame, sarcasm, motive attribution, as-if-normal, only-when-I-speak-up, legal/public threats (lawyer, HR, "everyone will hear") — any language. List in escalatingFraming[], then omit from output (no verbatim, no close paraphrase).
 
 GOAL: Clearer, calmer, harder to escalate against — NOT submissive, fake-positive, or corporate.
 - Do NOT synonym-swap while keeping the same accusatory structure.
-- Do NOT reorder the same "you + problem" sentences — merge into situation + impact (what cannot happen and why).
+- Do NOT reorder the same "you + problem" sentences — merge into situation + impact (what cannot happen and why), but KEEP specific times/numbers from the input.
+- If input says "je gaf … terug", keep "je gaf" — never replace with "ik heb … teruggekregen".
 - If the input already says arrangements/agreements do not work, do not only append "I want better agreements" — reframe and end with one concrete forward ask.
 - REFRAME: observation + impact + pattern + constructive forward look.
 - Avoid: "ik vind het belangrijk dat we samen", "this raises questions", hollow "I hope we can work together".
 `.trim();
 
 const EXAMPLE_SCHEDULING = `
-EXAMPLE (Dutch — structural de-escalation):
+LANGUAGE: Write output in the EXACT same language as the input (Dutch, English, German, French, Spanish, Portuguese, etc.). Never translate.
+
+EXAMPLE (illustrative — structural de-escalation; apply the same logic in the input language):
 
 Input:
 "Ik ben er eerlijk gezegd best klaar mee dat afspraken steeds op het laatste moment veranderen en ik vervolgens maar moet meebewegen alsof dat normaal is. Het voelt vaak alsof er pas rekening wordt gehouden met mijn planning of situatie zodra ik er zelf iets van zeg, terwijl ik juist probeer vooraf duidelijkheid te houden. Ik snap dat dingen soms anders lopen, maar dit begint inmiddels wel een patroon te worden waar ik last van heb."
@@ -35,6 +46,22 @@ Input: "Je bent niet thuis / te laat voor overdracht … Joa aan de deur … ron
 BAD: Same three "je bent / je arriveert" accusations in new order + "ik wil betere afspraken" (already said agreements fail).
 
 GOOD: "Ik merk dat overdracht aan de deur volgens afspraak structureel lastig is: ik ben op tijd, maar het lukt vaak niet omdat er pas rond 10 uur of later iemand thuis is. Af en toe vertraging kan, maar dit is inmiddels structureel en verstoort mijn planning. Kunnen we afspreken hoe we dit betrouwbaar regelen?"
+
+EXAMPLE (clothing / hedge — keep "in het geval"):
+
+Input: "… kleren met vlekken … in het geval je het wel gebruikt … liever niet …"
+
+BAD: Drops "in het geval" and ends with only "wil je ze teruggeven?"
+
+GOOD: Keeps substantive (vlekken, kleren), hedge ("in het geval je het wel gebruikt"), and "je gaf … terug" if present — no agency flip to "ik heb teruggekregen".
+
+EXAMPLE (je gaf — keep exact agency):
+
+Input: "je gaf de kleren die ik meegaf vies terug. Ik heb liever niet dat je de kleding die ik koop gebruikt…"
+
+BAD: "Ik merk dat de kleren die ik meegaf vies terugkwamen…" (drops "je gaf")
+
+GOOD: "Je gaf de kleren die ik meegaf vies terug. Ik heb liever niet dat je de kleding die ik koop gebruikt, omdat er nu vlekken in zitten…"
 `.trim();
 
 function levelBlock(level: TransformLevel): string {
@@ -43,6 +70,7 @@ function levelBlock(level: TransformLevel): string {
 TRANSFORM LEVEL: FIRM BOUNDARY
 - Same structural de-escalation as Clear & calm (reframe bucket 4, keep 1–2).
 - State boundaries and requests clearly and directly — still no blame/motive attacks.
+- Remove legal threats, HR escalation, and public-shaming lines entirely — state impact + one concrete forward ask instead.
 - End with an explicit forward ask or agreement when the input implied one.
 `.trim();
   }
@@ -54,9 +82,14 @@ TRANSFORM LEVEL: CLEAR & CALM (structural de-escalation)
 `.trim();
 }
 
-export function messageRewriterStructuredRules(level: TransformLevel): string {
+export function messageRewriterStructuredRules(
+  level: TransformLevel,
+  lang: RewriteLang = 'unknown'
+): string {
   return `
 You are Conflict Buddy — Message Rewriter.
+
+${rewriteLangBanner(lang)}
 
 ${FRAMEWORK}
 
@@ -78,6 +111,22 @@ ${EXAMPLE_SCHEDULING}
 `.trim();
 }
 
+function contextualHints(input: string): string {
+  const hints: string[] = [];
+  if (isHandoverContext(input)) {
+    hints.push(
+      'HANDOVER: Do NOT open with direct "you are not home / you are late" accusations. Start with situation + impact on handover/planning. Keep names, times, and that agreements fail — without "you yourself around [time]" or repeated you+late chains.'
+    );
+  }
+  const agency = findAgencyGave(input);
+  if (agency) {
+    hints.push(
+      `CRITICAL: Keep the input agency phrase (${agency.label}) in output — do not replace with passive "I received" only.`
+    );
+  }
+  return hints.length ? `\n${hints.join('\n')}` : '';
+}
+
 export function messageRewriterStructuredUserPrompt(
   input: string,
   level: TransformLevel
@@ -87,10 +136,18 @@ export function messageRewriterStructuredUserPrompt(
       ? 'FIRM BOUNDARY: de-escalate structure, keep limits/requests explicit.'
       : 'CLEAR & CALM: structural de-escalation, not tone polish.';
 
+  const lang = detectRewriteLocale(input);
+  const langLine =
+    lang === 'unknown'
+      ? 'Write in the EXACT same language as the input. Never translate.'
+      : `INPUT LANGUAGE: ${rewriteLangLabel(lang)}. Output MUST be ${rewriteLangLabel(lang)} only — never translate.`;
+
   return `
 ${mode}
 
-Same language as input. Input-only topics.
+${langLine}
+Input-only topics.
+${contextualHints(input)}
 
 1. Fill analysis arrays (substantive, boundaries, emotional, escalating).
 2. Write output using preserved points; reframe escalating framing.

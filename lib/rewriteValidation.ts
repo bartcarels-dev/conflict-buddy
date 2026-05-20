@@ -1,11 +1,23 @@
-import type { RewriteAnalysis } from '@/lib/types';
+import type { RewriteAnalysis, TransformLevel } from '@/lib/types';
 import {
   escalationNotReduced,
   findCorporatePhrases,
   framingFromAnalysisCopied,
 } from '@/lib/rewriteEscalationPatterns';
 import {
+  extractTimes,
+  findAgencyGave,
+  HEDGE_PATTERNS,
+  isHandoverContext,
+  languageMismatch,
+  REGULAR_ABSENCE_BLAME,
+  rewriteLangLabel,
+  detectRewriteLocale,
+  YOU_SELF_TIME,
+} from '@/lib/rewriteLocale';
+import {
   hasRedundantAgreementAsk,
+  inputLeadCopied,
   isMostlyReorderedBlame,
 } from '@/lib/rewriteStructuralCheck';
 
@@ -18,22 +30,10 @@ export type ValidationIssue = {
     | 'escalation_preserved'
     | 'substantive_dropped'
     | 'too_corporate'
-    | 'reordered_blame';
+    | 'reordered_blame'
+    | 'fact_dropped';
   detail: string;
 };
-
-const HEDGE_PATTERNS: { pattern: RegExp; label: string }[] = [
-  { pattern: /\bin het geval\b/i, label: 'in het geval' },
-  { pattern: /\bals je\b/i, label: 'als je' },
-  { pattern: /\bliever niet\b/i, label: 'liever niet' },
-  { pattern: /\bop zijn minst\b/i, label: 'op zijn minst' },
-  { pattern: /\btenzij\b/i, label: 'tenzij' },
-  { pattern: /\bin case\b/i, label: 'in case' },
-  { pattern: /\bif you\b/i, label: 'if you' },
-  { pattern: /\bi(?:'d| would) prefer\b/i, label: "I'd prefer" },
-  { pattern: /\bat least\b/i, label: 'at least' },
-  { pattern: /\bunless\b/i, label: 'unless' },
-];
 
 function normalize(text: string) {
   return text
@@ -68,9 +68,28 @@ function phraseLikelyPreserved(phrase: string, output: string): boolean {
 export function validateRewrite(
   input: string,
   output: string,
-  analysis?: RewriteAnalysis | null
+  analysis?: RewriteAnalysis | null,
+  level: TransformLevel = 'moderate'
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
+  const strict = level === 'moderate' || level === 'firm';
+
+  if (!strict) {
+    if (languageMismatch(input, output)) {
+      issues.push({
+        code: 'escalation_preserved',
+        detail: `Output must stay in ${rewriteLangLabel(detectRewriteLocale(input))} — do not translate`,
+      });
+    }
+    return issues;
+  }
+
+  if (languageMismatch(input, output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail: `Output must stay in ${rewriteLangLabel(detectRewriteLocale(input))} — do not translate`,
+    });
+  }
 
   for (const { pattern, label } of HEDGE_PATTERNS) {
     if (pattern.test(input) && !pattern.test(output)) {
@@ -81,43 +100,75 @@ export function validateRewrite(
     }
   }
 
-  if (
-    /\bje\s+gaf\b/i.test(input) &&
-    /\bik\s+heb\b/i.test(output) &&
-    /\bteruggekregen\b/i.test(output) &&
-    !/\bje\s+gaf\b/i.test(output)
-  ) {
+  const agency = findAgencyGave(input);
+  if (agency && !agency.preserve.test(output)) {
     issues.push({
       code: 'agency_flipped',
-      detail: 'Agency flip: "je gaf … terug" → "ik heb … teruggekregen"',
+      detail: `Keep "${agency.label}" from input — do not flip to passive "I received" only`,
     });
   }
 
-  if (
-    /\byou\s+(gave|returned)\b/i.test(input) &&
-    /\bi\s+received\b/i.test(output) &&
-    !/\byou\s+(gave|returned)\b/i.test(output)
-  ) {
+  if (YOU_SELF_TIME.test(input) && YOU_SELF_TIME.test(output)) {
     issues.push({
-      code: 'agency_flipped',
-      detail: 'Agency flip: "you gave/returned" → only "I received"',
+      code: 'escalation_preserved',
+      detail:
+        'Drop "you yourself" before time — state facts/impact (e.g. "around 10") without second-person blame',
     });
+  }
+
+  if (isHandoverContext(input) && REGULAR_ABSENCE_BLAME.test(output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail:
+        'Handover: reframe "you are regularly not home/late" to situation + impact on handover/planning',
+    });
+  }
+
+  const inputTimes = extractTimes(input);
+  for (const t of inputTimes) {
+    const num = t.match(/\d{1,2}/)?.[0];
+    if (num && !output.includes(num)) {
+      issues.push({
+        code: 'fact_dropped',
+        detail: `Time/number from input missing in output: "${t.trim()}"`,
+      });
+    }
   }
 
   const inputHasConditionalClose =
-    /\b(in het geval|in case|als je het|if you)\b/i.test(input) &&
-    input.length > 120;
+    /\b(in het geval|in case|im falle|au cas où|en caso de|no caso de|als je het|if you)\b/i.test(
+      input
+    ) && input.length > 120;
   const outputShortGenericClose =
-    /wil je.*teruggeven\??\s*$/i.test(output.trim()) ||
-    /could you.*return.*\?\s*$/i.test(output.trim());
+    /(wil je|could you|könntest du|pourrais-tu|podrías|poderia)\s+.{0,40}(teruggeven|return|zurückgeben|rendre|devolver)\??\s*$/i.test(
+      output.trim()
+    );
   if (
     inputHasConditionalClose &&
     outputShortGenericClose &&
-    !/\b(in het geval|in case)\b/i.test(output)
+    !HEDGE_PATTERNS.some(({ pattern }) => pattern.test(output))
   ) {
     issues.push({
       code: 'closing_replaced',
       detail: 'Conditional closing replaced by generic ask',
+    });
+  }
+
+  if (
+    /\b(advocaat|lawyer|attorney|abogado|anwalt|avocat|advogado)\s*(bellen|call|contact|llamar|anrufen|appeler|ligar)/i.test(
+      output
+    )
+  ) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail: 'Remove legal-threat lines from output',
+    });
+  }
+
+  if (/\b(iedereen\s+hoort|everyone\s+will\s+hear|todos\s+van\s+a\s+saber|alle\s+werden|tout\s+le\s+monde\s+saura)\b/i.test(output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail: 'Remove public-shaming lines from output',
     });
   }
 
@@ -139,6 +190,14 @@ export function validateRewrite(
     issues.push({
       code: 'too_corporate',
       detail: `Corporate/submissive phrase added: "${hit.label}"`,
+    });
+  }
+
+  if (inputLeadCopied(input, output)) {
+    issues.push({
+      code: 'escalation_preserved',
+      detail:
+        'Opening sentence copied from input — reframe (do not keep the same blame lead-in)',
     });
   }
 
@@ -194,7 +253,9 @@ Rules:
 - Reduce repeated "you are late / you are not home" chains — state facts + impact on handover/planning instead.
 - Do NOT only reorder the same accusations; do NOT add a generic "better agreements" line if the input already said arrangements fail.
 - KEEP every substantive point and boundary from your analysis arrays.
-- Same language as input. Not submissive or corporate.
+- KEEP times, numbers, names, and conditional hedges from the input (in the same language).
+- If input uses second-person "you gave" / "je gaf" / "tu diste" etc., keep that agency — do not flip to "I received" only.
+- Same language as input — never translate. Not submissive or corporate.
 `.trim();
 }
 

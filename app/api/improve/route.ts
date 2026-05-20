@@ -18,6 +18,12 @@ import {
   messageRewriterStructuredUserPrompt,
 } from '@/lib/prompts/messageRewriterStructured';
 import {
+  detectRewriteLocale,
+  findAgencyGave,
+  languageMismatch,
+  rewriteLangLabel,
+} from '@/lib/rewriteLocale';
+import {
   buildUnchangedRetryPrompt,
   buildValidationRetryPrompt,
   isRewriteUnchanged,
@@ -109,9 +115,10 @@ async function generateMinimalRewrite(
   input: string,
   retryNote?: string
 ): Promise<string> {
+  const lang = detectRewriteLocale(input);
   let userPrompt = messageRewriterMinimalUserPrompt(input);
   if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
-  const parsed = await runModel(messageRewriterMinimalRules(), userPrompt);
+  const parsed = await runModel(messageRewriterMinimalRules(lang), userPrompt);
   return extractOutput(parsed, 'rewrite');
 }
 
@@ -120,10 +127,11 @@ async function generateStructuredRewrite(
   level: TransformLevel,
   retryNote?: string
 ): Promise<{ output: string; analysis: RewriteAnalysis | null }> {
+  const lang = detectRewriteLocale(input);
   let userPrompt = messageRewriterStructuredUserPrompt(input, level);
   if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
   const parsed = await runModel(
-    messageRewriterStructuredRules(level),
+    messageRewriterStructuredRules(level, lang),
     userPrompt
   );
   return {
@@ -132,7 +140,8 @@ async function generateStructuredRewrite(
   };
 }
 
-const MAX_REWRITE_ATTEMPTS = 2;
+const MAX_STRUCTURED_ATTEMPTS = 4;
+const MAX_MINIMAL_ATTEMPTS = 2;
 
 async function rewriteWithValidation(
   input: string,
@@ -142,7 +151,11 @@ async function rewriteWithValidation(
   let analysis: RewriteAnalysis | null = null;
   let retryNote: string | undefined;
 
-  for (let attempt = 0; attempt < MAX_REWRITE_ATTEMPTS; attempt++) {
+  const maxAttempts = usesStructuredPipeline(level)
+    ? MAX_STRUCTURED_ATTEMPTS
+    : MAX_MINIMAL_ATTEMPTS;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     if (usesStructuredPipeline(level)) {
       const result = await generateStructuredRewrite(input, level, retryNote);
       output = result.output;
@@ -153,13 +166,13 @@ async function rewriteWithValidation(
 
     if (!output) break;
 
-    const issues = validateRewrite(input, output, analysis);
+    const issues = validateRewrite(input, output, analysis, level);
     const needsUnchangedRetry =
       usesStructuredPipeline(level) && isRewriteUnchanged(input, output);
 
     if (issues.length === 0 && !needsUnchangedRetry) break;
 
-    if (attempt === MAX_REWRITE_ATTEMPTS - 1) break;
+    if (attempt === maxAttempts - 1) break;
 
     if (needsUnchangedRetry) {
       retryNote = buildUnchangedRetryPrompt();
@@ -170,7 +183,51 @@ async function rewriteWithValidation(
     }
   }
 
+  output = ensureAgencyPreserved(input, output, level);
+
+  for (let fix = 0; fix < 2 && languageMismatch(input, output); fix++) {
+    const label = rewriteLangLabel(detectRewriteLocale(input));
+    const note = `REJECTED — wrong language in previous attempt. Rewrite entirely in ${label} ONLY. Do not use any other language.`;
+    if (usesStructuredPipeline(level)) {
+      output = (await generateStructuredRewrite(input, level, note)).output;
+      output = ensureAgencyPreserved(input, output, level);
+    } else {
+      output = await generateMinimalRewrite(input, note);
+    }
+  }
+
   return output;
+}
+
+/** If input uses second-person "you gave" (any locale), keep that when the model dropped it. */
+function ensureAgencyPreserved(
+  input: string,
+  output: string,
+  level: TransformLevel
+): string {
+  if (!usesStructuredPipeline(level)) return output;
+  const agency = findAgencyGave(input);
+  if (!agency || agency.preserve.test(output)) return output;
+
+  const firstChunk = output.slice(0, 80).toLowerCase();
+  if (agency.preserve.test(firstChunk)) return output;
+
+  const sentence =
+    input
+      .split(/[.!?]/)
+      .map((s) => s.trim())
+      .find((s) => agency.test.test(s)) ?? '';
+  if (!sentence) return output;
+
+  const punct = sentence.match(/([.!?])\s*$/)?.[1] ?? '.';
+  const rest = output
+    .replace(
+      /^(Ik merk|I notice|Je remarque|He notado|Percebo|Noto|Ich merke|Je remarque)[^.!?]+[.!?]\s*/i,
+      ''
+    )
+    .replace(/^Hey,?\s*/i, '')
+    .trim();
+  return `${sentence}${punct} ${rest}`.trim();
 }
 
 export async function POST(req: Request) {

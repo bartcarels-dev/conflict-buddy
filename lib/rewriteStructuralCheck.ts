@@ -14,7 +14,7 @@ function normalize(text: string): string {
 
 /** 2nd-person + complaint/lateness/absence within same clause (multi-language pronouns). */
 const DIRECT_BLAME_CLAUSE =
-  /\b(you|je|jij|u|du|vous|tu|ty)\b[^.!?\n]{0,55}\b(not|niet|no|never|nooit|late|laat|thuis|home|arriv|komt?|aan|absent|away|te laat|on time|op tijd)\b|\b(you|je|jij)\s+(are|is|bent|was|were|werd)\s+(not|niet|no|late|laat|thuis|away)\b/gi;
+  /\b(you|je|jij|u|du|tu|usted|você|voce|vous|ty|ihr)\b[^.!?\n]{0,55}\b(not|niet|no|never|nooit|nie|late|laat|tarde|retard|thuis|home|hause|arriv|kommt?|absent|away|te laat|on time|op tijd|zu spät)\b|\b(you|je|jij|du|tu)\s+(are|is|bent|bist|was|were|werd|war)\s+(not|niet|no|late|laat|thuis|away|tarde)\b/gi;
 
 export function countDirectBlameClauses(text: string): number {
   const matches = text.match(DIRECT_BLAME_CLAUSE);
@@ -40,26 +40,37 @@ export function isMostlyReorderedBlame(input: string, output: string): boolean {
   const blameIn = countDirectBlameClauses(input);
   const blameOut = countDirectBlameClauses(output);
 
-  if (overlap < 0.78) return false;
+  if (overlap < 0.72) return false;
   if (blameIn < 2) return false;
 
   // Still multiple direct you+problem clauses, not reduced enough
   const blameReduced = blameOut <= Math.floor(blameIn * 0.5);
-  if (!blameReduced && blameOut >= 2) return true;
+  if (!blameReduced && blameOut >= 1) return true;
 
   return false;
 }
 
 /** Input already says agreements don't work; output only adds generic "better agreements" without reframing. */
+/** First sentence/clause of input copied verbatim into output (tone-polish failure). */
+export function inputLeadCopied(input: string, output: string): boolean {
+  const first = input.split(/[.!?]/)[0]?.trim() ?? '';
+  if (first.length < 30) return false;
+  const lead = normalize(first);
+  const out = normalize(output);
+  return lead.length >= 30 && out.includes(lead);
+}
+
 export function hasRedundantAgreementAsk(input: string, output: string): boolean {
   const inNorm = normalize(input);
   const outNorm = normalize(output);
   const inputAlreadyBroken =
-    /\b(afspraak|agreement|arrangement).{0,40}(niet|not|don't|werken niet|doesn't work|do not work)\b/i.test(
+    /\b(afspraak|agreement|arrangement|acuerdo|vereinbarung|accord|acordo).{0,40}(niet|not|don't|werken niet|doesn't work|do not work|no funciona|funktioniert nicht|ne fonctionne)\b/i.test(
       inNorm
-    ) || /\bzo werken.{0,30}niet\b/i.test(inNorm);
+    ) ||
+    /\bzo werken.{0,30}niet\b/i.test(inNorm) ||
+    /\b(so|así)\s+.{0,20}(no\s+funciona|doesn't work)\b/i.test(inNorm);
   const outputAddsGenericAsk =
-    /\b(betere|better|meer duidelijkheid|clearer).{0,30}(afspraak|agreement|arrangement)\b/i.test(
+    /\b(betere|better|meer duidelijkheid|clearer|bessere|mejor|melhor).{0,30}(afspraak|agreement|arrangement|acuerdo|vereinbarung|accord|acordo)\b/i.test(
       outNorm
     );
   return (

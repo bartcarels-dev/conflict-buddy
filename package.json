@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "node --use-system-ca ./node_modules/next/dist/bin/next start",
     "lint": "eslint",
-    "eval:rewrite": "node --use-system-ca scripts/eval-rewrite.mjs"
+    "eval:rewrite": "node --use-system-ca scripts/eval-rewrite.mjs",
+    "eval:rewrite:suite": "node --use-system-ca scripts/eval-rewrite-suite.mjs",
+    "eval:analyze": "node scripts/eval-analyze-report.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

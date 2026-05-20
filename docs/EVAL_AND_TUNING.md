@@ -1,0 +1,32 @@
+# Eval & tuning policy
+
+## What we do (safe)
+
+- **Offline fixtures** in `lib/prompts/__fixtures__/` — synthetic messages, no user data.
+- **`npm run eval:rewrite:suite`** — calls the local API, writes `rewrite-eval-report.json` (outputs only, for debugging).
+- **`npm run eval:analyze`** — summarizes failures from the report; suggests what to fix in **prompts / validation** in the repo.
+- **Human or agent review** — change `lib/prompts/*`, `lib/rewriteValidation.ts`, etc., then re-run eval.
+
+This is the right place to “analyze input and output and improve the model” (really: improve **prompts + checks**, not fine-tune weights).
+
+## What we avoid (careful)
+
+| Approach | Risk |
+|----------|------|
+| **Auto-edit prompts from production traffic** | Privacy, consent, non-reproducible drift, one bad day breaks everyone |
+| **Store user messages for tuning** | Conflicts with “no history” / privacy promise |
+| **Online learning per user** | Hard to audit; unpredictable outputs |
+
+Production path: **no saving of input/output** for tuning. Optional later: explicit opt-in feedback (“this rewrite was wrong”) without storing the full message.
+
+## Commands
+
+```bash
+npm run dev
+npm run eval:rewrite:suite          # NL + i18n
+$env:EVAL_ONLY='nl'; npm run eval:rewrite:suite
+$env:EVAL_ONLY='i18n'; npm run eval:rewrite:suite
+npm run eval:analyze
+```
+
+Target: **≥95% pass** on `moderate` + `firm` across all fixture languages before calling quality “excellent”.

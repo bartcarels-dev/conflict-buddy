@@ -145,8 +145,9 @@ export function ToolWorkflow({
               </button>
             </div>
             <p className="mt-2 text-xs text-muted-light">
-              Light polish keeps your wording and closing; Clear &amp; calm
-              smooths tone while keeping your limits.
+              Light polish: small fixes, often looks similar if your draft is
+              already calm. Clear &amp; calm: rephrases for smoother tone and
+              keeps your limits and conditions.
             </p>
           </div>
         )}

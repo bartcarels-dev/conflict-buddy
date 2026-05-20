@@ -11,7 +11,9 @@ import {
 import { messageRewriterRules } from '@/lib/prompts/messageRewriter';
 import {
   buildPreservationRetryPrompt,
+  buildUnchangedRetryPrompt,
   checkRewritePreservation,
+  isRewriteUnchanged,
 } from '@/lib/rewritePreservation';
 
 function ensureLogEntry(
@@ -39,8 +41,8 @@ function buildRewritePrompts(level: TransformLevel) {
 function buildRewriteUserPrompt(input: string, level: TransformLevel) {
   const levelNote =
     level === 'minimal'
-      ? 'Apply MINIMAL polish — preserve structure and closing.'
-      : 'Apply MODERATE calm clarity — keep every boundary and hedge.';
+      ? 'Apply MINIMAL polish — preserve structure and closing; near-identical OK if already calm.'
+      : 'Apply MODERATE clear & calm — rephrase for smoother tone; output must NOT be identical to the input.';
 
   return `
 Rewrite the message below.
@@ -132,10 +134,30 @@ export async function POST(req: Request) {
 
     if (mode === 'rewrite') {
       output = await generateRewrite(input, transformLevel);
+
+      if (transformLevel === 'moderate' && isRewriteUnchanged(input, output)) {
+        output = await generateRewrite(
+          input,
+          transformLevel,
+          buildUnchangedRetryPrompt()
+        );
+      }
+
       const issues = checkRewritePreservation(input, output);
       if (issues.length > 0) {
-        const retryNote = buildPreservationRetryPrompt(issues);
-        output = await generateRewrite(input, transformLevel, retryNote);
+        output = await generateRewrite(
+          input,
+          transformLevel,
+          buildPreservationRetryPrompt(issues)
+        );
+      }
+
+      if (transformLevel === 'moderate' && isRewriteUnchanged(input, output)) {
+        output = await generateRewrite(
+          input,
+          transformLevel,
+          buildUnchangedRetryPrompt()
+        );
       }
     } else {
       const { systemPrompt } = buildLogPrompts(dateLabel, formattedDate);

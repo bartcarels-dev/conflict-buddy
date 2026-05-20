@@ -13,10 +13,13 @@ Input: "...schoon en gewassen terug te geven in het geval je het wel gebruikt."
 Good: still includes "in het geval" (or equivalent), not only "Wil je voortaan schoon teruggeven?"
 Bad: drops "in het geval je het wel gebruikt" and invents a new topic (e.g. overdracht).
 
-Example C — Already calm → minimal change:
-Input: "Hey, ik wil even laten weten dat ik morgen later ben. Kun je dat doorgeven?"
-Good: light polish only, same structure and ask.
-Bad: full rewrite with new closing template.
+Example C — MODERATE on already-calm text (must still rephrase):
+Input: "Hey, je hebt de kleren vies teruggegeven. … in het geval je het wel gebruikt."
+Good: tighter wording, same facts/hedge: "Hey, je hebt de kleren die ik meegaf vies teruggegeven. … als je ze gebruikt, graag schoon en gewassen terug."
+Bad: copy-paste identical to input, OR drop "in het geval"/conditional meaning.
+
+Example C2 — MINIMAL on calm text (near-duplicate OK):
+Input: short polite schedule note — only fix typos/grammar; can stay almost identical.
 
 Example D — English, firm boundary without insults:
 Input: "You keep returning my stuff broken. Stop it or I'll report you."
@@ -36,9 +39,11 @@ TRANSFORM LEVEL: MINIMAL (light polish)
   }
   return `
 TRANSFORM LEVEL: MODERATE (clear & calm — default)
-- Make the message calmer and clearer while keeping every limit and request.
-- You may merge duplicate sentences and smooth phrasing.
-- Still preserve perspective, hedges, and the user's closing intent — do not use a generic template close.
+- Rephrase the message so it reads calmer and clearer — the output MUST use different wording than the input (not a copy-paste).
+- Typical edits: trim fillers ("ook gewoon", "eigenlijk"), shorten long sentences, softer connectors, calmer verbs — keep every fact, limit, and hedge.
+- Merge repetition; one clear flow — but keep "in het geval" / "if" / "unless" meaning when present.
+- Preserve perspective (you/I), boundaries, and conditional closings — refine them, do not replace with a generic one-line ask.
+- Target: noticeably smoother to read; roughly 10–30% wording change when the input is multi-sentence.
 `.trim();
 }
 

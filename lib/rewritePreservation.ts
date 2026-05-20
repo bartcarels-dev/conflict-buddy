@@ -4,7 +4,7 @@
  */
 
 export type PreservationIssue = {
-  code: 'hedge_dropped' | 'agency_flipped' | 'closing_replaced';
+  code: 'hedge_dropped' | 'agency_flipped' | 'closing_replaced' | 'unchanged';
   detail: string;
 };
 
@@ -22,7 +22,19 @@ const HEDGE_PATTERNS: { pattern: RegExp; label: string }[] = [
 ];
 
 function normalize(text: string) {
-  return text.toLowerCase().replace(/\s+/g, ' ');
+  return text
+    .toLowerCase()
+    .replace(/[.,!?;:'"()]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** True when rewrite returned essentially the same text (common when input is already calm). */
+export function isRewriteUnchanged(input: string, output: string): boolean {
+  const a = normalize(input);
+  const b = normalize(output);
+  if (!a || !b) return false;
+  return a === b;
 }
 
 export function checkRewritePreservation(
@@ -96,6 +108,16 @@ export function checkRewritePreservation(
     seen.add(key);
     return true;
   });
+}
+
+export function buildUnchangedRetryPrompt(): string {
+  return `
+Your previous output was identical to the input. That is not acceptable for CLEAR & CALM mode.
+
+Rephrase the message: smoother, calmer, clearer wording — but keep every fact, boundary, hedge ("in het geval", "if", "unless"), and conditional closing meaning.
+
+Return JSON { "output": "string" }. The text MUST differ from the input.
+`.trim();
 }
 
 export function buildPreservationRetryPrompt(issues: PreservationIssue[]): string {

@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Conflict Buddy — Communication Safety Tool",
+  title: "Conflict Buddy — Clearer messages & factual notes",
   description:
-    "Calm, factual messaging support for separated and co-parenting parents.",
+    "Turn tense communication into clearer messages and factual log entries. Paste, generate, edit, and copy — nothing saved to an account.",
 };
 
 export default function RootLayout({

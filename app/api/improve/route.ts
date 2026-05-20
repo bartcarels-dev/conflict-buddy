@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { ToolMode } from '@/lib/types';
 import {
-  deEscalatedRules,
-  messageRewriterVoiceRules,
   detectLanguage,
   formatDate,
   getErrorResponse,
   globalRules,
   logEntryRules,
+  messageRewriterRules,
   parseAiJson,
   runCompletion,
 } from '@/lib/ai';
@@ -31,11 +30,7 @@ function buildRewritePrompts(lang: ReturnType<typeof detectLanguage>) {
 Je bent Conflict Buddy — Message Rewriter voor gespannen communicatie.
 Schrijf één rustiger, duidelijker bericht dat de gebruiker kan versturen of als basis kan gebruiken.
 
-${globalRules(lang)}
-
-${messageRewriterVoiceRules(lang)}
-
-${deEscalatedRules(lang)}
+${messageRewriterRules(lang)}
 
 Return valid JSON only: { "output": "string" }
 `.trim()
@@ -43,16 +38,24 @@ Return valid JSON only: { "output": "string" }
 You are Conflict Buddy — Message Rewriter for tense communication.
 Write one calmer, clearer message the user can send or use as a draft.
 
-${globalRules(lang)}
-
-${messageRewriterVoiceRules(lang)}
-
-${deEscalatedRules(lang)}
+${messageRewriterRules(lang)}
 
 Return valid JSON only: { "output": "string" }
 `.trim();
 
   return { systemPrompt };
+}
+
+function buildRewriteUserPrompt(
+  lang: ReturnType<typeof detectLanguage>,
+  input: string
+) {
+  const guard =
+    lang === 'nl'
+      ? 'Gebruik ALLEEN onderwerpen uit deze invoer. Voeg geen overdracht, kind of andere context toe die hier niet staat.'
+      : 'Use ONLY topics from this input. Do not add handover, children, or other context not stated here.';
+
+  return `${guard}\n\nInvoer:\n${input}`;
 }
 
 function buildLogPrompts(
@@ -130,15 +133,17 @@ export async function POST(req: Request) {
     const lang = detectLanguage(input);
     const dateLabel = lang === 'nl' ? 'Datum' : 'Date';
 
-    const userPrompt =
-      lang === 'nl'
-        ? `Invoer:\n${input}`
-        : `Input:\n${input}`;
-
     const { systemPrompt } =
       mode === 'rewrite'
         ? buildRewritePrompts(lang)
         : buildLogPrompts(lang, formattedDate, dateLabel);
+
+    const userPrompt =
+      mode === 'rewrite'
+        ? buildRewriteUserPrompt(lang, input)
+        : lang === 'nl'
+          ? `Invoer:\n${input}`
+          : `Input:\n${input}`;
 
     const raw = await runCompletion(systemPrompt, userPrompt);
     let output = '';

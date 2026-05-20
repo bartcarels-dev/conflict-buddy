@@ -149,6 +149,30 @@ SEPARATION ↔ CLOTHING (required in de-escalated + boundary when in input):
 `.trim();
 }
 
+/** Lighter global rules for Message Rewriter — no handover/court templates. */
+export function rewriteGlobalRules(lang: Lang): string {
+  if (lang === 'nl') {
+    return `
+ALGEMEEN (Message Rewriter):
+- Rustiger, duidelijker bericht aan de andere partij — geen juridisch advies of therapie.
+- Alleen wat in de invoer staat; geen co-ouderschap-template, geen overdracht/kind/KGB tenzij de gebruiker dat noemt.
+- Beknopt, natuurlijk Nederlands; geen formele brief of dossierstijl.
+- Geen emotionele labels, schuld of dreigementen; geen AI-clichés ("ik vind het belangrijk dat", "dit roept vragen op").
+- Geen onnatuurlijke vertalingen (niet "terugkrijgen" als de invoer "teruggeven/gaf terug" zegt).
+- Elk feit maximaal één keer in het bericht.
+`.trim();
+  }
+  return `
+GENERAL (Message Rewriter):
+- Calmer, clearer message to the other person — not legal advice or therapy.
+- Only what is in the input; no co-parenting template, no handover/child/benefits unless the user mentioned them.
+- Concise, natural phrasing; not a formal letter or case report.
+- No blame, labels, or threats; no AI clichés.
+- No calques (do not use "received back" if the input says "gave back").
+- State each fact once.
+`.trim();
+}
+
 /** Voice rules for Message Rewriter — keep natural Dutch/English, not reporting calques. */
 export function messageRewriterVoiceRules(lang: Lang): string {
   if (lang === 'nl') {
@@ -161,6 +185,7 @@ MESSAGE REWRITER — STEM & WERKWOORDEN (verzendbaar bericht aan de andere parti
 - Wie doet wat: als de invoer zegt dat de ander iets deed (gaf terug, zei, gebruikte): laat de ander het onderwerp — niet alles naar "ik heb …" herschrijven.
 - Slotalinea: alleen over onderwerpen uit de invoer (alleen kleding → bijv. "Wil je de kleren voortaan schoon en gewassen teruggeven?"; FOUT: "bij de volgende overdracht" als overdracht niet in de invoer staat).
 - Spreektaal: zinnen die iemand echt zou typen in een app-bericht, geen beleidstaal of dossierformulering.
+- VERBODEN zonder invoer: "overdracht", "hoofdingang", kindgebonden budget, kindnamen, "bij de volgende overdracht".
 `.trim();
   }
   return `
@@ -172,6 +197,41 @@ MESSAGE REWRITER — VOICE & VERBS (sendable message to the other person):
 - Who did what: when the input says the other person did something, keep them as the subject — do not rewrite everything as "I have …".
 - Closing line: only about topics in the input (clothing only → ask about clean return; do not mention handover if not in the input).
 - Sound like a real text message, not a policy memo or case report.
+- FORBIDDEN unless in input: "handover", main entrance, child benefit, child names, "at the next handover".
+`.trim();
+}
+
+/** Full rule set for the public Message Rewriter — input-only, no legacy multi-field templates. */
+export function messageRewriterRules(lang: Lang): string {
+  if (lang === 'nl') {
+    return `
+${rewriteGlobalRules(lang)}
+
+${messageRewriterVoiceRules(lang)}
+
+MESSAGE REWRITER — VORM:
+- Informeel bericht (WhatsApp/SMS-stijl), optioneel start met "Hey,".
+- Na de feiten: één korte, concrete vraag of verzoek — alleen over onderwerpen uit de invoer.
+- GOED (alleen kleding): "Wil je de kleren voortaan schoon en gewassen teruggeven?"
+- FOUT: "Wil je hier rekening mee houden bij de volgende overdracht?" als overdracht niet in de invoer staat.
+- Geen "Groet," verplicht; geen preken of "ik verwacht dat".
+- Als invoer over kleding/spullen gaat: feiten behouden (vies terug, vlekken, zelf wassen) in rustigere bewoording — niet weglaten.
+- Als invoer "scheiden" én kleding koop/wassen noemt: die koppeling mag in één korte zin; anders geen scheiden-template toevoegen.
+`.trim();
+  }
+  return `
+${rewriteGlobalRules(lang)}
+
+${messageRewriterVoiceRules(lang)}
+
+MESSAGE REWRITER — SHAPE:
+- Informal message (text/app style); optional "Hey," opening.
+- After the facts: one short concrete ask — only about topics in the input.
+- GOOD (clothing only): "Could you return clothes clean and washed from now on?"
+- WRONG: "at the next handover" when handover is not in the input.
+- No required sign-off lecture; no "I expect that we".
+- If input is about clothing/items: keep facts (dirty return, stains, wash yourself) in calmer wording.
+- Only mention "separation" vs clothing if the user brought up both.
 `.trim();
 }
 

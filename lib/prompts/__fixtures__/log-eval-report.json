@@ -1,0 +1,32 @@
+[
+  {
+    "id": "custody-mothersday-chat",
+    "category": "chat",
+    "status": "PASS",
+    "fails": [],
+    "output": "Datum: 21-05-2026\n• Bart stelde voor dat de overdracht van het kind op Moederdag de volgende ochtend om 8.30 uur zou plaatsvinden.\n• Bart gaf aan dat hij het kind op 31 mei zou brengen en op maandagochtend 1 juni bij Sasha zou laten.\n• Sasha gaf aan dat zij het kind op dezelfde dag, Moederdag, naar Bart zou brengen.\n• Sasha meldde dat er op 31 mei een verjaardag was, waardoor zij niet beschikbaar was voor de overdracht.\n• Sasha stelde voor om het kind op zondag om 14.00 uur eerder naar Bart te brengen en dat Bart het kind op 31 mei om 14.00 uur naar haar zou brengen.\n• Sasha bevestigde later dat zij op Moederdag om 14.00 uur het kind naar Bart zou brengen en dat Bart op 31 mei om 14.00 uur het kind naar haar zou brengen."
+  },
+  {
+    "id": "handover-blame-nl",
+    "category": "notes",
+    "status": "PASS",
+    "fails": [],
+    "output": "Datum: 21-05-2026\n• Overdracht van Joa is gepland om 9:00 uur.\n• Partij A is regelmatig niet thuis bij de overdracht; partij B arriveert rond 10:00 uur.\n• Patroon van vertraging genoemd; impact op planning vermeld."
+  },
+  {
+    "id": "short-factual-en",
+    "category": "notes",
+    "status": "PASS",
+    "fails": [],
+    "output": "Datum: 21-05-2026\n• Er was een telefoongesprek met de school om 15:00 uur.\n• De leraar gaf aan dat Joa deze week twee keer te laat is opgehaald.\n• Er zal een e-mail naar beide ouders worden gestuurd."
+  },
+  {
+    "id": "work-email-thread",
+    "category": "email",
+    "status": "FAIL",
+    "fails": [
+      "missing any of: \"report\", \"friday\", \"monday\", \"handover\""
+    ],
+    "output": "Date: 21-05-2026\n• Rapport moet uiterlijk vrijdag ingeleverd worden.\n• Wijziging in het overdrachtschema maakt het niet mogelijk om het rapport op vrijdag in te leveren.\n• Voorstel gedaan om het rapport op maandag in te leveren."
+  }
+]

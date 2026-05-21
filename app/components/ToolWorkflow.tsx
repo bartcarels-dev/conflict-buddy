@@ -91,12 +91,17 @@ export function ToolWorkflow({
   const isReply = rewriteIntent === 'reply';
   const showTheirField = activeMode === 'rewrite' && isReply;
 
+  const logHasInput =
+    !!logInput.trim() ||
+    !!theirMessage.trim() ||
+    !!userDraft.trim();
+
   const canGenerate =
     activeMode === 'rewrite'
       ? isReply
         ? !!theirMessage.trim()
         : !!userDraft.trim()
-      : !!logInput.trim();
+      : logHasInput;
 
   const output = activeMode === 'rewrite' ? rewriteOutput : logOutput;
   const hasOutput = !!output.trim();
@@ -118,13 +123,18 @@ export function ToolWorkflow({
     { id: 'polish', label: m.rewriteEntry.polish, hint: m.rewriteEntry.polishHint },
   ];
 
-  const generateLabel = isReply
-    ? hasOutput
-      ? m.actions.regenerate
-      : m.actions.suggestReply
-    : hasOutput
-      ? m.actions.regenerate
-      : m.actions.rewriteMessage;
+  const generateLabel =
+    activeMode === 'log'
+      ? hasOutput
+        ? m.actions.regenerate
+        : m.actions.buildLogEntry
+      : isReply
+        ? hasOutput
+          ? m.actions.regenerate
+          : m.actions.suggestReply
+        : hasOutput
+          ? m.actions.regenerate
+          : m.actions.rewriteMessage;
 
   const outputLabel =
     activeMode === 'rewrite'

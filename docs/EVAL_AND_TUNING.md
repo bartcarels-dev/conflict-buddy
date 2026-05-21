@@ -27,7 +27,14 @@ npm run eval:rewrite:suite          # NL + i18n
 $env:EVAL_ONLY='nl'; npm run eval:rewrite:suite
 $env:EVAL_ONLY='i18n'; npm run eval:rewrite:suite
 npm run eval:analyze
+npm run eval:log:suite
 ```
+
+### Log entry suite
+
+`lib/prompts/__fixtures__/log-eval-suite.json` — chat exports, blame notes, email threads.
+
+Checks: `Datum:`/`Date:` header, `mustNotContain` blame/conflation, handover date sanity (31 May vs 1 June), optional `mustContainAny` for critical facts only.
 
 Target: **≥95% pass** on `moderate` + `firm` across all fixture languages before calling quality “excellent”.
 

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "eval:rewrite": "node --use-system-ca scripts/eval-rewrite.mjs",
     "eval:rewrite:suite": "node --use-system-ca scripts/eval-rewrite-suite.mjs",
-    "eval:analyze": "node scripts/eval-analyze-report.mjs"
+    "eval:analyze": "node scripts/eval-analyze-report.mjs",
+    "eval:log:suite": "node --use-system-ca scripts/eval-log-suite.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

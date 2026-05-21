@@ -24,6 +24,10 @@ import {
   logEntryBuilderRules,
   logEntryBuilderUserPrompt,
 } from '@/lib/prompts/logEntryBuilder';
+import {
+  buildLogValidationRetryPrompt,
+  validateLogEntry,
+} from '@/lib/logValidation';
 import { buildRewriteContext } from '@/lib/rewrite/context';
 import { hasKnewPerfectlyEscalation } from '@/lib/rewrite/profiles';
 import { findAgencyGave, detectRewriteLocale, languageMismatch, rewriteLangLabel } from '@/lib/rewriteLocale';
@@ -353,6 +357,34 @@ async function composeReplyWithValidation(
   return output;
 }
 
+const MAX_LOG_ATTEMPTS = 3;
+
+async function buildLogWithValidation(
+  input: string,
+  dateLabel: string,
+  formattedDate: string
+): Promise<string> {
+  const dateLine = `${dateLabel}: ${formattedDate}`;
+  const lang = detectRewriteLocale(input);
+  let output = '';
+  let retryNote: string | undefined;
+
+  for (let attempt = 0; attempt < MAX_LOG_ATTEMPTS; attempt++) {
+    let userPrompt = logEntryBuilderUserPrompt(input);
+    if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
+    const parsed = await runModel(logEntryBuilderRules(dateLine, lang), userPrompt);
+    output = extractOutput(parsed, 'log');
+    output = ensureLogEntry(output, dateLabel, formattedDate);
+
+    const issues = validateLogEntry(input, output);
+    if (issues.length === 0) break;
+    if (attempt === MAX_LOG_ATTEMPTS - 1) break;
+    retryNote = buildLogValidationRetryPrompt(issues);
+  }
+
+  return output;
+}
+
 /** If input uses second-person "you gave" (any locale), keep that when the model dropped it. */
 function ensureAgencyPreserved(
   input: string,
@@ -441,15 +473,7 @@ export async function POST(req: Request) {
         );
       }
       const dateLabel = logDateLabel(logInput);
-      const { systemPrompt, userPrompt } = buildLogPrompts(
-        logInput,
-        dateLabel,
-        formattedDate
-      );
-
-      const parsed = await runModel(systemPrompt, userPrompt);
-      output = extractOutput(parsed, 'log');
-      output = ensureLogEntry(output, dateLabel, formattedDate);
+      output = await buildLogWithValidation(logInput, dateLabel, formattedDate);
     }
 
     if (!output) {

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "custody-mothersday-chat",
+    "category": "chat",
+    "eventDate": "2026-05-21",
+    "input": "[19:17, 5/5/2026] Bart: Dat hij op moederdag langer bij je blijft is goed, maar dan wil ik de overdracht graag de volgende ochtend. Bijvoorbeeld om 8.30 uur. Ik wil hem dan 31 mei en dan breng ik hem maandagochtend 1 juni bij jou.\n[20:04, 5/5/2026] Sasha: Nee ik breng hem gewoon diezelfde dag naar jou. En 31 mei hebben wij een verjaardag dus dat kan niet\n[20:10, 5/5/2026] Sasha: Dan breng ik hem zondag eerder, 14.00. En jij 31e ook.\n[20:36, 5/6/2026] Sasha: Laat even weten betreft zondag Moederdag 14.00 Joa naar jou. En dan 31 mei Joa 14.00 brengen naar mij",
+    "mustNotContain": [
+      "bart heeft op 31 mei",
+      "bart zal joa op 31 mei brengen",
+      "brengt joa op 31 mei naar"
+    ],
+    "mustContainAny": ["1 juni", "maandagochtend", "8:30", "8.30", "moederdag", "14:00", "14.00"]
+  },
+  {
+    "id": "handover-blame-nl",
+    "category": "notes",
+    "eventDate": "2026-05-21",
+    "input": "Je bent regelmatig niet thuis bij overdracht Joa. Ik sta klaar om 9 uur maar jij komt pas rond 10. Zo werken de afspraken niet en het gooit mijn planning in de war.",
+    "mustNotContain": ["je bent regelmatig", "gooit mijn planning"],
+    "mustContainAny": ["overdracht", "joa", "10", "planning"]
+  },
+  {
+    "id": "short-factual-en",
+    "category": "notes",
+    "eventDate": "2026-05-21",
+    "input": "Call with school at 3pm. Teacher said Joa was picked up late twice this week. I will email both parents.",
+    "mustNotContain": ["you are", "irresponsible"],
+    "mustContainAny": ["school", "3", "joa", "late", "email"]
+  },
+  {
+    "id": "work-email-thread",
+    "category": "email",
+    "eventDate": "2026-05-21",
+    "input": "From: manager@co.com\nWe need the report by Friday.\n\nMy draft reply: I cannot make Friday because of the handover schedule change. Proposed Monday.",
+    "mustNotContain": ["cannot make friday because you"],
+    "mustContainAny": ["report", "rapport", "friday", "vrijdag", "monday", "maandag", "handover", "overdracht"]
+  }
+]

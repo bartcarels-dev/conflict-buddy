@@ -34,6 +34,12 @@ export default function Home() {
     [rewriteEntryMode, theirMessage, userDraft]
   );
 
+  const logSource = () => {
+    const direct = logInput.trim();
+    if (direct) return direct;
+    return [theirMessage.trim(), userDraft.trim()].filter(Boolean).join('\n\n');
+  };
+
   const runGenerate = async () => {
     setError('');
     setLoading(true);
@@ -41,6 +47,13 @@ export default function Home() {
     else setLogCopied(false);
 
     try {
+      if (activeTool === 'rewrite') {
+        if (rewriteIntent === 'reply' && !theirMessage.trim()) return;
+        if (rewriteIntent === 'polish' && !userDraft.trim()) return;
+      } else if (!logSource()) {
+        return;
+      }
+
       const body =
         activeTool === 'rewrite'
           ? {
@@ -52,16 +65,9 @@ export default function Home() {
             }
           : {
               mode: 'log' as const,
-              input: logInput.trim(),
+              input: logSource(),
               eventDate,
             };
-
-      if (activeTool === 'rewrite') {
-        if (rewriteIntent === 'reply' && !theirMessage.trim()) return;
-        if (rewriteIntent === 'polish' && !userDraft.trim()) return;
-      } else if (!logInput.trim()) {
-        return;
-      }
 
       const res = await fetch('/api/improve', {
         method: 'POST',
@@ -137,6 +143,12 @@ export default function Home() {
           onModeChange={(mode) => {
             setActiveTool(mode);
             setError('');
+            if (mode === 'log' && !logInput.trim()) {
+              const merged = [theirMessage.trim(), userDraft.trim()]
+                .filter(Boolean)
+                .join('\n\n');
+              if (merged) setLogInput(merged);
+            }
           }}
           theirMessage={theirMessage}
           userDraft={userDraft}

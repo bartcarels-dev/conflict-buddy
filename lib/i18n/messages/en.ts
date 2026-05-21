@@ -25,18 +25,33 @@ export const en: Messages = {
   },
   intro: {
     rewrite:
-      'Paste a message that feels emotional, reactive, or unclear. Get a calmer, clearer version you can edit and copy.',
-    log: 'Paste the same notes (or a message you are documenting). Get a neutral, factual log-style entry — not a copy of blame wording.',
+      'Paste what they said, your draft, or both — get a calmer reply or a clearer version of your message.',
+    log: 'Paste notes about what happened. Get a neutral, factual log-style entry — not a copy of blame wording.',
+  },
+  rewriteEntry: {
+    aria: 'How to start',
+    reply: 'Reply to them',
+    replyHint: 'They messaged you — we suggest a reply',
+    polish: 'Polish my draft',
+    polishHint: 'You already wrote something — we refine it',
   },
   input: {
-    rewriteLabel: 'Your message',
-    rewritePlaceholder:
-      'Paste the message you want to send, or a rough draft of what you want to say…',
+    theirMessageLabel: 'What they said',
+    theirMessagePlaceholder:
+      'Paste their message, email, or text you are responding to…',
+    theirMessageHint:
+      'Paste the message you are replying to. It is not stored after you leave.',
+    userDraftLabel: 'What you want to say (optional)',
+    userDraftPlaceholderReply:
+      'Rough draft, bullet points, or leave empty — we will suggest a reply…',
+    userDraftPlaceholderPolish:
+      'Paste the message you want to send, or a rough draft…',
+    userDraftHintReply:
+      'Optional: your angle, boundaries, or a partial draft to include.',
     logLabel: 'What happened',
     logPlaceholder:
       'Rough notes: who was involved, what happened, when, what was said…',
-    sharedHint:
-      'This text is shared between both tools — switch tabs without losing it.',
+    logHint: 'Used for the log entry only — separate from the rewriter fields.',
   },
   log: {
     entryDate: 'Entry date',
@@ -53,6 +68,7 @@ export const en: Messages = {
     generating: 'Generating…',
     regenerate: 'Regenerate',
     rewriteMessage: 'Rewrite message',
+    suggestReply: 'Suggest reply',
     buildLogEntry: 'Build log entry',
     resetAll: 'Reset all',
     copy: 'Copy',
@@ -60,6 +76,7 @@ export const en: Messages = {
   },
   output: {
     rewriteLabel: 'Clearer message',
+    replyLabel: 'Suggested reply',
     rewritePlaceholder: 'Your clearer message will appear here after you generate.',
     logLabel: 'Log entry',
     logPlaceholder: 'Your neutral log entry will appear here after you generate.',

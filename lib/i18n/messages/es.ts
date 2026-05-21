@@ -22,17 +22,32 @@ export const es: Messages = {
   },
   intro: {
     rewrite:
-      'Pega un mensaje emocional, reactivo o poco claro. Obtén una versión más calmada y clara para editar y copiar.',
-    log: 'Las mismas notas (o un mensaje que documentas). Obtén una entrada neutra y factual — no una copia de acusaciones.',
+      'Pega lo que dijeron, tu borrador o ambos — respuesta sugerida o versión más clara de tu mensaje.',
+    log: 'Notas sobre lo ocurrido. Entrada neutra y factual — no una copia de acusaciones.',
+  },
+  rewriteEntry: {
+    aria: 'Cómo empezar',
+    reply: 'Responderles',
+    replyHint: 'Te escribieron — sugerimos una respuesta',
+    polish: 'Pulir mi borrador',
+    polishHint: 'Ya escribiste algo — lo refinamos',
   },
   input: {
-    rewriteLabel: 'Tu mensaje',
-    rewritePlaceholder:
-      'Pega el mensaje que quieres enviar o un borrador de lo que quieres decir…',
+    theirMessageLabel: 'Lo que dijeron',
+    theirMessagePlaceholder:
+      'Pega su mensaje, correo o texto al que respondes…',
+    theirMessageHint:
+      'No se guarda después de salir.',
+    userDraftLabel: 'Lo que quieres decir (opcional)',
+    userDraftPlaceholderReply:
+      'Borrador, puntos clave o vacío — sugerimos una respuesta…',
+    userDraftPlaceholderPolish:
+      'Pega el mensaje que quieres enviar o un borrador…',
+    userDraftHintReply:
+      'Opcional: tu enfoque, límites o un borrador parcial.',
     logLabel: 'Qué ocurrió',
     logPlaceholder: 'Notas: quién, qué, cuándo, qué se dijo…',
-    sharedHint:
-      'Este texto se comparte entre ambas herramientas — cambia de pestaña sin perderlo.',
+    logHint: 'Solo para el registro — separado del reescritor.',
   },
   log: { entryDate: 'Fecha de la entrada' },
   rewrite: {
@@ -47,6 +62,7 @@ export const es: Messages = {
     generating: 'Generando…',
     regenerate: 'Regenerar',
     rewriteMessage: 'Reescribir mensaje',
+    suggestReply: 'Sugerir respuesta',
     buildLogEntry: 'Crear entrada',
     resetAll: 'Restablecer todo',
     copy: 'Copiar',
@@ -54,6 +70,7 @@ export const es: Messages = {
   },
   output: {
     rewriteLabel: 'Mensaje más claro',
+    replyLabel: 'Respuesta sugerida',
     rewritePlaceholder: 'Tu mensaje más claro aparecerá aquí tras generar.',
     logLabel: 'Entrada de registro',
     logPlaceholder: 'Tu entrada neutra aparecerá aquí tras generar.',

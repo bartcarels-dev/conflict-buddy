@@ -22,12 +22,24 @@ export type Messages = {
     rewrite: string;
     log: string;
   };
+  rewriteEntry: {
+    aria: string;
+    reply: string;
+    replyHint: string;
+    polish: string;
+    polishHint: string;
+  };
   input: {
-    rewriteLabel: string;
-    rewritePlaceholder: string;
+    theirMessageLabel: string;
+    theirMessagePlaceholder: string;
+    theirMessageHint: string;
+    userDraftLabel: string;
+    userDraftPlaceholderReply: string;
+    userDraftPlaceholderPolish: string;
+    userDraftHintReply: string;
     logLabel: string;
     logPlaceholder: string;
-    sharedHint: string;
+    logHint: string;
   };
   log: {
     entryDate: string;
@@ -43,6 +55,7 @@ export type Messages = {
     generating: string;
     regenerate: string;
     rewriteMessage: string;
+    suggestReply: string;
     buildLogEntry: string;
     resetAll: string;
     copy: string;
@@ -50,6 +63,7 @@ export type Messages = {
   };
   output: {
     rewriteLabel: string;
+    replyLabel: string;
     rewritePlaceholder: string;
     logLabel: string;
     logPlaceholder: string;

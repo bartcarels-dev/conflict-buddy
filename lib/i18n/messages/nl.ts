@@ -25,18 +25,33 @@ export const nl: Messages = {
   },
   intro: {
     rewrite:
-      'Plak een bericht dat emotioneel, reactief of onduidelijk voelt. Krijg een rustigere, duidelijkere versie om te bewerken en te kopiëren.',
-    log: 'Plak dezelfde notities (of een bericht dat je vastlegt). Krijg een neutrale, feitelijke lognotitie — geen kopie van beschuldigende formuleringen.',
+      'Plak wat zij zeiden, je concept, of beide — krijg een rustiger antwoord of een duidelijkere versie van je bericht.',
+    log: 'Plak notities over wat er gebeurde. Krijg een neutrale, feitelijke lognotitie — geen kopie van beschuldigende formuleringen.',
+  },
+  rewriteEntry: {
+    aria: 'Hoe beginnen',
+    reply: 'Antwoord op hen',
+    replyHint: 'Zij stuurden iets — wij stellen een antwoord voor',
+    polish: 'Mijn concept verfijnen',
+    polishHint: 'Je hebt al iets geschreven — wij polijsten het',
   },
   input: {
-    rewriteLabel: 'Jouw bericht',
-    rewritePlaceholder:
-      'Plak het bericht dat je wilt sturen, of een ruwe versie van wat je wilt zeggen…',
+    theirMessageLabel: 'Wat zij zeiden',
+    theirMessagePlaceholder:
+      'Plak hun bericht, e-mail of tekst waarop je reageert…',
+    theirMessageHint:
+      'Plak het bericht waarop je reageert. Het wordt niet opgeslagen na dit bezoek.',
+    userDraftLabel: 'Wat jij wilt zeggen (optioneel)',
+    userDraftPlaceholderReply:
+      'Ruwe tekst, bullets, of leeg — wij stellen een antwoord voor…',
+    userDraftPlaceholderPolish:
+      'Plak het bericht dat je wilt sturen, of een ruwe versie…',
+    userDraftHintReply:
+      'Optioneel: je invalshoek, grenzen of een gedeeltelijk concept.',
     logLabel: 'Wat er gebeurde',
     logPlaceholder:
       'Ruwe notities: wie, wat, wanneer, wat er gezegd werd…',
-    sharedHint:
-      'Deze tekst is gedeeld tussen beide tools — wissel van tab zonder iets te verliezen.',
+    logHint: 'Alleen voor de lognotitie — los van de rewriter-velden.',
   },
   log: {
     entryDate: 'Datum van de gebeurtenis',
@@ -53,6 +68,7 @@ export const nl: Messages = {
     generating: 'Bezig met genereren…',
     regenerate: 'Opnieuw genereren',
     rewriteMessage: 'Bericht herschrijven',
+    suggestReply: 'Antwoord voorstellen',
     buildLogEntry: 'Lognotitie maken',
     resetAll: 'Alles wissen',
     copy: 'Kopiëren',
@@ -60,6 +76,7 @@ export const nl: Messages = {
   },
   output: {
     rewriteLabel: 'Duidelijker bericht',
+    replyLabel: 'Voorgesteld antwoord',
     rewritePlaceholder: 'Je duidelijkere bericht verschijnt hier na het genereren.',
     logLabel: 'Lognotitie',
     logPlaceholder: 'Je neutrale lognotitie verschijnt hier na het genereren.',

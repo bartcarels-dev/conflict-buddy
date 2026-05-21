@@ -1,7 +1,8 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useI18n } from '@/app/components/I18nProvider';
-import type { ToolMode, TransformLevel } from '@/lib/types';
+import type { RewriteIntent, ToolMode, TransformLevel } from '@/lib/types';
 
 const fieldClass =
   'w-full rounded-lg border-2 border-border bg-input-bg px-4 py-3 text-sm text-foreground shadow-sm placeholder:text-muted-light focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/20';
@@ -9,10 +10,30 @@ const fieldClass =
 const panelClass =
   'rounded-2xl border-2 border-border bg-surface p-6 shadow-[var(--shadow)]';
 
+export type RewriteEntryMode = 'auto' | RewriteIntent;
+
+export function resolveRewriteIntent(
+  entryMode: RewriteEntryMode,
+  theirMessage: string,
+  userDraft: string
+): RewriteIntent {
+  if (entryMode !== 'auto') return entryMode;
+  const their = theirMessage.trim();
+  const draft = userDraft.trim();
+  if (their && !draft) return 'reply';
+  if (draft && !their) return 'polish';
+  if (their) return 'reply';
+  return 'polish';
+}
+
 type Props = {
   activeMode: ToolMode;
   onModeChange: (mode: ToolMode) => void;
-  input: string;
+  theirMessage: string;
+  userDraft: string;
+  logInput: string;
+  rewriteEntryMode: RewriteEntryMode;
+  onRewriteEntryModeChange: (mode: RewriteEntryMode) => void;
   rewriteOutput: string;
   logOutput: string;
   eventDate: string;
@@ -20,7 +41,9 @@ type Props = {
   error: string;
   rewriteCopied: boolean;
   logCopied: boolean;
-  onInputChange: (value: string) => void;
+  onTheirMessageChange: (value: string) => void;
+  onUserDraftChange: (value: string) => void;
+  onLogInputChange: (value: string) => void;
   onRewriteOutputChange: (value: string) => void;
   onLogOutputChange: (value: string) => void;
   onEventDateChange: (value: string) => void;
@@ -34,7 +57,11 @@ type Props = {
 export function ToolWorkflow({
   activeMode,
   onModeChange,
-  input,
+  theirMessage,
+  userDraft,
+  logInput,
+  rewriteEntryMode,
+  onRewriteEntryModeChange,
   rewriteOutput,
   logOutput,
   eventDate,
@@ -42,7 +69,9 @@ export function ToolWorkflow({
   error,
   rewriteCopied,
   logCopied,
-  onInputChange,
+  onTheirMessageChange,
+  onUserDraftChange,
+  onLogInputChange,
   onRewriteOutputChange,
   onLogOutputChange,
   onEventDateChange,
@@ -53,7 +82,22 @@ export function ToolWorkflow({
   onTransformLevelChange,
 }: Props) {
   const { messages: m } = useI18n();
-  const canGenerate = !!input.trim();
+
+  const rewriteIntent = useMemo(
+    () => resolveRewriteIntent(rewriteEntryMode, theirMessage, userDraft),
+    [rewriteEntryMode, theirMessage, userDraft]
+  );
+
+  const isReply = rewriteIntent === 'reply';
+  const showTheirField = activeMode === 'rewrite' && isReply;
+
+  const canGenerate =
+    activeMode === 'rewrite'
+      ? isReply
+        ? !!theirMessage.trim()
+        : !!userDraft.trim()
+      : !!logInput.trim();
+
   const output = activeMode === 'rewrite' ? rewriteOutput : logOutput;
   const hasOutput = !!output.trim();
   const copied = activeMode === 'rewrite' ? rewriteCopied : logCopied;
@@ -68,6 +112,26 @@ export function ToolWorkflow({
     { level: 'moderate', label: m.rewrite.moderate },
     { level: 'firm', label: m.rewrite.firm },
   ];
+
+  const entryChips: { id: RewriteIntent; label: string; hint: string }[] = [
+    { id: 'reply', label: m.rewriteEntry.reply, hint: m.rewriteEntry.replyHint },
+    { id: 'polish', label: m.rewriteEntry.polish, hint: m.rewriteEntry.polishHint },
+  ];
+
+  const generateLabel = isReply
+    ? hasOutput
+      ? m.actions.regenerate
+      : m.actions.suggestReply
+    : hasOutput
+      ? m.actions.regenerate
+      : m.actions.rewriteMessage;
+
+  const outputLabel =
+    activeMode === 'rewrite'
+      ? isReply
+        ? m.output.replyLabel
+        : m.output.rewriteLabel
+      : m.output.logLabel;
 
   return (
     <div className="space-y-6">
@@ -109,29 +173,118 @@ export function ToolWorkflow({
       </p>
 
       <div className={panelClass + ' space-y-4'}>
-        <div>
-          <label
-            htmlFor="shared-input"
-            className="block text-sm font-medium text-foreground mb-2"
+        {activeMode === 'rewrite' && (
+          <div
+            className="flex flex-col sm:flex-row gap-2 p-1 rounded-lg border border-border bg-surface-muted"
+            role="group"
+            aria-label={m.rewriteEntry.aria}
           >
-            {activeMode === 'rewrite'
-              ? m.input.rewriteLabel
-              : m.input.logLabel}
-          </label>
-          <textarea
-            id="shared-input"
-            className={`${fieldClass} min-h-[180px] resize-y`}
-            rows={7}
-            placeholder={
-              activeMode === 'rewrite'
-                ? m.input.rewritePlaceholder
-                : m.input.logPlaceholder
-            }
-            value={input}
-            onChange={(e) => onInputChange(e.target.value)}
-          />
-          <p className="mt-2 text-xs text-muted-light">{m.input.sharedHint}</p>
-        </div>
+            {entryChips.map((chip) => {
+              const active =
+                rewriteEntryMode === chip.id ||
+                (rewriteEntryMode === 'auto' && rewriteIntent === chip.id);
+              return (
+                <button
+                  key={chip.id}
+                  type="button"
+                  onClick={() => onRewriteEntryModeChange(chip.id)}
+                  className={[
+                    'flex-1 rounded-md px-3 py-2.5 text-left transition-colors border-2',
+                    active
+                      ? 'border-primary bg-primary-subtle'
+                      : 'border-transparent hover:bg-surface',
+                  ].join(' ')}
+                  aria-pressed={active}
+                >
+                  <span
+                    className={[
+                      'block text-xs font-semibold',
+                      active ? 'text-primary' : 'text-foreground',
+                    ].join(' ')}
+                  >
+                    {chip.label}
+                  </span>
+                  <span className="block mt-0.5 text-[11px] text-muted leading-snug">
+                    {chip.hint}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {activeMode === 'rewrite' && showTheirField && (
+          <div>
+            <label
+              htmlFor="their-message"
+              className="block text-sm font-medium text-foreground mb-2"
+            >
+              {m.input.theirMessageLabel}
+            </label>
+            <textarea
+              id="their-message"
+              className={`${fieldClass} min-h-[140px] resize-y`}
+              rows={5}
+              placeholder={m.input.theirMessagePlaceholder}
+              value={theirMessage}
+              onChange={(e) => {
+                onTheirMessageChange(e.target.value);
+                if (rewriteEntryMode === 'auto' && e.target.value.trim()) {
+                  onRewriteEntryModeChange('auto');
+                }
+              }}
+            />
+            <p className="mt-2 text-xs text-muted-light">
+              {m.input.theirMessageHint}
+            </p>
+          </div>
+        )}
+
+        {activeMode === 'rewrite' ? (
+          <div>
+            <label
+              htmlFor="user-draft"
+              className="block text-sm font-medium text-foreground mb-2"
+            >
+              {m.input.userDraftLabel}
+            </label>
+            <textarea
+              id="user-draft"
+              className={`${fieldClass} min-h-[140px] resize-y`}
+              rows={5}
+              placeholder={
+                isReply
+                  ? m.input.userDraftPlaceholderReply
+                  : m.input.userDraftPlaceholderPolish
+              }
+              value={userDraft}
+              onChange={(e) => onUserDraftChange(e.target.value)}
+            />
+            {isReply && (
+              <p className="mt-2 text-xs text-muted-light">
+                {m.input.userDraftHintReply}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div>
+            <label
+              htmlFor="log-input"
+              className="block text-sm font-medium text-foreground mb-2"
+            >
+              {m.input.logLabel}
+            </label>
+            <textarea
+              id="log-input"
+              className={`${fieldClass} min-h-[180px] resize-y`}
+              rows={7}
+              placeholder={m.input.logPlaceholder}
+              value={logInput}
+              onChange={(e) => onLogInputChange(e.target.value)}
+            />
+            <p className="mt-2 text-xs text-muted-light">{m.input.logHint}</p>
+          </div>
+        )}
 
         {activeMode === 'log' && (
           <div>
@@ -189,13 +342,7 @@ export function ToolWorkflow({
                 : 'border-border bg-surface-muted text-muted cursor-not-allowed',
             ].join(' ')}
           >
-            {loading
-              ? m.actions.generating
-              : hasOutput
-                ? m.actions.regenerate
-                : activeMode === 'rewrite'
-                  ? m.actions.rewriteMessage
-                  : m.actions.buildLogEntry}
+            {loading ? m.actions.generating : generateLabel}
           </button>
           <button
             type="button"
@@ -219,9 +366,7 @@ export function ToolWorkflow({
             htmlFor="tool-output"
             className="block text-sm font-medium text-foreground"
           >
-            {activeMode === 'rewrite'
-              ? m.output.rewriteLabel
-              : m.output.logLabel}
+            {outputLabel}
           </label>
           {hasOutput && (
             <button

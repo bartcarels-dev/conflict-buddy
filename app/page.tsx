@@ -1,15 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LanguageSwitcher } from '@/app/components/LanguageSwitcher';
 import { useI18n } from '@/app/components/I18nProvider';
-import { ToolWorkflow } from '@/app/components/ToolWorkflow';
+import {
+  ToolWorkflow,
+  resolveRewriteIntent,
+  type RewriteEntryMode,
+} from '@/app/components/ToolWorkflow';
 import type { ToolMode, TransformLevel } from '@/lib/types';
 
 export default function Home() {
   const { messages: m } = useI18n();
   const [activeTool, setActiveTool] = useState<ToolMode>('rewrite');
-  const [input, setInput] = useState('');
+  const [theirMessage, setTheirMessage] = useState('');
+  const [userDraft, setUserDraft] = useState('');
+  const [logInput, setLogInput] = useState('');
+  const [rewriteEntryMode, setRewriteEntryMode] =
+    useState<RewriteEntryMode>('auto');
   const [rewriteOutput, setRewriteOutput] = useState('');
   const [logOutput, setLogOutput] = useState('');
   const [eventDate, setEventDate] = useState(() =>
@@ -21,24 +29,44 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const runGenerate = async () => {
-    if (!input.trim()) return;
+  const rewriteIntent = useMemo(
+    () => resolveRewriteIntent(rewriteEntryMode, theirMessage, userDraft),
+    [rewriteEntryMode, theirMessage, userDraft]
+  );
 
+  const runGenerate = async () => {
     setError('');
     setLoading(true);
     if (activeTool === 'rewrite') setRewriteCopied(false);
     else setLogCopied(false);
 
     try {
+      const body =
+        activeTool === 'rewrite'
+          ? {
+              mode: 'rewrite' as const,
+              theirMessage: theirMessage.trim(),
+              input: userDraft.trim(),
+              transformLevel: rewriteLevel,
+              rewriteIntent,
+            }
+          : {
+              mode: 'log' as const,
+              input: logInput.trim(),
+              eventDate,
+            };
+
+      if (activeTool === 'rewrite') {
+        if (rewriteIntent === 'reply' && !theirMessage.trim()) return;
+        if (rewriteIntent === 'polish' && !userDraft.trim()) return;
+      } else if (!logInput.trim()) {
+        return;
+      }
+
       const res = await fetch('/api/improve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mode: activeTool,
-          input,
-          ...(activeTool === 'rewrite' ? { transformLevel: rewriteLevel } : {}),
-          ...(activeTool === 'log' ? { eventDate } : {}),
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -69,7 +97,10 @@ export default function Home() {
   };
 
   const resetAll = () => {
-    setInput('');
+    setTheirMessage('');
+    setUserDraft('');
+    setLogInput('');
+    setRewriteEntryMode('auto');
     setRewriteOutput('');
     setLogOutput('');
     setEventDate(new Date().toISOString().slice(0, 10));
@@ -107,7 +138,11 @@ export default function Home() {
             setActiveTool(mode);
             setError('');
           }}
-          input={input}
+          theirMessage={theirMessage}
+          userDraft={userDraft}
+          logInput={logInput}
+          rewriteEntryMode={rewriteEntryMode}
+          onRewriteEntryModeChange={setRewriteEntryMode}
           rewriteOutput={rewriteOutput}
           logOutput={logOutput}
           eventDate={eventDate}
@@ -115,7 +150,9 @@ export default function Home() {
           error={error}
           rewriteCopied={rewriteCopied}
           logCopied={logCopied}
-          onInputChange={setInput}
+          onTheirMessageChange={setTheirMessage}
+          onUserDraftChange={setUserDraft}
+          onLogInputChange={setLogInput}
           onRewriteOutputChange={setRewriteOutput}
           onLogOutputChange={setLogOutput}
           onEventDateChange={setEventDate}

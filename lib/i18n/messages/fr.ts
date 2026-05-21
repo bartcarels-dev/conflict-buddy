@@ -22,17 +22,32 @@ export const fr: Messages = {
   },
   intro: {
     rewrite:
-      'Collez un message émotionnel, réactif ou peu clair. Obtenez une version plus calme et claire à modifier et copier.',
-    log: 'Les mêmes notes (ou un message à documenter). Obtenez une entrée de journal neutre et factuelle — pas une copie d’accusations.',
+      'Collez ce qu’ils ont dit, votre brouillon, ou les deux — réponse suggérée ou version plus claire de votre message.',
+    log: 'Notes sur ce qui s’est passé. Entrée de journal neutre et factuelle — pas une copie d’accusations.',
+  },
+  rewriteEntry: {
+    aria: 'Comment commencer',
+    reply: 'Répondre',
+    replyHint: 'Ils vous ont écrit — nous suggérons une réponse',
+    polish: 'Polir mon brouillon',
+    polishHint: 'Vous avez déjà écrit — nous l’affînons',
   },
   input: {
-    rewriteLabel: 'Votre message',
-    rewritePlaceholder:
-      'Collez le message à envoyer ou un brouillon de ce que vous voulez dire…',
+    theirMessageLabel: 'Ce qu’ils ont dit',
+    theirMessagePlaceholder:
+      'Collez leur message, e-mail ou texte auquel vous répondez…',
+    theirMessageHint:
+      'Non enregistré après votre visite.',
+    userDraftLabel: 'Ce que vous voulez dire (optionnel)',
+    userDraftPlaceholderReply:
+      'Brouillon, points clés ou vide — nous suggérons une réponse…',
+    userDraftPlaceholderPolish:
+      'Collez le message à envoyer ou un brouillon…',
+    userDraftHintReply:
+      'Optionnel : votre angle, limites ou un brouillon partiel.',
     logLabel: 'Ce qui s’est passé',
     logPlaceholder: 'Notes : qui, quoi, quand, ce qui a été dit…',
-    sharedHint:
-      'Ce texte est partagé entre les deux outils — changez d’onglet sans le perdre.',
+    logHint: 'Uniquement pour la note de journal — séparé du reformulateur.',
   },
   log: { entryDate: 'Date de l’entrée' },
   rewrite: {
@@ -47,6 +62,7 @@ export const fr: Messages = {
     generating: 'Génération…',
     regenerate: 'Régénérer',
     rewriteMessage: 'Reformuler le message',
+    suggestReply: 'Suggérer une réponse',
     buildLogEntry: 'Créer la note',
     resetAll: 'Tout réinitialiser',
     copy: 'Copier',
@@ -54,6 +70,7 @@ export const fr: Messages = {
   },
   output: {
     rewriteLabel: 'Message plus clair',
+    replyLabel: 'Réponse suggérée',
     rewritePlaceholder: 'Votre message plus clair apparaîtra ici après génération.',
     logLabel: 'Note de journal',
     logPlaceholder: 'Votre note neutre apparaîtra ici après génération.',

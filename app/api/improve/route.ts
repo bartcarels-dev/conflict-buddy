@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { RewriteAnalysis, ToolMode, TransformLevel } from '@/lib/types';
+import type { RewriteAnalysis, RewriteIntent, ToolMode, TransformLevel } from '@/lib/types';
 import {
   detectLanguage,
   formatDate,
@@ -12,6 +12,10 @@ import {
   messageRewriterMinimalUserPrompt,
   usesStructuredPipeline,
 } from '@/lib/prompts/messageRewriterMinimal';
+import {
+  messageReplyComposerRules,
+  messageReplyComposerUserPrompt,
+} from '@/lib/prompts/messageReplyComposer';
 import {
   messageRewriterStructuredRules,
   messageRewriterStructuredUserPrompt,
@@ -141,6 +145,39 @@ async function generateStructuredRewrite(
   };
 }
 
+async function generateComposeReply(
+  theirMessage: string,
+  userNotes: string,
+  level: TransformLevel,
+  retryNote?: string
+): Promise<{ output: string; analysis: RewriteAnalysis | null }> {
+  const lang = detectRewriteLocale(theirMessage);
+  let userPrompt = messageReplyComposerUserPrompt(theirMessage, userNotes, level);
+  if (retryNote) userPrompt = `${userPrompt}\n\n${retryNote}`;
+  const parsed = await runModel(
+    messageReplyComposerRules(level, lang),
+    userPrompt
+  );
+  return {
+    output: extractOutput(parsed, 'rewrite'),
+    analysis: parseAnalysis(parsed),
+  };
+}
+
+function resolveRewriteIntent(
+  explicit: unknown,
+  theirMessage: string,
+  userDraft: string
+): RewriteIntent {
+  if (explicit === 'reply' || explicit === 'polish') return explicit;
+  const their = theirMessage.trim();
+  const draft = userDraft.trim();
+  if (their && !draft) return 'reply';
+  if (draft && !their) return 'polish';
+  if (their) return 'reply';
+  return 'polish';
+}
+
 const MAX_STRUCTURED_ATTEMPTS = 4;
 const MAX_MINIMAL_ATTEMPTS = 2;
 
@@ -227,6 +264,95 @@ async function rewriteWithValidation(
   return output;
 }
 
+async function composeReplyWithValidation(
+  theirMessage: string,
+  userNotes: string,
+  level: TransformLevel
+): Promise<string> {
+  const rewriteContext = buildRewriteContext(theirMessage);
+  const validationInput = userNotes.trim() || theirMessage;
+  const localeSource = theirMessage;
+
+  let output = '';
+  let analysis: RewriteAnalysis | null = null;
+  let retryNote: string | undefined;
+
+  const maxAttempts = usesStructuredPipeline(level)
+    ? MAX_STRUCTURED_ATTEMPTS
+    : MAX_MINIMAL_ATTEMPTS;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    if (usesStructuredPipeline(level)) {
+      const result = await generateComposeReply(
+        theirMessage,
+        userNotes,
+        level,
+        retryNote
+      );
+      output = result.output;
+      analysis = result.analysis;
+    } else {
+      const result = await generateComposeReply(
+        theirMessage,
+        userNotes,
+        level,
+        retryNote
+      );
+      output = result.output;
+      analysis = result.analysis;
+    }
+
+    if (!output) break;
+
+    const issues = validateRewrite(validationInput, output, analysis, level);
+    const needsUnchangedRetry =
+      usesStructuredPipeline(level) &&
+      userNotes.trim() !== '' &&
+      isRewriteUnchanged(userNotes, output) &&
+      !rewriteContext.flags.skipUnchangedRetry;
+
+    if (issues.length === 0 && !needsUnchangedRetry) break;
+    if (attempt === maxAttempts - 1) break;
+
+    if (needsUnchangedRetry) {
+      retryNote = buildUnchangedRetryPrompt();
+    } else if (issues.length > 0) {
+      retryNote = buildValidationRetryPrompt(issues);
+    } else {
+      break;
+    }
+  }
+
+  if (userNotes.trim()) {
+    output = ensureAgencyPreserved(userNotes, output, level);
+  }
+
+  for (let fix = 0; fix < 2 && languageMismatch(localeSource, output); fix++) {
+    const label = rewriteLangLabel(detectRewriteLocale(localeSource));
+    const note = `REJECTED — wrong language. Reply must be in ${label} ONLY (same as their message).`;
+    output = (await generateComposeReply(theirMessage, userNotes, level, note)).output;
+    if (userNotes.trim()) output = ensureAgencyPreserved(userNotes, output, level);
+  }
+
+  const insultInOutput =
+    /\b(ridiculous|ridicule|ridículo|lächerlich|belachelijk)\b/i;
+  for (let fix = 0; fix < 2 && insultInOutput.test(output); fix++) {
+    const note =
+      'REJECTED — remove insult words from the reply. State impact and request without sarcasm.';
+    output = (await generateComposeReply(theirMessage, userNotes, level, note)).output;
+    if (userNotes.trim()) output = ensureAgencyPreserved(userNotes, output, level);
+  }
+
+  for (let fix = 0; fix < 2 && hasKnewPerfectlyEscalation(validationInput, output); fix++) {
+    const note =
+      'REJECTED — remove "you knew perfectly well" style lines from the reply.';
+    output = (await generateComposeReply(theirMessage, userNotes, level, note)).output;
+    if (userNotes.trim()) output = ensureAgencyPreserved(userNotes, output, level);
+  }
+
+  return output;
+}
+
 /** If input uses second-person "you gave" (any locale), keep that when the model dropped it. */
 function ensureAgencyPreserved(
   input: string,
@@ -262,7 +388,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const mode = body.mode as ToolMode;
-    const input = String(body.input ?? '').trim();
+    const userDraft = String(body.input ?? '').trim();
+    const theirMessage = String(body.theirMessage ?? '').trim();
     const eventDate = body.eventDate as string | undefined;
     const transformLevel = parseTransformLevel(body.transformLevel);
 
@@ -273,23 +400,49 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!input) {
-      return NextResponse.json(
-        { error: 'Missing required field: input' },
-        { status: 400 }
-      );
-    }
-
     const formattedDate = formatDate(eventDate);
-    const dateLabel = logDateLabel(input);
-
     let output = '';
+    let rewriteIntent: RewriteIntent | undefined;
 
     if (mode === 'rewrite') {
-      output = await rewriteWithValidation(input, transformLevel);
+      rewriteIntent = resolveRewriteIntent(
+        body.rewriteIntent,
+        theirMessage,
+        userDraft
+      );
+
+      if (rewriteIntent === 'reply') {
+        if (!theirMessage) {
+          return NextResponse.json(
+            { error: 'Missing required field: theirMessage (for reply mode)' },
+            { status: 400 }
+          );
+        }
+        output = await composeReplyWithValidation(
+          theirMessage,
+          userDraft,
+          transformLevel
+        );
+      } else {
+        if (!userDraft) {
+          return NextResponse.json(
+            { error: 'Missing required field: input (your draft)' },
+            { status: 400 }
+          );
+        }
+        output = await rewriteWithValidation(userDraft, transformLevel);
+      }
     } else {
+      const logInput = userDraft || theirMessage;
+      if (!logInput) {
+        return NextResponse.json(
+          { error: 'Missing required field: input' },
+          { status: 400 }
+        );
+      }
+      const dateLabel = logDateLabel(logInput);
       const { systemPrompt, userPrompt } = buildLogPrompts(
-        input,
+        logInput,
         dateLabel,
         formattedDate
       );
@@ -306,7 +459,12 @@ export async function POST(req: Request) {
       );
     }
 
-    return NextResponse.json({ mode, output, transformLevel });
+    return NextResponse.json({
+      mode,
+      output,
+      transformLevel,
+      ...(rewriteIntent ? { rewriteIntent } : {}),
+    });
   } catch (err) {
     console.error('Error in /api/improve:', err);
     const { status, error } = getErrorResponse(err);

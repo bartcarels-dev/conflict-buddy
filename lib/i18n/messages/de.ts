@@ -22,17 +22,32 @@ export const de: Messages = {
   },
   intro: {
     rewrite:
-      'Fügen Sie eine emotionale, reaktive oder unklare Nachricht ein. Erhalten Sie eine ruhigere, klarere Version zum Bearbeiten und Kopieren.',
-    log: 'Dieselben Notizen (oder eine Nachricht zur Dokumentation). Erhalten Sie einen neutralen, sachlichen Logeintrag — keine Kopie von Vorwürfen.',
+      'Fügen Sie ein, was die andere Person schrieb, Ihren Entwurf oder beides — Vorschlag für eine Antwort oder klarere Formulierung.',
+    log: 'Notizen zum Geschehen. Erhalten Sie einen neutralen, sachlichen Logeintrag — keine Kopie von Vorwürfen.',
+  },
+  rewriteEntry: {
+    aria: 'Einstieg',
+    reply: 'Antwort an sie',
+    replyHint: 'Sie haben geschrieben — wir schlagen eine Antwort vor',
+    polish: 'Meinen Entwurf verfeinern',
+    polishHint: 'Sie haben bereits etwas geschrieben — wir polieren es',
   },
   input: {
-    rewriteLabel: 'Ihre Nachricht',
-    rewritePlaceholder:
+    theirMessageLabel: 'Was sie schrieben',
+    theirMessagePlaceholder:
+      'Nachricht, E-Mail oder Text einfügen, auf den Sie antworten…',
+    theirMessageHint:
+      'Wird nach diesem Besuch nicht gespeichert.',
+    userDraftLabel: 'Was Sie sagen möchten (optional)',
+    userDraftPlaceholderReply:
+      'Entwurf, Stichpunkte oder leer — wir schlagen eine Antwort vor…',
+    userDraftPlaceholderPolish:
       'Nachricht einfügen, die Sie senden möchten, oder einen Entwurf…',
+    userDraftHintReply:
+      'Optional: Ihre Perspektive, Grenzen oder ein Teilentwurf.',
     logLabel: 'Was passiert ist',
     logPlaceholder: 'Stichnotizen: wer, was, wann, was gesagt wurde…',
-    sharedHint:
-      'Dieser Text gilt für beide Tools — Tab wechseln ohne Verlust.',
+    logHint: 'Nur für den Logeintrag — getrennt von den Rewriter-Feldern.',
   },
   log: { entryDate: 'Datum des Eintrags' },
   rewrite: {
@@ -47,6 +62,7 @@ export const de: Messages = {
     generating: 'Wird erstellt…',
     regenerate: 'Erneut erstellen',
     rewriteMessage: 'Nachricht umschreiben',
+    suggestReply: 'Antwort vorschlagen',
     buildLogEntry: 'Logeintrag erstellen',
     resetAll: 'Alles zurücksetzen',
     copy: 'Kopieren',
@@ -54,6 +70,7 @@ export const de: Messages = {
   },
   output: {
     rewriteLabel: 'Klarere Nachricht',
+    replyLabel: 'Vorgeschlagene Antwort',
     rewritePlaceholder: 'Ihre klarere Nachricht erscheint hier nach dem Erstellen.',
     logLabel: 'Logeintrag',
     logPlaceholder: 'Ihr neutraler Logeintrag erscheint hier nach dem Erstellen.',

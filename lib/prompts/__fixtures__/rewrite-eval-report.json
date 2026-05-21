@@ -15,7 +15,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "I notice that plans have been changing at the last minute, which forces me to adjust my schedule. This situation is becoming a recurring pattern that affects me, especially since I try to communicate my availability clearly in advance. I understand that changes happen, but I would appreciate it if we could work on maintaining more consistent plans."
+    "output": "I notice that plans are frequently changing at the last minute, which forces me to adjust my schedule unexpectedly. I try to stay clear in advance, but this pattern is becoming challenging for me. I understand that things can change, but I would appreciate more consistency moving forward."
   },
   {
     "id": "scheduling-en",
@@ -24,7 +24,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "I notice that plans often change at the last minute, which makes it difficult for me to manage my schedule. It feels like my schedule is only considered when I bring it up, despite my efforts to communicate clearly in advance. I understand that changes can happen, but this has become a recurring pattern that affects me. I would appreciate it if we could work on maintaining more consistent plans moving forward."
+    "output": "I notice that plans have been changing at the last minute frequently, which forces me to adjust my schedule. This situation is becoming a recurring pattern that affects me. I would appreciate it if we could establish clearer communication about any changes in advance."
   },
   {
     "id": "scheduling-de",
@@ -42,7 +42,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Ich merke, dass Absprachen in letzter Minute häufig geändert werden, was dazu führt, dass ich mich ständig anpassen muss. Das sorgt bei mir für Müdigkeit, da ich versuche, vorher Klarheit zu halten. Ich verstehe, dass sich Dinge ändern können, aber für mich wird das langsam zu einem belastenden Muster. Können wir daher klare Absprachen treffen, um dies zu vermeiden?"
+    "output": "Ich merke, dass Absprachen in letzter Minute häufig geändert werden, was dazu führt, dass ich mich anpassen soll. Das sorgt bei mir für Müdigkeit, da ich versuche, vorher Klarheit zu halten. Ich verstehe, dass sich Dinge ändern können, aber dieses Verhalten wird für mich langsam zu einem belastenden Muster. Ich möchte, dass wir klare Absprachen treffen, um solche Situationen zu vermeiden."
   },
   {
     "id": "scheduling-de",
@@ -51,7 +51,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Ich merke, dass Absprachen in letzter Minute häufig geändert werden, was es für mich schwierig macht, meine Planung aufrechtzuerhalten. Das sorgt bei mir für Müdigkeit, da ich versuche, im Voraus Klarheit zu haben. Ich verstehe, dass sich Dinge ändern können, aber für mich wird das langsam zu einem belastenden Muster. Ich möchte, dass Absprachen klarer und verlässlicher sind."
+    "output": "Ich merke, dass Absprachen in letzter Minute häufig geändert werden, was dazu führt, dass ich mich anpassen muss. Das sorgt bei mir für Müdigkeit, da ich versuche, im Voraus Klarheit zu haben. Ich verstehe, dass sich Dinge ändern können, aber dieses Verhalten wird für mich langsam zu einem belastenden Muster. Ich möchte, dass wir klarere Absprachen treffen."
   },
   {
     "id": "scheduling-fr",
@@ -69,7 +69,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Je remarque que les arrangements changent souvent au dernier moment, ce qui m'oblige à m'adapter. J'essaie d'être clair(e) à l'avance, mais cela semble devenir un schéma récurrent. Je comprends que les choses peuvent changer, mais cela commence à avoir un impact sur ma situation."
+    "output": "Je remarque que les arrangements changent souvent au dernier moment, ce qui m'oblige à m'adapter. J'essaie d'être clair(e) à l'avance, mais cela semble devenir un schéma récurrent qui me pèse. Je comprends que les choses peuvent changer, mais j'aimerais que l'on prenne en compte mon planning de manière plus proactive."
   },
   {
     "id": "scheduling-fr",
@@ -78,7 +78,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Je remarque que les arrangements changent souvent au dernier moment, ce qui m'oblige à m'adapter. Cela me fatigue, surtout parce que j'essaie d'être clair(e) à l'avance. Je comprends que des changements peuvent survenir, mais cela devient un schéma qui me pèse. Je préfère que nous respections les arrangements convenus."
+    "output": "Je remarque que les arrangements changent souvent au dernier moment, ce qui m'oblige à m'adapter. Cela me fatigue, surtout parce que j'essaie d'être clair(e) à l'avance sur mon planning. Je comprends que des changements peuvent survenir, mais cela devient un schéma qui pèse sur moi. Je préfère que les arrangements soient respectés et je souhaite que mon planning soit pris en compte à l'avance."
   },
   {
     "id": "scheduling-es",
@@ -96,7 +96,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que los planes cambian siempre en el último momento, lo que me obliga a adaptarme constantemente. Esto me genera cansancio, especialmente porque intento ser claro/a con antelación. Entiendo que las cosas pueden cambiar, pero este patrón está afectando mi planificación. ¿Podemos encontrar una manera de manejar esto de forma más efectiva?"
+    "output": "He notado que los planes cambian con frecuencia en el último momento, lo que me obliga a adaptarme constantemente. Esto me genera cansancio, especialmente porque intento ser claro/a con antelación. Entiendo que las cosas pueden cambiar, pero este patrón está afectando mi planificación. ¿Podemos encontrar una manera de manejar esto de forma más efectiva?"
   },
   {
     "id": "scheduling-es",
@@ -105,7 +105,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que los planes cambian siempre en el último momento, lo que me obliga a adaptarme y afecta mi horario. Prefiero que se respete mi horario y me gustaría que se me informe con antelación sobre cambios, ya que esto se está convirtiendo en un patrón que me afecta."
+    "output": "He notado que los planes cambian frecuentemente en el último momento, lo que me obliga a adaptar mi horario. Esto me causa cansancio, especialmente porque prefiero que los cambios en los planes se comuniquen con antelación. Entiendo que las cosas pueden cambiar, pero me gustaría que pudiéramos establecer un mejor sistema para evitar este patrón."
   },
   {
     "id": "scheduling-pt",
@@ -123,7 +123,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que os planos têm mudado frequentemente em cima da hora, o que me obriga a me adaptar. Isso me deixa cansado/a, especialmente porque eu tento ser claro/a com antecedência. Essa situação está se tornando um padrão que me afeta. Gostaria de encontrar uma forma de ter planos mais estáveis."
+    "output": "Percebo que os planos têm mudado frequentemente em cima da hora, o que me faz ter que me adaptar constantemente. Isso me causa cansaço, especialmente porque tento ser claro/a com antecedência sobre a minha agenda. Sinto que isso está se tornando um padrão que me afeta e gostaria de encontrar uma forma de melhorar essa situação."
   },
   {
     "id": "scheduling-pt",
@@ -132,7 +132,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que os planos têm mudado frequentemente em cima da hora, o que me obriga a me adaptar. Isso tem me causado cansaço, pois gostaria que os planos fossem mantidos conforme acordado. Entendo que mudanças podem ocorrer, mas isso está se tornando um padrão que me afeta. Gostaria de ser informado/a com antecedência sobre quaisquer mudanças para que possamos evitar esse tipo de situação."
+    "output": "Percebo que os planos têm mudado frequentemente em cima da hora, o que me força a me adaptar. Isso me causa cansaço, especialmente porque gostaria que minha agenda fosse considerada com mais antecedência. Entendo que mudanças podem ocorrer, mas isso está se tornando um padrão que me afeta. Podemos estabelecer uma forma de garantir que minha agenda seja levada em conta antes das decisões serem tomadas?"
   },
   {
     "id": "handover-en",
@@ -150,7 +150,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "I've noticed that the handover has been challenging lately because I need to drop Sam at your door as agreed, but this is difficult when arrivals are often around 10 or later. This has become a recurring issue, and it disrupts my planning. Can we discuss how to ensure a more reliable handover?"
+    "output": "I've noticed that the handover has been challenging because I'm unable to drop Sam at your door as agreed. When you arrive around 10 or later, it disrupts my planning. While I understand that delays can happen occasionally, this has become a consistent issue. The current arrangements are not working effectively for me. Can we discuss how to ensure a smoother handover in the future?"
   },
   {
     "id": "handover-en",
@@ -159,7 +159,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "I’ve noticed that the handover has been challenging because it often happens that I need to drop Sam at your door, but it’s difficult when you arrive around 10 or later. While occasional delays can happen, this has become a systematic issue that disrupts my planning. I need reliable timing for the handover. Can we agree on a specific time to ensure this works?"
+    "output": "I've noticed that the handover has been challenging lately because I need to drop Sam at your door as agreed, but it often doesn't work out when you arrive around 10 or later. This has become a systematic issue that disrupts my planning. I need reliable timing for the handover to ensure everything goes smoothly. Can we agree on a better way to manage this?"
   },
   {
     "id": "handover-de",
@@ -175,11 +175,9 @@
     "lang": "de",
     "category": "handover",
     "level": "moderate",
-    "status": "FAIL",
-    "fails": [
-      "missing: \"sam\""
-    ],
-    "output": "Ich merke, dass die Übergabe an deiner Tür regelmäßig schwierig ist, da du oft erst gegen 10 Uhr oder später kommst. Das führt dazu, dass ich meine Planung anpassen muss, was für mich frustrierend ist. Ich möchte, dass wir die Übergabe zuverlässig gestalten, damit es für uns beide funktioniert."
+    "status": "PASS",
+    "fails": [],
+    "output": "Ich merke, dass die Übergabe von Sam an deiner Tür regelmäßig schwierig ist, weil du oft erst gegen 10 Uhr oder später kommst. Das führt dazu, dass ich meine Planung anpassen muss. Ich würde gerne eine Lösung finden, die für uns beide funktioniert."
   },
   {
     "id": "handover-de",
@@ -188,7 +186,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Ich merke, dass die Übergabe an deiner Tür regelmäßig schwierig ist, da du oft erst gegen 10 Uhr oder später kommst. Das sorgt bei mir für Frustration, weil ich Sam wie vereinbart übergeben möchte. Diese Situation ist inzwischen systematisch und stört meine Planung. Können wir besprechen, wie wir die Übergabe zuverlässig gestalten können?"
+    "output": "Ich merke, dass die Übergabe an deiner Tür regelmäßig schwierig ist, weil du oft erst gegen 10 Uhr oder später kommst. Das sorgt bei mir für Frustration, da ich Sam wie vereinbart übergeben möchte. Es ist wichtig, dass wir die Übergabe zuverlässig gestalten und du pünktlich bist oder vorher Bescheid gibst, um meine Planung nicht durcheinanderzubringen."
   },
   {
     "id": "handover-fr",
@@ -206,7 +204,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Je constate que la remise de Sam à ta porte devient difficile, car il arrive souvent que tu sois absent(e) ou que tu arrives vers 10h ou plus tard. Cela perturbe mon planning et me cause des désagréments. Je comprends qu'une fois cela peut arriver, mais cela devient un schéma récurrent. Pour que cela fonctionne mieux, j'aimerais que nous trouvions une solution fiable pour nos remises."
+    "output": "Je remarque que la remise de Sam à ta porte devient difficile car tu arrives souvent vers 10h ou plus tard. Cela perturbe mon planning et je ressens de la frustration, surtout parce que nos accords ne semblent pas fonctionner. Pourrais-tu me confirmer que tu seras disponible à l'heure convenue à l'avenir ?"
   },
   {
     "id": "handover-fr",
@@ -215,7 +213,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Je constate que la remise de Sam à ta porte devient difficile, car il est souvent impossible de le faire lorsque tu arrives vers 10h ou plus tard. Cela perturbe mon planning et je ressens de la frustration à cause de cette situation. Je préfère que tu sois à l'heure pour la remise, car cela facilitera le processus. Pourrions-nous convenir d'un horaire qui fonctionne mieux pour nous deux ?"
+    "output": "Je remarque que la remise de Sam à ta porte devient difficile car tu arrives souvent vers 10h ou plus tard. Cela perturbe mon planning et je ressens de la frustration. Je préfère que nous respections les horaires convenus pour la remise."
   },
   {
     "id": "handover-es",
@@ -224,7 +222,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Regularmente no estás en casa o llegas tarde a la entrega. Necesito dejar a Sam en tu puerta como acordamos, pero es imposible cuando tú llegas sobre las 10 o más tarde. Puede pasar una vez, pero ya es sistemático. Los acuerdos que tenemos no funcionan así y también me desorganizan la planificación."
+    "output": "Regularmente no estás en casa o llegas tarde a la entrega. Necesito dejar a Sam en tu puerta como acordamos, pero es imposible cuando tú llegas sobre las 10 o más tarde. Puede pasar una vez, pero ya es sistemático. Los acuerdos que tenemos no funcionan así y también me desorganiza la planificación."
   },
   {
     "id": "handover-es",
@@ -233,7 +231,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que la entrega a la puerta se complica porque a menudo no estás en casa o llegas tarde, lo que afecta mi planificación. Necesito dejar a Sam en tu puerta como acordamos, pero esto se vuelve difícil cuando llegas sobre las 10 o más tarde. Puede pasar una vez, pero esto se ha vuelto un patrón y los acuerdos que tenemos no están funcionando. ¿Podemos encontrar una solución para que esto se resuelva?"
+    "output": "He notado que la entrega a la puerta se complica porque no estás en casa o llegas más tarde de las 10. Esto afecta mi planificación, ya que necesito dejar a Sam como acordamos. Entiendo que pueden surgir imprevistos, pero esto se ha vuelto un patrón y los acuerdos que tenemos no están funcionando. Necesito que llegues a tiempo para la entrega."
   },
   {
     "id": "handover-es",
@@ -242,7 +240,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que la entrega de Sam se complica cuando llegas sobre las 10 o más tarde, lo que afecta mi planificación. Necesito que llegues a tiempo para la entrega, ya que los acuerdos que tenemos no están funcionando y esto me desorganiza. ¿Podemos encontrar una solución para asegurar que esto no siga ocurriendo?"
+    "output": "He notado que la entrega de Sam se complica cuando llegas sobre las 10 o más tarde, lo que afecta mi planificación. Necesito que llegues a tiempo para la entrega, ya que los acuerdos que tenemos no están funcionando. Esto me causa frustración y me desorganiza. ¿Podemos encontrar una solución para que esto no siga así?"
   },
   {
     "id": "handover-pt",
@@ -251,7 +249,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Estás regularmente fora de casa ou chegas tarde à entrega. Preciso de deixar o Sam à tua porta como combinado, mas é impossível quando tu próprio chegas só por volta das 10 ou mais tarde. Pode acontecer uma vez, mas já se tornou sistemático. Os acordos que temos não funcionam assim e também estragam o meu planeamento."
+    "output": "Estás regularmente fora de casa ou chegas tarde à entrega. Preciso de deixar o Sam à tua porta como combinado, mas é impossível quando tu próprio chegas só por volta das 10 ou mais tarde. Pode acontecer uma vez, mas já é sistemático. Os acordos que temos não funcionam assim e também estragam o meu planeamento."
   },
   {
     "id": "handover-pt",
@@ -260,7 +258,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Tenho notado que a entrega do Sam à tua porta tem sido complicada, pois muitas vezes chegas apenas por volta das 10 ou até mais tarde. Isso tem acontecido com frequência e está a afetar o meu planeamento. Podemos discutir como garantir que a entrega ocorra conforme combinado?"
+    "output": "Tenho notado que a entrega do Sam está a ser complicada, pois frequentemente não estás em casa ou chegas apenas por volta das 10 horas ou mais tarde. Isso tem um impacto no meu planeamento, pois preciso de deixar o Sam à tua porta como combinado. Embora possa acontecer ocasionalmente, já se tornou um padrão que está a afetar os nossos acordos. Como podemos resolver isso para que funcione melhor para ambos?"
   },
   {
     "id": "handover-pt",
@@ -269,7 +267,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que a entrega do Sam está a ser complicada, pois muitas vezes chegas apenas por volta das 10 ou mais tarde. Isso tem um impacto negativo no meu planeamento, pois preciso de deixar o Sam à tua porta como combinado. Já se tornou um padrão que os acordos que temos não estão a funcionar. Preciso que chegas a tempo para a entrega; se não for possível, precisamos de encontrar uma solução."
+    "output": "Tenho notado que a entrega do Sam está a ser complicada, pois frequentemente chegas apenas por volta das 10 ou mais tarde. Isso torna impossível deixar o Sam à tua porta como combinado. Embora possa acontecer uma vez, já se tornou um padrão e isso afeta o meu planeamento. Podemos discutir como garantir que isso funcione de forma mais confiável?"
   },
   {
     "id": "you-gave-en",
@@ -287,7 +285,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "you gave back the clothes I sent dirty. Now there are stains that I can't remove. I'd prefer if you didn't use the clothes I buy to avoid this issue in the future."
+    "output": "you gave back the clothes I sent dirty. Because of this, I would prefer if the clothes I buy are not used."
   },
   {
     "id": "you-gave-en",
@@ -296,7 +294,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "you gave back the clothes I sent dirty. I've noticed that the clothes I sent came back dirty, which has resulted in stains that I can't remove. This situation is frustrating for me, and I'd rather you not use the clothes I buy."
+    "output": "you gave back the clothes I sent dirty. I've noticed that the clothes I sent back were returned dirty, which has left me with stains that I can't remove. I'd prefer if you didn't use the clothes I buy to avoid this issue in the future."
   },
   {
     "id": "you-gave-de",
@@ -314,7 +312,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Ich habe festgestellt, dass die Kleidung, die ich mitgegeben habe, schmutzig zurückkam. Das führt dazu, dass ich die Flecken nicht mehr herausbekomme. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe."
+    "output": "du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Es ist mir aufgefallen, dass die Kleidung, die ich mitgegeben habe, schmutzig zurückkam. Das sorgt bei mir für Frustration, da ich möchte, dass die Kleidung, die ich kaufe, in einem guten Zustand bleibt. Ich möchte lieber nicht, dass du die Kleidung benutzt, weil jetzt Flecken drin sind, die ich nicht mehr rausbekomme."
   },
   {
     "id": "you-gave-de",
@@ -323,7 +321,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Ich habe festgestellt, dass die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben wurde. Das führt dazu, dass ich jetzt Flecken habe, die ich nicht mehr rausbekomme. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe."
+    "output": "du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Ich habe festgestellt, dass die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben wurde. Das sorgt bei mir für Unbehagen, da ich lieber nicht möchte, dass du die Kleidung benutzt, die ich kaufe, weil jetzt Flecken drin sind, die ich nicht mehr rausbekomme."
   },
   {
     "id": "you-gave-fr",
@@ -341,7 +339,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "tu as rendu les vêtements que j'avais envoyés sales. Je préfère que tu n'utilises pas les vêtements que j'achète pour éviter ce genre de problème à l'avenir."
+    "output": "tu as rendu les vêtements que j'avais envoyés sales. J'ai remarqué que les vêtements que tu as rendus étaient sales, ce qui me cause de la frustration car il y a des taches que je n'arrive plus à enlever. Pour éviter cela à l'avenir, je préfère que tu n'utilises pas les vêtements que j'achète."
   },
   {
     "id": "you-gave-fr",
@@ -350,7 +348,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "tu as rendu les vêtements que j'avais envoyés sales. Je constate que les vêtements que j'avais envoyés sont revenus sales. Cela me cause de la frustration, surtout parce qu'il y a des taches que je n'arrive plus à enlever. Je préfère que tu n'utilises pas les vêtements que j'achète."
+    "output": "tu as rendu les vêtements que j'avais envoyés sales. J'ai remarqué que les vêtements que tu as rendus étaient sales. Cela me cause de la frustration, car il y a des taches que je n'arrive plus à enlever. Je préfère que tu n'utilises pas les vêtements que j'achète."
   },
   {
     "id": "you-gave-es",
@@ -368,45 +366,45 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que la ropa que yo envié devolviste sucia, lo que me causa frustración porque ahora hay manchas que no puedo quitar. Prefiero que no uses la ropa que compro para evitar este tipo de situaciones en el futuro."
+    "output": "devolviste sucia la ropa que yo envié. Prefiero que no uses la ropa que compro para evitar que esto vuelva a suceder."
   },
   {
     "id": "you-gave-es",
     "lang": "es",
     "category": "agency",
     "level": "firm",
+    "status": "PASS",
+    "fails": [],
+    "output": "He notado que la ropa que envié devolviste sucia, lo que ha dejado manchas que no puedo quitar. Prefiero que no uses la ropa que compro para evitar este tipo de situaciones en el futuro."
+  },
+  {
+    "id": "you-gave-pt",
+    "lang": "pt",
+    "category": "agency",
+    "level": "minimal",
+    "status": "PASS",
+    "fails": [],
+    "output": "Devolveste sujas as roupas que eu enviei. Prefiro que não uses a roupa que compro, porque agora há nódoas que já não consigo tirar."
+  },
+  {
+    "id": "you-gave-pt",
+    "lang": "pt",
+    "category": "agency",
+    "level": "moderate",
+    "status": "PASS",
+    "fails": [],
+    "output": "Devolveste as roupas que eu enviei com nódoas, o que me causa preocupação, pois agora não consigo tirar essas manchas. Prefiro que não uses a roupa que compro, para evitar esse tipo de problema no futuro."
+  },
+  {
+    "id": "you-gave-pt",
+    "lang": "pt",
+    "category": "agency",
+    "level": "firm",
     "status": "FAIL",
     "fails": [
-      "missing: \"manch\""
+      "missing: \"nód\""
     ],
-    "output": "devolviste sucia la ropa que yo envié. Prefiero que no uses la ropa que compro para evitar que esto vuelva a suceder."
-  },
-  {
-    "id": "you-gave-pt",
-    "lang": "pt",
-    "category": "agency",
-    "level": "minimal",
-    "status": "PASS",
-    "fails": [],
-    "output": "Devolveste sujas as roupas que eu enviei. Prefiro que não uses a roupa que comprei porque agora há nódoas que já não consigo tirar."
-  },
-  {
-    "id": "you-gave-pt",
-    "lang": "pt",
-    "category": "agency",
-    "level": "moderate",
-    "status": "PASS",
-    "fails": [],
-    "output": "devolveste sujas as roupas que eu enviei. Notei que as roupas que enviaste voltaram sujas, o que me causa frustração, pois agora há nódoas que já não consigo tirar. Prefiro que não uses a roupa que compro, para evitar esse tipo de situação no futuro."
-  },
-  {
-    "id": "you-gave-pt",
-    "lang": "pt",
-    "category": "agency",
-    "level": "firm",
-    "status": "PASS",
-    "fails": [],
-    "output": "devolveste sujas as roupas que eu enviei. Notei que as roupas que enviaste estavam sujas, o que me causa preocupação, pois agora há nódoas que já não consigo tirar. Prefiro que não uses a roupa que compro, pois isso tem um impacto negativo na sua condição."
+    "output": "devolveste sujas as roupas que eu enviei. Prefiro que não uses a roupa que compro, pois isso tem um impacto negativo na sua condição."
   },
   {
     "id": "threat-en",
@@ -415,7 +413,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "This is ridiculous. You are ignoring me again. If you do this one more time, I will call your lawyer and make sure everyone hears how you handle agreements."
+    "output": "This is frustrating. You are ignoring me again. If you do this one more time, I will call your lawyer and make sure everyone hears how you handle agreements."
   },
   {
     "id": "threat-en",
@@ -424,7 +422,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "I feel frustrated because it seems like my concerns are not being acknowledged. If this continues, I will need to consider escalating the situation to ensure that our agreements are respected. I would appreciate it if we could address this issue directly."
+    "output": "I feel frustrated because it seems like I'm being ignored again. If this continues, I will need to take further action to address how agreements are being handled."
   },
   {
     "id": "threat-en",
@@ -433,7 +431,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "I feel that my concerns are not being addressed, and this is becoming frustrating for me. If this pattern continues, I will need to take further action, including involving your lawyer to ensure that my experiences are heard. I would like to find a way to improve our communication and agreements moving forward."
+    "output": "I feel frustrated because it seems like my concerns are being ignored again. If this happens one more time, I will need to take further action to address the situation. It's important for me that we handle our agreements more effectively."
   },
   {
     "id": "threat-de",
@@ -442,7 +440,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Das ist lächerlich. Du ignorierst mich schon wieder. Wenn du das noch einmal machst, rufe ich deinen Anwalt an und sorge dafür, dass alle hören, wie du mit Absprachen umgehst."
+    "output": "Das ist nicht in Ordnung. Du ignorierst mich schon wieder. Wenn du das noch einmal machst, rufe ich deinen Anwalt an und sorge dafür, dass alle hören, wie du mit Absprachen umgehst."
   },
   {
     "id": "threat-de",
@@ -451,7 +449,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Ich merke, dass du mich wieder ignorierst, was bei mir Frustration auslöst. Wenn das noch einmal passiert, sehe ich mich gezwungen, deinen Anwalt zu kontaktieren, um die Situation zu klären. Ich möchte, dass wir respektvoll mit Absprachen umgehen."
+    "output": "Ich merke, dass ich wieder ignoriert werde, was bei mir Frustration auslöst. Wenn das erneut passiert, sehe ich mich gezwungen, deinen Anwalt zu kontaktieren, um die Situation zu klären. Ich möchte, dass wir in Zukunft klarere Absprachen treffen, damit solche Missverständnisse vermieden werden."
   },
   {
     "id": "threat-de",
@@ -460,7 +458,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Ich merke, dass du mich schon wieder ignorierst, was bei mir Frustration auslöst. Wenn das noch einmal passiert, möchte ich, dass du respektierst, wie wichtig unsere Absprachen sind. Können wir klären, wie wir in Zukunft besser kommunizieren können?"
+    "output": "Ich merke, dass ich wiederholt nicht die nötige Aufmerksamkeit von dir bekomme, was bei mir Frustration auslöst. Wenn das noch einmal passiert, sehe ich mich gezwungen, rechtliche Schritte einzuleiten. Ich möchte, dass wir klarere Absprachen treffen, um solche Situationen in Zukunft zu vermeiden."
   },
   {
     "id": "threat-fr",
@@ -469,7 +467,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "C'est ridicule. Tu m'ignores encore. Si tu recommences, j'appellerai ton avocat et je ferai en sorte que tout le monde entende comment tu gères les arrangements."
+    "output": "C'est inacceptable. Tu m'ignores encore. Si tu recommences, j'appellerai ton avocat et je ferai en sorte que tout le monde entende comment tu gères les arrangements."
   },
   {
     "id": "threat-fr",
@@ -478,7 +476,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Je remarque que tu m'ignores encore, ce qui affecte notre communication. Si cela se reproduit, je devrais envisager d'autres options pour gérer les arrangements, car cela devient difficile pour moi. J'aimerais que nous puissions trouver une solution constructive ensemble."
+    "output": "Je remarque que tu m'ignores encore, ce qui me fait sentir ignoré. J'aimerais que nous puissions discuter de la manière dont tu gères les arrangements, car cela a un impact sur notre communication. Je préfère éviter d'impliquer un avocat pour résoudre ce genre de situation."
   },
   {
     "id": "threat-fr",
@@ -487,7 +485,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Je remarque que tu m'ignores encore, et cela devient difficile pour moi. Si cela se reproduit, je devrai envisager d'autres actions pour aborder comment tu gères les arrangements. J'aimerais que nous puissions trouver une solution ensemble."
+    "output": "Je remarque que tu m'ignores encore, ce qui est frustrant pour moi. Si cela se reproduit, je devrai envisager d'autres actions. J'aimerais que nous puissions trouver un moyen de mieux gérer nos arrangements."
   },
   {
     "id": "threat-es",
@@ -496,7 +494,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Esto es ridículo. Me estás ignorando otra vez. Si lo vuelves a hacer, llamaré a tu abogado y haré que todos escuchen cómo manejas los acuerdos."
+    "output": "Esto es inaceptable. Me estás ignorando otra vez. Si lo vuelves a hacer, llamaré a tu abogado y haré que todos oigan cómo manejas los acuerdos."
   },
   {
     "id": "threat-es",
@@ -505,7 +503,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que en varias ocasiones no he recibido respuesta de tu parte, lo cual me causa frustración. Si esto vuelve a suceder, me veré en la necesidad de involucrar a un abogado para abordar cómo se están manejando los acuerdos. Me gustaría que pudiéramos encontrar una forma más efectiva de comunicarnos y resolver estos temas."
+    "output": "He notado que hay ocasiones en las que no recibo respuesta, lo que me hace sentir frustrado. Si esto continúa, me veré obligado a tomar medidas adicionales para abordar la situación. Me gustaría encontrar una manera de comunicarnos mejor y asegurar que los acuerdos se manejen de manera efectiva."
   },
   {
     "id": "threat-es",
@@ -514,7 +512,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Me doy cuenta de que hay ocasiones en las que no recibo respuesta, lo cual afecta nuestra comunicación. Si esto vuelve a suceder, me veré obligado a tomar medidas para asegurarme de que se respeten los acuerdos. Espero que podamos encontrar una manera de mejorar nuestra comunicación y evitar malentendidos en el futuro."
+    "output": "Me siento frustrado porque me estás ignorando otra vez. No quiero que esto continúe, ya que si lo vuelves a hacer, tomaré medidas. Espero que podamos encontrar una forma de comunicarnos mejor."
   },
   {
     "id": "threat-pt",
@@ -523,7 +521,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Isto é ridículo. Estás a ignorar-me outra vez. Se fizeres isto outra vez, ligo ao teu advogado e faço com que todos ouçam como tratas os acordos."
+    "output": "Isto é inaceitável. Estás a ignorar-me outra vez. Se fizeres isto outra vez, ligo ao teu advogado e faço com que todos ouçam como tratas os acordos."
   },
   {
     "id": "threat-pt",
@@ -532,7 +530,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Estou a perceber que há uma falta de comunicação entre nós, pois sinto que estás a ignorar-me novamente. Isso gera em mim uma sensação de frustração, especialmente porque é importante para mim que os acordos sejam respeitados. Se isso continuar a acontecer, gostaria de encontrar uma forma de resolver a situação de maneira construtiva."
+    "output": "Sinto que há uma falta de comunicação, pois parece que não estou a ser ouvido. Se isso continuar a acontecer, isso pode levar a consequências sérias. Gostaria de encontrar uma forma de garantir que os acordos sejam respeitados."
   },
   {
     "id": "threat-pt",
@@ -541,7 +539,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que a comunicação entre nós não está a funcionar como deveria. Sinto que estou a ser ignorado e isso não é aceitável para mim. Se isto acontecer novamente, não hesitarei em tomar medidas para resolver a situação. Gostaria de encontrar uma forma de garantir que os nossos acordos sejam respeitados."
+    "output": "Percebo que estás a ignorar-me novamente, e isso é frustrante. Se isto acontecer mais uma vez, vou precisar de tomar medidas para garantir que os acordos sejam respeitados. Podemos discutir como evitar essa situação no futuro?"
   },
   {
     "id": "calm-en",
@@ -550,7 +548,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Hi, I wanted to let you know I'll be ten minutes late for the handover tomorrow. Can you pass that along?"
+    "output": "Hi, I wanted to let you know I'll be ten minutes late for the handover tomorrow. Can you please pass that on?"
   },
   {
     "id": "calm-en",
@@ -559,7 +557,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Hi, I wanted to inform you that I will be ten minutes late for the handover tomorrow. Could you please pass that information along?"
+    "output": "Hi, I wanted to inform you that I will be ten minutes late for the handover tomorrow. Could you please pass that message along?"
   },
   {
     "id": "calm-en",
@@ -568,7 +566,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Hi, I wanted to inform you that I'll be ten minutes late for the handover tomorrow. Could you please make sure to pass that on?"
+    "output": "Hi, I wanted to inform you that I'll be ten minutes late for the handover tomorrow. Could you please pass that message on?"
   },
   {
     "id": "calm-de",
@@ -586,7 +584,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Hallo, ich wollte kurz sagen, dass ich morgen zehn Minuten später zur Übergabe komme. Kannst du das bitte weitergeben? Das hilft mir, besser zu planen."
+    "output": "Hallo, ich möchte dich informieren, dass ich morgen zehn Minuten später zur Übergabe komme. Kannst du das bitte weitergeben?"
   },
   {
     "id": "calm-de",
@@ -613,7 +611,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Salut, je voulais te prévenir que la remise de demain sera décalée de dix minutes. Cela impacte ma planification. Peux-tu le transmettre ?"
+    "output": "Salut, je voulais te prévenir que la remise de demain sera décalée de dix minutes. Pourrais-tu le transmettre, s'il te plaît ?"
   },
   {
     "id": "calm-fr",
@@ -622,7 +620,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Salut, je voulais te dire que je serai dix minutes en retard pour la remise demain. Cela complique un peu la planification. Peux-tu le transmettre ?"
+    "output": "Salut, je voulais te prévenir que je serai dix minutes en retard pour la remise demain. Cela impacte ma planification, pourrais-tu le transmettre ?"
   },
   {
     "id": "calm-es",
@@ -667,7 +665,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Olá, queria avisar que a entrega amanhã será dez minutos mais tarde. Isso pode impactar nosso planejamento, então gostaria de saber se podes passar essa informação."
+    "output": "Olá, queria avisar que a entrega de amanhã será dez minutos mais tarde. Isso pode impactar o planejamento, então gostaria de saber se podes passar essa informação."
   },
   {
     "id": "calm-pt",
@@ -676,7 +674,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Quero avisar que a entrega amanhã será dez minutos mais tarde. Isso pode impactar nosso planejamento, então gostaria que você pudesse passar essa informação."
+    "output": "Olá, queria avisar que amanhã a entrega será dez minutos mais tarde. Podes confirmar se isso está ok?"
   },
   {
     "id": "clothing-hedge-en",
@@ -694,7 +692,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "I noticed that the clothes returned were dirty, which is frustrating because there are stains that can't be removed. I prefer not to have the clothes I buy used, and I would appreciate it if they could be returned clean and washed in case they are used."
+    "output": "I noticed that the clothes were returned dirty, which is frustrating for me because there are stains that can't be removed. I would prefer if you didn't use the clothes I buy. If you do use them, please return them clean and washed."
   },
   {
     "id": "clothing-hedge-en",
@@ -703,7 +701,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "I noticed that the clothes I sent back were returned dirty, which is frustrating because there are stains I can't get out. I prefer that you don't use the clothes I buy, and I would appreciate it if you could return them clean and washed in case you do use them."
+    "output": "I've noticed that the clothes were returned dirty, which has left me with stains that I can't get out. I prefer that the clothes I buy are not used, and if they are, I would appreciate it if they could be returned clean and washed in case you do use them."
   },
   {
     "id": "clothing-hedge-de",
@@ -719,9 +717,11 @@
     "lang": "de",
     "category": "clothing",
     "level": "moderate",
-    "status": "PASS",
-    "fails": [],
-    "output": "Du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben, und jetzt sind Flecken drin. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe. Gib sie bitte zumindest sauber zurück, falls du sie benutzt."
+    "status": "FAIL",
+    "fails": [
+      "missing: \"falls\""
+    ],
+    "output": "Hey, du hast die Kleidung, die ich mitgegeben habe, in einem Zustand zurückgegeben, der für mich unangenehm ist, da jetzt Flecken drin sind. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe. Gib sie bitte zumindest sauber zurück, wenn du sie verwendest."
   },
   {
     "id": "clothing-hedge-de",
@@ -730,7 +730,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben, was bei mir für Unmut sorgt, da jetzt Flecken drin sind. Ich möchte, dass du die Kleidung, die ich kaufe, nicht benutzt. Gib sie bitte zumindest sauber zurück, falls du sie benutzt."
+    "output": "Du hast die Kleidung, die ich mitgegeben habe, schmutzig zurückgegeben. Ich möchte lieber nicht, dass du die Kleidung benutzt, die ich kaufe, weil jetzt Flecken drin sind. Bitte gib sie sauber zurück, falls du sie benutzt."
   },
   {
     "id": "clothing-hedge-fr",
@@ -739,7 +739,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Hey, tu as rendu les vêtements que j'avais envoyés sales. Je préfère que tu n'utilises pas les vêtements que j'achète, car il y a des taches. Rends-les au moins propres au cas où tu les utiliserais."
+    "output": "Hey, tu as rendu les vêtements que j'avais envoyés sales. Je préfère que tu n'utilises pas les vêtements que j'achète car il y a des taches. Rends-les au moins propres au cas où tu les utiliserais."
   },
   {
     "id": "clothing-hedge-fr",
@@ -748,7 +748,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Je remarque que tu as rendu les vêtements que j'avais envoyés sales, ce qui me dérange. Je préfère que tu n'utilises pas les vêtements que j'achète, car il y a des taches. Pourrais-tu les rendre propres au moins au cas où tu les utilises ?"
+    "output": "Je remarque que tu as rendu les vêtements que j'avais envoyés sales, ce qui me dérange car cela impacte leur état. Je préfère que tu n'utilises pas les vêtements que j'achète, surtout s'ils reviennent avec des taches. Pourrais-tu au moins les rendre propres au cas où tu les utilises ?"
   },
   {
     "id": "clothing-hedge-fr",
@@ -773,9 +773,12 @@
     "lang": "es",
     "category": "clothing",
     "level": "moderate",
-    "status": "PASS",
-    "fails": [],
-    "output": "Devolviste sucia la ropa que envié, y hay manchas en la ropa que compro. Prefiero que no uses la ropa que compro, y me gustaría que, en caso de que la uses, la devuelvas limpia."
+    "status": "FAIL",
+    "fails": [
+      "missing: \"caso\"",
+      "missing: \"en caso\""
+    ],
+    "output": "Devolviste sucia la ropa que envié, lo cual me preocupa porque hay manchas. Prefiero que no uses la ropa que compro. Si decides usarla, al menos devuélvela limpia."
   },
   {
     "id": "clothing-hedge-es",
@@ -784,7 +787,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Devolviste sucia la ropa que envié, lo cual afecta mi percepción sobre el cuidado de las prendas. Prefiero que no uses la ropa que compro, ya que hay manchas. Al menos, me gustaría que la devuelvas limpia en caso de que la uses."
+    "output": "Devolviste sucia la ropa que envié. Prefiero que no uses la ropa que compro porque hay manchas. Al menos devuélvela limpia en caso de que la uses."
   },
   {
     "id": "clothing-hedge-pt",
@@ -793,7 +796,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Hey, devolveste sujas as roupas que enviei. Prefiro que não uses a roupa que comprei porque há nódoas. No mínimo, devolve limpas no caso de as usares."
+    "output": "Hey, devolveste sujas as roupas que enviei. Prefiro que não uses a roupa que compro porque há nódoas. No mínimo, devolve limpas no caso de as usares."
   },
   {
     "id": "clothing-hedge-pt",
@@ -802,7 +805,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Devolveste sujas as roupas que enviei, e isso me causa preocupação, pois há nódoas. Prefiro que não uses a roupa que compro. No mínimo, gostaria que devolvesses limpas no caso de as usares."
+    "output": "Notei que devolveste sujas as roupas que enviei, e isso causa desconforto, especialmente porque há nódoas. Prefiro que não uses a roupa que compro. No caso de as usares, gostaria que as devolvesses limpas."
   },
   {
     "id": "clothing-hedge-pt",
@@ -811,7 +814,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Devolveste sujas as roupas que enviei, o que me causa preocupação, pois prefiro que não uses a roupa que compro, já que há nódoas. No mínimo, gostaria que devolvesses limpas no caso de as usares."
+    "output": "Devolveste sujas as roupas que enviei, e isso me preocupa, pois há nódoas. Prefiro que não uses a roupa que compro. No mínimo, gostaria que devolvesses limpas no caso de as usares."
   },
   {
     "id": "work-email-en",
@@ -829,7 +832,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "I noticed that my deadline was ignored, and now everything is on me. The task was due today, which has caused me a lot of stress. I need you to deliver it by tomorrow."
+    "output": "I noticed that the deadline was due today, and now I am left managing everything. This situation is causing me frustration. Please deliver the work by tomorrow to help me meet my commitments."
   },
   {
     "id": "work-email-en",
@@ -838,7 +841,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "I noticed that the deadline was due today, and now everything is on me as a result. This situation is frustrating for me. I need you to deliver tomorrow to help resolve this issue."
+    "output": "I noticed that the deadline was due today, and now everything is on me. This situation is causing me frustration. Please deliver the work by tomorrow to avoid further complications."
   },
   {
     "id": "work-email-de",
@@ -856,7 +859,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Ich habe festgestellt, dass meine Deadline ignoriert wurde und jetzt alles bei mir liegt. Es war klar, dass es heute fertig sein musste. Das sorgt bei mir für Frustration. Bitte liefere morgen, damit wir die Situation klären können."
+    "output": "Ich merke, dass meine Deadline ignoriert wurde und jetzt alles bei mir liegt. Es musste heute fertig sein, was bei mir Frustration auslöst. Bitte liefere morgen, damit wir die Situation klären können."
   },
   {
     "id": "work-email-de",
@@ -865,7 +868,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Ich habe festgestellt, dass die Deadline ignoriert wurde und jetzt alles bei mir liegt. Es war klar, dass es heute fertig sein musste. Ich bitte dich, morgen zu liefern, da ich sonst Schwierigkeiten habe, alles rechtzeitig zu erledigen."
+    "output": "Ich merke, dass meine Deadline ignoriert wurde und jetzt alles bei mir liegt. Es musste heute fertig sein, was für mich zu Frustration führt. Bitte liefere bis morgen, damit wir die Situation klären können."
   },
   {
     "id": "work-email-fr",
@@ -874,18 +877,16 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Tu as ignoré ma deadline et maintenant tout repose sur moi. Tu savais très bien que c'était pour aujourd'hui. Arrête les excuses et livre demain, sinon j'escalade ça aux RH."
+    "output": "Tu as ignoré ma deadline et maintenant tout repose sur moi. Arrête les excuses et livre demain, sinon j'escalade ça aux RH."
   },
   {
     "id": "work-email-fr",
     "lang": "fr",
     "category": "work",
     "level": "moderate",
-    "status": "FAIL",
-    "fails": [
-      "missing: \"deadline\""
-    ],
-    "output": "Je constate que la livraison était prévue pour aujourd'hui, mais elle n'a pas eu lieu, ce qui met une pression importante sur moi. J'aimerais que tu livres demain pour que nous puissions avancer. Cela devient un schéma récurrent qui affecte ma planification."
+    "status": "PASS",
+    "fails": [],
+    "output": "Je constate que ma deadline a été ignorée et cela met une pression importante sur moi, car tout repose sur moi maintenant. Il est essentiel que tu livres demain pour que je puisse avancer. J'aimerais que nous puissions mieux respecter les délais à l'avenir."
   },
   {
     "id": "work-email-fr",
@@ -894,7 +895,7 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Je constate que tu as ignoré ma deadline, qui était pour aujourd'hui. Cela me met dans une situation difficile, car tout repose sur moi maintenant. Peux-tu livrer demain ?"
+    "output": "Tu as ignoré ma deadline, et cela a un impact important sur mon travail, car tout repose sur moi. Je te demande de livrer demain pour que je puisse avancer. J'aimerais que nous puissions mieux gérer nos délais à l'avenir."
   },
   {
     "id": "work-email-es",
@@ -903,7 +904,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Ignoraste mi plazo y ahora todo recae sobre mí. Sabías perfectamente que era para hoy. Deja las excusas y entrégalo mañana, o escalaré esto a RRHH."
+    "output": "Ignoraste mi plazo y ahora todo recae sobre mí. Deja las excusas y entrégalo mañana, o escalaré esto a RRHH."
   },
   {
     "id": "work-email-es",
@@ -912,18 +913,16 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "He notado que el plazo de entrega que se esperaba para hoy no se ha cumplido, lo que significa que ahora tengo que asumir toda la carga. Esto me genera frustración, ya que afecta mi planificación. Te pido que entregues el trabajo mañana para poder avanzar. De lo contrario, tendré que considerar otras opciones para resolver esta situación."
+    "output": "He notado que el plazo no se ha cumplido y ahora todo recae sobre mí. Esto me genera frustración y presión. Necesito que entregues el trabajo mañana para poder avanzar. ¿Podemos asegurarnos de que esto se cumpla?"
   },
   {
     "id": "work-email-es",
     "lang": "es",
     "category": "work",
     "level": "firm",
-    "status": "FAIL",
-    "fails": [
-      "contains banned: \"perfectamente que\""
-    ],
-    "output": "Ignoraste mi plazo y ahora todo recae sobre mí. Sabías perfectamente que era para hoy. Para evitar más complicaciones, te pido que entregues mañana."
+    "status": "PASS",
+    "fails": [],
+    "output": "Ignoraste mi plazo y ahora todo recae sobre mí. La entrega era para hoy y necesito que se entregue mañana. Si no se entrega, tendré que considerar otras acciones."
   },
   {
     "id": "work-email-pt",
@@ -932,7 +931,7 @@
     "level": "minimal",
     "status": "PASS",
     "fails": [],
-    "output": "Ignoraste o meu prazo e agora está tudo comigo. Sabias muito bem que era para hoje. Para com as desculpas e entrega amanhã, ou escalo isto para os RH."
+    "output": "Ignoraste o meu prazo e agora está tudo comigo. Pára com as desculpas e entrega amanhã, ou escalo isto para os RH."
   },
   {
     "id": "work-email-pt",
@@ -941,7 +940,7 @@
     "level": "moderate",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que o prazo que estabelecemos não foi cumprido e agora estou com a responsabilidade total. Era para ser entregue hoje, e isso está a causar-me frustração. Para evitar mais complicações, peço que a entrega seja feita amanhã. Caso contrário, terei que considerar outras opções."
+    "output": "Percebo que o prazo foi ignorado e agora estou com tudo nas minhas mãos. Isso gera frustração, pois a entrega era para hoje. Pára com as desculpas e entrega amanhã, para que possamos evitar complicações adicionais."
   },
   {
     "id": "work-email-pt",
@@ -950,6 +949,6 @@
     "level": "firm",
     "status": "PASS",
     "fails": [],
-    "output": "Percebo que o prazo era para hoje e que não foi cumprido, o que agora me coloca em uma situação difícil. Isso gera frustração, pois esperava que a entrega fosse feita conforme combinado. Peço que a entrega seja realizada amanhã, sem mais desculpas."
+    "output": "Percebo que o prazo foi ignorado e agora estou sobrecarregado com a situação. A entrega era para hoje e isso está a causar-me frustração. Por favor, entrega amanhã para que possamos resolver isso de forma eficaz."
   }
 ]

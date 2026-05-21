@@ -1,7 +1,9 @@
 /**
- * Shared locale patterns for rewrite validation and hints.
- * Intent-based — works across EN, NL, DE, FR, ES, PT (and mixed input).
+ * Locale detection and cross-cutting patterns (language, hedges, agency, times).
+ * Scenario-specific behavior lives in lib/rewrite/profiles/*.
  */
+
+import { calmNoticeProfile } from '@/lib/rewrite/profiles/calm-notice';
 
 export type RewriteLang = 'nl' | 'en' | 'de' | 'fr' | 'es' | 'pt' | 'unknown';
 
@@ -95,58 +97,24 @@ export function languageMismatch(input: string, output: string): boolean {
   return false;
 }
 
-/** Custody / child handover context */
-export const HANDOVER_CONTEXT =
-  /\b(overdracht|handover|custody\s+exchange|übergabe|uebergabe|remise|entrega|passagem|garde|übergeben)\b/i;
+export {
+  HANDOVER_CONTEXT,
+  HANDOVER_TIMING,
+  REGULAR_ABSENCE_BLAME,
+  YOU_SELF_TIME,
+} from '@/lib/rewrite/patterns';
 
-/** Late / not home in handover messages */
-export const HANDOVER_TIMING =
-  /\b(te\s+laat|niet\s+thuis|not\s+home|too\s+late|not\s+on\s+time|zu\s+spät|nicht\s+da|nicht\s+zu\s+hause|en\s+retard|pas\s+à\s+la\s+maison|tarde|no\s+estás|nicht\s+anwesend|\d{1,2}\s*(uur|Uhr|h|heures?|horas?))\b/i;
+export {
+  isHandoverContext,
+  isSchedulingPattern,
+  hasKnewPerfectlyEscalation,
+} from '@/lib/rewrite/profiles';
 
-/** Direct "you + regularly + not home/late" blame (NL + EN; others via escalation categories) */
-export const REGULAR_ABSENCE_BLAME =
-  /\b(je|you|du|tu|estás|usted|você|voce)\s+.{0,25}(regelmatig|regularly|regelmäßig|régulièrement|regularmente)\s+.{0,25}(niet\s+thuis|not\s+home|nicht\s+(da|zu\s+hause)|absent|en\s+retard|fora\s+de\s+casa|tarde|late)\b/i;
+export function isAlreadyCalmMessage(input: string): boolean {
+  return calmNoticeProfile.match(input);
+}
 
-/** "You yourself around [time]" accusation */
-export const YOU_SELF_TIME =
-  /\b(je\s+zelf|you\s+yourself|du\s+selbst|tu\s+mismo|você\s+mesmo|toi-même)\s+.{0,15}(rond|around|um|vers|sobre|às?)\s+\d/i;
-
-/** Agency: second person gave/returned — preserve in output */
-export const AGENCY_GAVE: { test: RegExp; preserve: RegExp; label: string }[] = [
-  { test: /\bje\s+gaf\b/i, preserve: /\bje\s+gaf\b/i, label: 'je gaf' },
-  { test: /\byou\s+gave\b/i, preserve: /\byou\s+gave\b/i, label: 'you gave' },
-  {
-    test: /\bdu\s+hast\b.+\b(zurückgegeben|gegeben)\b/i,
-    preserve: /\bdu\s+hast\b/i,
-    label: 'du hast',
-  },
-  {
-    test: /\bdu\s+gabst\b/i,
-    preserve: /\bdu\s+gabst\b/i,
-    label: 'du gabst',
-  },
-  {
-    test: /\btu\s+as\s+(rendu|donné)\b/i,
-    preserve: /\btu\s+as\s+(rendu|donné)\b/i,
-    label: 'tu as rendu/donné',
-  },
-  {
-    test: /\bdevolviste\b/i,
-    preserve: /\bdevolviste\b/i,
-    label: 'devolviste',
-  },
-  {
-    test: /\bdevolveste\b/i,
-    preserve: /\bdevolveste\b/i,
-    label: 'devolveste',
-  },
-  { test: /\btu\s+me\s+(diste|has\s+dado)\b/i, preserve: /\btu\s+me\s+(diste|has\s+dado)\b/i, label: 'tu me diste/has dado' },
-  {
-    test: /\b(você|voce)\s+me\s+(deu|devolveu)\b/i,
-    preserve: /\b(você|voce)\s+me\s+(deu|devolveu)\b/i,
-    label: 'você me deu/devolveu',
-  },
-];
+export { AGENCY_GAVE, findAgencyGave } from '@/lib/rewrite/agency';
 
 export const HEDGE_PATTERNS: { pattern: RegExp; label: string }[] = [
   { pattern: /\bin het geval\b/i, label: 'in het geval' },
@@ -165,6 +133,7 @@ export const HEDGE_PATTERNS: { pattern: RegExp; label: string }[] = [
   { pattern: /\bpor\s+lo\s+menos\b/i, label: 'por lo menos' },
   { pattern: /\ba\s+menos\s+que\b/i, label: 'a menos que' },
   { pattern: /\bfalls\s+du\b/i, label: 'falls du' },
+  { pattern: /\bwenn\s+du\b/i, label: 'wenn du' },
   { pattern: /\bim\s+falle\b/i, label: 'im Falle' },
   { pattern: /\blieber\s+nicht\b/i, label: 'lieber nicht' },
   { pattern: /\bmindestens\b/i, label: 'mindestens' },
@@ -193,28 +162,4 @@ export function extractTimes(input: string): string[] {
     if (m) found.push(...m);
   }
   return found;
-}
-
-export function findAgencyGave(input: string) {
-  return AGENCY_GAVE.find(({ test }) => test.test(input));
-}
-
-export function isHandoverContext(input: string): boolean {
-  return HANDOVER_CONTEXT.test(input) && HANDOVER_TIMING.test(input);
-}
-
-/** Short, informational handover delay — should not be heavily de-escalated. */
-export function isAlreadyCalmMessage(input: string): boolean {
-  if (input.length > 220) return false;
-  return (
-    /\b(\d{1,2}|ten|zehn|dix|diez|dez)\s+min/i.test(input) &&
-    HANDOVER_CONTEXT.test(input) &&
-    !/\b(advocaat|lawyer|belachelijk|ridiculous|ignor|negeer)\b/i.test(input)
-  );
-}
-
-export function isSchedulingPattern(input: string): boolean {
-  return /\b(last minute|letzter minute|dernier moment|último momento|última hora|laatste moment)\b/i.test(
-    input
-  );
 }

@@ -1,14 +1,19 @@
 /**
  * Run: npm run dev (separate terminal)
  * Then: npm run eval:rewrite:suite
+ *
+ * Fixtures: input + optional mustNotContain (verbatim escalation survivors).
+ * Generic structural checks: scripts/eval-rewrite-checks.mjs
  */
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { genericRewriteChecks } from './eval-rewrite-checks.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const base = process.env.EVAL_URL ?? 'http://localhost:3000';
 const levels = ['minimal', 'moderate', 'firm'];
+
 function loadFixtures(name) {
   return JSON.parse(
     readFileSync(join(__dirname, `../lib/prompts/__fixtures__/${name}`), 'utf8')
@@ -31,28 +36,15 @@ function check(text, patterns, level) {
   const lower = text.toLowerCase();
   const fails = [];
   const strict = level === 'moderate' || level === 'firm';
+
   if (strict) {
     for (const p of patterns.mustNotContain ?? []) {
       if (lower.includes(p.toLowerCase())) fails.push(`contains banned: "${p}"`);
     }
   }
-  const should = strict
-    ? [...(patterns.shouldContainModerate ?? []), ...(patterns.shouldContain ?? [])]
-    : [...(patterns.shouldContain ?? [])];
-  const seen = new Set();
-  const shouldUnique = should.filter((p) => {
-    const k = p.toLowerCase();
-    if (seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  });
-  for (const p of shouldUnique) {
-    if (!lower.includes(p.toLowerCase())) fails.push(`missing: "${p}"`);
-  }
-  const any = strict ? (patterns.shouldContainAny ?? []) : [];
-  if (any.length && !any.some((p) => lower.includes(p.toLowerCase()))) {
-    fails.push(`missing any of: ${any.map((p) => `"${p}"`).join(', ')}`);
-  }
+
+  fails.push(...genericRewriteChecks(patterns.input, text, level, patterns));
+
   return fails;
 }
 
@@ -70,7 +62,7 @@ async function rewrite(input, transformLevel) {
 async function main() {
   const report = [];
   console.log(
-    `Evaluating ${fixtures.length} cases × ${levels.length} modes${includeI18n ? ' (incl. i18n)' : ''}\n`
+    `Evaluating ${fixtures.length} cases × ${levels.length} modes (generic checks + mustNotContain)${includeI18n ? ' (incl. i18n)' : ''}\n`
   );
 
   for (const f of fixtures) {

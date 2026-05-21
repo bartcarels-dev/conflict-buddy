@@ -31,6 +31,16 @@ npm run eval:analyze
 
 Target: **≥95% pass** on `moderate` + `firm` across all fixture languages before calling quality “excellent”.
 
+### What fixtures assert (scalable)
+
+| Check | Where | Purpose |
+|-------|--------|---------|
+| **Generic structural** | `scripts/eval-rewrite-checks.mjs` | Unchanged output, insults, legal/HR threats, “you knew perfectly” — same rules for every topic |
+| **mustNotContain** (optional) | Per fixture | Verbatim escalating phrase from *that* input must not survive in output |
+| ~~shouldContain / shouldContainAny~~ | Removed | Topic keywords (stain, schmutz, …) do not scale |
+
+Quality for hedges, agency, handover, etc. is enforced in **`lib/rewriteValidation.ts`** and **context profiles** (`lib/rewrite/profiles/*`), not in eval keyword lists.
+
 ```bash
 # Gate on moderate+firm only (default target 95%)
 $env:EVAL_TARGET_PCT=95; npm run eval:rewrite:suite

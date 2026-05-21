@@ -2,46 +2,52 @@
   {
     "id": "scheduling-pattern",
     "input": "Ik ben er eerlijk gezegd best klaar mee dat afspraken steeds op het laatste moment veranderen en ik vervolgens maar moet meebewegen alsof dat normaal is. Het voelt vaak alsof er pas rekening wordt gehouden met mijn planning of situatie zodra ik er zelf iets van zeg, terwijl ik juist probeer vooraf duidelijkheid te houden. Ik snap dat dingen soms anders lopen, maar dit begint inmiddels wel een patroon te worden waar ik last van heb.",
-    "mustNotContain": ["alsof dat normaal is", "zodra ik er zelf iets van zeg", "pas rekening wordt gehouden"],
-    "shouldContain": ["planning", "patroon"]
+    "mustNotContain": [
+      "alsof dat normaal is",
+      "zodra ik er zelf iets van zeg",
+      "pas rekening wordt gehouden"
+    ]
   },
   {
     "id": "handover-late",
     "input": "Ik merk dat je regelmatig niet thuis bent of te laat bent voor de overdracht. Ik wil Joa volgens afspraak aan jouw deur kunnen overdragen maar dit is onmogelijk als je zelf rond 10 uur of later arriveert. Het kan een keer voorkomen dat je niet op tijd bent, maar het gebeurt inmiddels structureel. Zo werken de afspraken die we hebben niet en het gooit bovendien mijn eigen planning door de war.",
-    "mustNotContain": ["je regelmatig niet thuis bent of te laat", "je zelf rond 10 uur"],
-    "shouldContain": ["planning", "10", "joa"],
-    "shouldContainModerate": ["joa", "planning"],
-    "shouldContainAny": ["10", "tien", "uur"]
+    "mustNotContain": [
+      "je regelmatig niet thuis bent of te laat",
+      "je zelf rond 10 uur"
+    ]
   },
   {
     "id": "clothing-hedge",
     "input": "Hey, je hebt de kleren die ik meegaf vies teruggegeven. Ik wil liever niet dat je de kleding die ik koop gebruikt, omdat er nu vlekken in zitten die ik er niet meer uit krijg. Het is ook gewoon netjes om het op zijn minst schoon en gewassen terug te geven in het geval je het wel gebruikt.",
-    "mustNotContain": [],
-    "shouldContain": ["in het geval", "kleren"]
+    "mustNotContain": []
   },
   {
     "id": "je-gaf-terug",
     "input": "je gaf de kleren die ik meegaf vies terug. Ik heb liever niet meer dat je de kleding die ik koop gebruikt want er zitten nu vlekken in die ik er niet meer uit krijg.",
-    "mustNotContain": ["ik heb de kleren die ik meegaf vies teruggekregen"],
-    "shouldContain": ["kleren", "vlekken"],
-    "shouldContainModerate": ["je gaf", "kleren", "vlekken"]
+    "mustNotContain": [
+      "ik heb de kleren die ik meegaf vies teruggekregen"
+    ]
   },
   {
     "id": "angry-threat",
     "input": "Dit is echt belachelijk. Je negeert me weer. Als je dit nog een keer doet ga ik je advocaat bellen en zorg ik dat iedereen hoort hoe jij met afspraken omgaat.",
-    "mustNotContain": ["belachelijk", "advocaat bellen", "iedereen hoort"],
-    "shouldContain": ["afspra"]
+    "mustNotContain": [
+      "belachelijk",
+      "advocaat bellen",
+      "iedereen hoort"
+    ]
   },
   {
     "id": "already-calm",
     "input": "Hoi, ik wil even laten weten dat ik morgen tien minuten later ben voor de overdracht. Kun je dat doorgeven?",
-    "mustNotContain": [],
-    "shouldContain": ["morgen", "overdracht"]
+    "mustNotContain": []
   },
   {
     "id": "work-email",
     "input": "Je hebt mijn deadline genegeerd en nu ligt alles bij mij. Je wist donders goed dat het vandaag af moest. Stop met excuses en lever morgen in, anders escaleer ik dit naar HR.",
-    "mustNotContain": ["donders goed", "escaleer ik dit naar HR"],
-    "shouldContain": ["deadline"]
+    "mustNotContain": [
+      "donders goed",
+      "escaleer ik dit naar HR"
+    ]
   }
 ]

@@ -36,12 +36,6 @@ async function runFixture(f) {
       fails.push(`still contains banned phrase: "${bad}"`);
     }
   }
-  for (const need of f.shouldContain ?? []) {
-    if (!out.toLowerCase().includes(need.toLowerCase())) {
-      fails.push(`missing expected: "${need}"`);
-    }
-  }
-
   return { id: f.id, output: out, fails };
 }
 

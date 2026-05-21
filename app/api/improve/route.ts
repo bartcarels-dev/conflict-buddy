@@ -20,17 +20,12 @@ import {
   logEntryBuilderRules,
   logEntryBuilderUserPrompt,
 } from '@/lib/prompts/logEntryBuilder';
-import {
-  detectRewriteLocale,
-  findAgencyGave,
-  isAlreadyCalmMessage,
-  languageMismatch,
-  rewriteLangLabel,
-} from '@/lib/rewriteLocale';
+import { buildRewriteContext } from '@/lib/rewrite/context';
+import { hasKnewPerfectlyEscalation } from '@/lib/rewrite/profiles';
+import { findAgencyGave, detectRewriteLocale, languageMismatch, rewriteLangLabel } from '@/lib/rewriteLocale';
 import {
   buildUnchangedRetryPrompt,
   buildValidationRetryPrompt,
-  hasKnewPerfectlyEscalation,
   isRewriteUnchanged,
   validateRewrite,
 } from '@/lib/rewriteValidation';
@@ -153,6 +148,7 @@ async function rewriteWithValidation(
   input: string,
   level: TransformLevel
 ): Promise<string> {
+  const rewriteContext = buildRewriteContext(input);
   let output = '';
   let analysis: RewriteAnalysis | null = null;
   let retryNote: string | undefined;
@@ -176,7 +172,7 @@ async function rewriteWithValidation(
     const needsUnchangedRetry =
       usesStructuredPipeline(level) &&
       isRewriteUnchanged(input, output) &&
-      !isAlreadyCalmMessage(input);
+      !rewriteContext.flags.skipUnchangedRetry;
 
     if (issues.length === 0 && !needsUnchangedRetry) break;
 
@@ -196,6 +192,19 @@ async function rewriteWithValidation(
   for (let fix = 0; fix < 2 && languageMismatch(input, output); fix++) {
     const label = rewriteLangLabel(detectRewriteLocale(input));
     const note = `REJECTED — wrong language in previous attempt. Rewrite entirely in ${label} ONLY. Do not use any other language.`;
+    if (usesStructuredPipeline(level)) {
+      output = (await generateStructuredRewrite(input, level, note)).output;
+      output = ensureAgencyPreserved(input, output, level);
+    } else {
+      output = await generateMinimalRewrite(input, note);
+    }
+  }
+
+  const insultInOutput =
+    /\b(ridiculous|ridicule|ridículo|lächerlich|belachelijk)\b/i;
+  for (let fix = 0; fix < 2 && insultInOutput.test(output); fix++) {
+    const note =
+      'REJECTED — remove insult words (ridiculous, ridicule, ridículo, etc.) from output. State impact and request without sarcasm.';
     if (usesStructuredPipeline(level)) {
       output = (await generateStructuredRewrite(input, level, note)).output;
       output = ensureAgencyPreserved(input, output, level);

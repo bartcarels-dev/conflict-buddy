@@ -9,8 +9,7 @@
       "zodra ik er zelf iets van zeg",
       "het voelt vaak alsof er pas",
       "pas rekening wordt gehouden"
-    ],
-    "shouldContain": ["planning", "patroon", "frustratie"]
+    ]
   },
   {
     "id": "handover-late",
@@ -19,14 +18,12 @@
     "mustNotContain": [
       "je regelmatig niet thuis bent of te laat",
       "je zelf rond 10 uur"
-    ],
-    "shouldContain": ["overdracht", "planning", "structureel"]
+    ]
   },
   {
     "id": "clothing-hedge",
     "level": "moderate",
     "input": "Hey, je hebt de kleren die ik meegaf vies teruggegeven. Ik wil liever niet dat je de kleding die ik koop gebruikt, omdat er nu vlekken in zitten die ik er niet meer uit krijg. Het is ook gewoon netjes om het op zijn minst schoon en gewassen terug te geven in het geval je het wel gebruikt.",
-    "mustNotContain": [],
-    "shouldContain": ["in het geval", "kleren", "vlekken"]
+    "mustNotContain": []
   }
 ]

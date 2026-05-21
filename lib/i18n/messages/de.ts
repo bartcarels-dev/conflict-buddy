@@ -28,16 +28,16 @@ export const de: Messages = {
   rewriteEntry: {
     aria: 'Einstieg',
     reply: 'Antwort an sie',
-    replyHint: 'Sie haben geschrieben — wir schlagen eine Antwort vor',
+    replyHint: 'Nachricht oder ganzer Verlauf — wir schlagen Ihre nächste Antwort vor',
     polish: 'Meinen Entwurf verfeinern',
     polishHint: 'Sie haben bereits etwas geschrieben — wir polieren es',
   },
   input: {
-    theirMessageLabel: 'Was sie schrieben',
+    theirMessageLabel: 'Gespräch oder was sie schrieben',
     theirMessagePlaceholder:
-      'Nachricht, E-Mail oder Text einfügen, auf den Sie antworten…',
+      'Letzte Nachricht oder ganzer Chat / E-Mail-Verlauf (Ihre Nachrichten dürfen für Kontext dabei sein)…',
     theirMessageHint:
-      'Wird nach diesem Besuch nicht gespeichert.',
+      'Ein ganzer Verlauf hilft bei Ton und Kontext. Nur für die Antwort — nicht gespeichert.',
     userDraftLabel: 'Was Sie sagen möchten (optional)',
     userDraftPlaceholderReply:
       'Entwurf, Stichpunkte oder leer — wir schlagen eine Antwort vor…',

@@ -223,8 +223,8 @@ export function ToolWorkflow({
             </label>
             <textarea
               id="their-message"
-              className={`${fieldClass} min-h-[140px] resize-y`}
-              rows={5}
+              className={`${fieldClass} min-h-[200px] resize-y`}
+              rows={8}
               placeholder={m.input.theirMessagePlaceholder}
               value={theirMessage}
               onChange={(e) => {

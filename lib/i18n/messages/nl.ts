@@ -31,16 +31,16 @@ export const nl: Messages = {
   rewriteEntry: {
     aria: 'Hoe beginnen',
     reply: 'Antwoord op hen',
-    replyHint: 'Zij stuurden iets — wij stellen een antwoord voor',
+    replyHint: 'Plak een bericht of heel gesprek — wij stellen je volgende antwoord voor',
     polish: 'Mijn concept verfijnen',
     polishHint: 'Je hebt al iets geschreven — wij polijsten het',
   },
   input: {
-    theirMessageLabel: 'Wat zij zeiden',
+    theirMessageLabel: 'Gesprek of wat zij zeiden',
     theirMessagePlaceholder:
-      'Plak hun bericht, e-mail of tekst waarop je reageert…',
+      'Plak hun laatste bericht, of een volledige chat / mailwisseling (jouw berichten mogen mee voor context)…',
     theirMessageHint:
-      'Plak het bericht waarop je reageert. Het wordt niet opgeslagen na dit bezoek.',
+      'Een heel gesprek helpt voor toon en context. Alleen voor het antwoord — niet opgeslagen.',
     userDraftLabel: 'Wat jij wilt zeggen (optioneel)',
     userDraftPlaceholderReply:
       'Ruwe tekst, bullets, of leeg — wij stellen een antwoord voor…',

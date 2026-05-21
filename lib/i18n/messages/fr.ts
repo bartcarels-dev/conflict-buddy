@@ -28,16 +28,16 @@ export const fr: Messages = {
   rewriteEntry: {
     aria: 'Comment commencer',
     reply: 'Répondre',
-    replyHint: 'Ils vous ont écrit — nous suggérons une réponse',
+    replyHint: 'Message ou conversation entière — nous suggérons votre prochaine réponse',
     polish: 'Polir mon brouillon',
     polishHint: 'Vous avez déjà écrit — nous l’affînons',
   },
   input: {
-    theirMessageLabel: 'Ce qu’ils ont dit',
+    theirMessageLabel: 'Conversation ou ce qu’ils ont dit',
     theirMessagePlaceholder:
-      'Collez leur message, e-mail ou texte auquel vous répondez…',
+      'Dernier message ou fil complet (chat, e-mails — vos messages peuvent être inclus pour le contexte)…',
     theirMessageHint:
-      'Non enregistré après votre visite.',
+      'Toute la conversation aide pour le ton et le contexte. Sert uniquement à suggérer votre réponse — non enregistré.',
     userDraftLabel: 'Ce que vous voulez dire (optionnel)',
     userDraftPlaceholderReply:
       'Brouillon, points clés ou vide — nous suggérons une réponse…',

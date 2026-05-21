@@ -4,18 +4,22 @@ import type { RewriteLang } from '@/lib/rewriteLocale';
 import { detectRewriteLocale, rewriteLangBanner, rewriteLangLabel } from '@/lib/rewriteLocale';
 
 const COMPOSE_FRAMEWORK = `
-You are drafting a REPLY to someone else's message — not rewriting their text.
+You are drafting a REPLY the user will send — not rewriting the other person's text.
 
-TASK: Write what the user should send back — clear, calm, de-escalated, in the SAME language as "Their message".
+INPUT may be a single message OR a conversation thread (multiple messages, chat export, email back-and-forth). Read the full thread for context and tone.
 
-Use the same four-bucket thinking as de-escalation (substantive, boundaries, emotional intensity, escalating framing from THEIR message — do not copy their attacks into your reply).
+TASK: Write ONE clear, calm, de-escalated message the user should send next — in the SAME language as the conversation (usually the most recent messages).
+
+Use the same four-bucket thinking as de-escalation (substantive, boundaries, emotional intensity, escalating framing from the thread — do not copy attacks into the reply).
 
 RULES:
-- Address the situation they raised; do not mirror insults, threats, or sarcasm.
+- If it is a thread: understand the arc, then reply to what matters now (typically the latest turn) — do not answer each message separately.
+- If both sides appear in the thread, you are still writing the USER's next outgoing message to the other person.
+- Address the situation; do not mirror insults, threats, or sarcasm.
 - Do NOT quote or paraphrase their worst lines back at them.
-- If the user provided draft/notes, honor their intent, boundaries, and agency phrases (e.g. "je gaf") — weave in, do not ignore.
+- If the user provided draft/notes, honor their intent, boundaries, and agency phrases — weave in, do not ignore.
 - Natural message length — not an essay or corporate email.
-- Same language as their message — never translate.
+- Same language as the conversation — never translate.
 `.trim();
 
 function levelBlock(level: TransformLevel): string {
@@ -87,9 +91,9 @@ ${langLine}
 ${buildProfilePromptHints(theirMessage)}
 ${notesBlock}
 
-Their message:
+Conversation or their message (context for your reply):
 ${theirMessage.trim()}
 
-Write the reply in "output". List escalatingFraming from THEIR message only (moderate/firm).
+Write the reply in "output". List escalatingFraming from the thread only (moderate/firm) — phrases to avoid in the reply.
 `.trim();
 }

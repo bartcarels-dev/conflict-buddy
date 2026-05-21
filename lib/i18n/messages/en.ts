@@ -31,16 +31,16 @@ export const en: Messages = {
   rewriteEntry: {
     aria: 'How to start',
     reply: 'Reply to them',
-    replyHint: 'They messaged you — we suggest a reply',
+    replyHint: 'Paste a message or full conversation — we suggest your next reply',
     polish: 'Polish my draft',
     polishHint: 'You already wrote something — we refine it',
   },
   input: {
-    theirMessageLabel: 'What they said',
+    theirMessageLabel: 'Conversation or what they said',
     theirMessagePlaceholder:
-      'Paste their message, email, or text you are responding to…',
+      'Paste their last message, or a full chat / email thread (your messages can be included for context)…',
     theirMessageHint:
-      'Paste the message you are replying to. It is not stored after you leave.',
+      'A whole conversation works best for tone and context. Used only to suggest your next reply — not stored.',
     userDraftLabel: 'What you want to say (optional)',
     userDraftPlaceholderReply:
       'Rough draft, bullet points, or leave empty — we will suggest a reply…',
